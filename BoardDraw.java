@@ -44,13 +44,43 @@ public class BoardDraw extends JPanel {
 
 
     public static void main(String[] args) {
-        JFrame f = new JFrame();
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.add(new BoardDraw());
-        f.pack();
-        f.setLocation(100,100);
-        f.setVisible(true);
+        JFrame boardFrame = new JFrame(); 
+        
+        JPanel overlayPanel = new JPanel();
+        overlayPanel.setLayout(new OverlayLayout(overlayPanel));
+
+        JLayeredPane buttonPane = new JLayeredPane(); 
+        boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        boardFrame.setLayout(new BorderLayout()); // Explicitly set BorderLayout
+        
+        // Add BoardDraw to CENTER (takes most space)
+        //boardFrame.add(new BoardDraw(), BorderLayout.CENTER);
+        
+        buttArrMaker.initButtArr(buttonPane);
+        overlayPanel.add(buttonPane); //add the buttons
+        overlayPanel.add(new BoardDraw()); //below add the actual board
+        //buttonPane.setOpaque(false);
+        //buttonPane.setBackground(new Color(0, 0, 0, 0));
+        
+        // Add buttonPane to SOUTH or another region
+        boardFrame.add(overlayPanel);
+        boardFrame.pack(); //sets the size of the stuff in the frame
+        boardFrame.setLocation(100,100); //chhange position of where displayed on screen
+        boardFrame.setVisible(true);
     }
 }
-    
+/*
+    public static void main(String[] args) {
+        JFrame boardFrame = new JFrame("Quax Game");
+        JLayeredPane buttonPane = new JLayeredPane();
+        boardFrame.setBounds(0,0,810,800);
+        buttonPane.setBounds(0,0,810,800);
+        boardFrame.add(new BoardDraw());
+        boardFrame.add(buttonPane);
+        buttArrMaker.initButtArr(buttonPane);
+        boardFrame.setVisible(true);
+
+    }
+}
+*/
 
