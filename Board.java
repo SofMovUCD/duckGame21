@@ -11,7 +11,7 @@ public class Board{
 		//traverse them to get from the bottom to the top.
 		//construct a spanning tree
 		//find and add all edges keeping track of how tall the tree gets
-		return null
+		return null;
 	}
 
 	public int[][][] getBoard(){
