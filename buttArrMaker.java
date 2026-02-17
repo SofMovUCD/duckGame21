@@ -17,7 +17,7 @@ public class buttArrMaker {
                     public void actionPerformed(ActionEvent e) {
                         // BoardDraw.paintComponent()
                         // Board[i][j][0] = getCurrentPlayer();
-                        // JLayeredPane.remove(buttArr);
+                        p.remove(buttArr[i][j]);
                     }
                 });
                 buttArr[i][j+j%2].setVisible(true);
@@ -33,7 +33,7 @@ public class buttArrMaker {
                     public void actionPerformed(ActionEvent e) {
                         // BoardDraw.paintComponent()
                         // Board[i][j][0] = getCurrentPlayer();
-                        // JLayeredPane.remove(buttArr);
+                        //p.remove(buttArr[i][j]);
                     }
                 });
                 buttArr[i][2*j+1].setVisible(true);

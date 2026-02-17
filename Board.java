@@ -1,4 +1,5 @@
-public class Board{
+public class Board {
+	/* 
 	private int[][][] board;
 	private Player player1;
 	private Player player2;
@@ -24,5 +25,5 @@ public class Board{
 		}
 		return num == 1? player1: player2;
 	}	
-
+	*/
 }
