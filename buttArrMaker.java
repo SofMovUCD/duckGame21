@@ -15,9 +15,10 @@ public class buttArrMaker {
                 buttArr[i][j+j%2].setBounds(30 + j*68, 45 + i*68, 68, 29);
                 buttArr[i][j+j%2].addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
+                        JButton src = (JButton) e.getSource();
                         // BoardDraw.paintComponent()
                         // Board[i][j][0] = getCurrentPlayer();
-                        //p.remove(e.getSource());
+                        p.remove(src);
                     }
                 });
                 buttArr[i][j+j%2].setVisible(true);
@@ -31,9 +32,10 @@ public class buttArrMaker {
                 buttArr[i][2*j+1].setBounds(88 + j*68, 83 + i*68, 20, 20);
                 buttArr[i][2*j+1].addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
+                        JButton src = (JButton) e.getSource();
                         // BoardDraw.paintComponent()
                         // Board[i][j][0] = getCurrentPlayer();
-                        //p.remove(buttArr[i][j]);
+                        p.remove(src);
                     }
                 });
                 buttArr[i][2*j+1].setVisible(true);

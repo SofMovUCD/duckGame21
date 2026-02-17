@@ -3,7 +3,7 @@ import javax.swing.*;
 
 public class BoardDraw extends JPanel {
 
-     public void paint(Graphics g) {
+    public void paint(Graphics g) {
         int yC = 0;
         int xC = 0;
         int numberOfPoints = 8;
@@ -38,6 +38,11 @@ public class BoardDraw extends JPanel {
         // Connect the first and last vertex
         
     }
+
+    public void paintComponent(Graphics g) {
+        Graphics2D g2 = (Graphics2D) g;
+    }   
+
     public Dimension getPreferredSize() {
         return new Dimension(810,800);
     }
