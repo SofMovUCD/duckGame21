@@ -4,6 +4,7 @@ import javax.swing.*;
 public class BoardDraw extends JPanel {
 
     public void paint(Graphics g) {
+        int myboard[][][] = Board.board;
         int yC = 0;
         int xC = 0;
         int numberOfPoints = 8;
@@ -39,10 +40,6 @@ public class BoardDraw extends JPanel {
         
     }
 
-    public void paintComponent(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g;
-    }   
-
     public Dimension getPreferredSize() {
         return new Dimension(810,800);
     }
@@ -55,14 +52,16 @@ public class BoardDraw extends JPanel {
         overlayPanel.setLayout(new OverlayLayout(overlayPanel));
 
         JLayeredPane buttonPane = new JLayeredPane(); 
+        JLayeredPane placedPane = new JLayeredPane();
         boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         boardFrame.setLayout(new BorderLayout()); // Explicitly set BorderLayout
         
         // Add BoardDraw to CENTER (takes most space)
         //boardFrame.add(new BoardDraw(), BorderLayout.CENTER);
         
-        buttArrMaker.initButtArr(buttonPane);
+        buttArrMaker.initButtArr(buttonPane, placedPane);
         overlayPanel.add(buttonPane); //add the buttons
+        overlayPanel.add(placedPane);
         overlayPanel.add(new BoardDraw()); //below add the actual board
         //buttonPane.setOpaque(false);
         //buttonPane.setBackground(new Color(0, 0, 0, 0));

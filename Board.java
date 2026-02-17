@@ -1,9 +1,8 @@
 public class Board {
-	/* 
-	private int[][][] board;
+	
+	public static int[][][] board = new int[21][21][2];
 	private Player player1;
 	private Player player2;
-
 
 	public Player checkWin(Board[][][] b){
 		//check if win condition satisfied
@@ -18,6 +17,10 @@ public class Board {
 	public int[][][] getBoard(){
 		return board;
 	}
+
+	public void setTile(int x, int y, int z, int val) {
+		board[x][y][z] = val;
+	} 
 	
 	public Player getPlayer(int num){
 		if(num != 1 && num != 2){
@@ -25,5 +28,5 @@ public class Board {
 		}
 		return num == 1? player1: player2;
 	}	
-	*/
+	
 }

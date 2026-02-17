@@ -3,7 +3,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class buttArrMaker {
-    public static JButton[][] initButtArr(JLayeredPane p) {
+    public static JButton[][] initButtArr(JLayeredPane p, JLayeredPane t) {
         JButton[][] buttArr = new JButton[21][21];
         //p.setLayout(new GridLayout(11, 11, 5, 5)); //make a grid layout for the octogons
         p.setLayout(null); //set absolute positioning
@@ -16,7 +16,9 @@ public class buttArrMaker {
                 buttArr[i][j+j%2].addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         JButton src = (JButton) e.getSource();
-                        // BoardDraw.paintComponent()
+                        t.add(new TileDraw());
+                        p.repaint();
+                        t.repaint();
                         // Board[i][j][0] = getCurrentPlayer();
                         p.remove(src);
                     }
@@ -35,6 +37,9 @@ public class buttArrMaker {
                         JButton src = (JButton) e.getSource();
                         // BoardDraw.paintComponent()
                         // Board[i][j][0] = getCurrentPlayer();
+                        t.add(new TileDraw());
+                        p.repaint();
+                        t.repaint();
                         p.remove(src);
                     }
                 });
