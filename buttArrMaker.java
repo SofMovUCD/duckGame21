@@ -17,7 +17,7 @@ public class buttArrMaker {
                     public void actionPerformed(ActionEvent e) {
                         // BoardDraw.paintComponent()
                         // Board[i][j][0] = getCurrentPlayer();
-                        p.remove(buttArr[i][j]);
+                        //p.remove(e.getSource());
                     }
                 });
                 buttArr[i][j+j%2].setVisible(true);
