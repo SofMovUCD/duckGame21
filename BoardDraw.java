@@ -34,9 +34,7 @@ public class BoardDraw extends JPanel {
                 g2.drawLine(x[0], y[0], x[numberOfPoints - 1], y[numberOfPoints - 1]);
             }
         }
-        
-
-        // Connect the first and last vertex
+        System.out.println("I have been drawn!");
         
     }
 
@@ -51,8 +49,8 @@ public class BoardDraw extends JPanel {
         JPanel overlayPanel = new JPanel();
         overlayPanel.setLayout(new OverlayLayout(overlayPanel));
 
-        JLayeredPane buttonPane = new JLayeredPane(); 
-        JLayeredPane placedPane = new JLayeredPane();
+        JLayeredPane buttonPane = new JLayeredPane();
+        JPanel placedPane = new JPanel();
         boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         boardFrame.setLayout(new BorderLayout()); // Explicitly set BorderLayout
         
@@ -60,14 +58,23 @@ public class BoardDraw extends JPanel {
         //boardFrame.add(new BoardDraw(), BorderLayout.CENTER);
         
         buttArrMaker.initButtArr(buttonPane, placedPane);
-        overlayPanel.add(buttonPane); //add the buttons
+        placedPane.setOpaque(false);
+        System.out.println(placedPane.getInsets());
+        System.out.println(placedPane.getBounds());
+        placedPane.setPreferredSize(new Dimension(68, 68));
+        //System.out.println(placedPane.getLocationOnScreen());
+        placedPane.setBorder(BorderFactory.createLineBorder(Color.red, 2));
         overlayPanel.add(placedPane);
+        //overlayPanel.setLayer(placedPane, new Integer(100));
+        overlayPanel.add(buttonPane); //add the buttons
+        //overlayPanel.setLayer(buttonPane, new Integer(50));
         overlayPanel.add(new BoardDraw()); //below add the actual board
+        //overlayPanel.moveToBack(new BoardDraw());
         //buttonPane.setOpaque(false);
         //buttonPane.setBackground(new Color(0, 0, 0, 0));
         
         // Add buttonPane to SOUTH or another region
-        boardFrame.add(overlayPanel);
+        boardFrame.setContentPane(overlayPanel);
         boardFrame.pack(); //sets the size of the stuff in the frame
         boardFrame.setLocation(100,100); //chhange position of where displayed on screen
         boardFrame.setVisible(true);

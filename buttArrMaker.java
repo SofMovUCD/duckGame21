@@ -3,7 +3,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class buttArrMaker {
-    public static JButton[][] initButtArr(JLayeredPane p, JLayeredPane t) {
+    public static JButton[][] initButtArr(JLayeredPane p, JPanel t) {
         JButton[][] buttArr = new JButton[21][21];
         //p.setLayout(new GridLayout(11, 11, 5, 5)); //make a grid layout for the octogons
         p.setLayout(null); //set absolute positioning
@@ -15,12 +15,16 @@ public class buttArrMaker {
                 buttArr[i][j+j%2].setBounds(30 + j*68, 45 + i*68, 68, 29);
                 buttArr[i][j+j%2].addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        JButton src = (JButton) e.getSource();
-                        t.add(new TileDraw());
-                        p.repaint();
+                        JButton src = (JButton) e.getSource(); //get the button which was pressed
+                        t.add(new TileDraw(src.getX(), src.getY())); //add an octagonal tile
+                        t.revalidate();
                         t.repaint();
+//                        t.updateUI();
+                        //System.out.println(t.getRootPane());
+                        p.repaint(); //repaint the board underneath the button removed
+                        //t.repaint();
                         // Board[i][j][0] = getCurrentPlayer();
-                        p.remove(src);
+                        p.remove(src); //remove the button entirely
                     }
                 });
                 buttArr[i][j+j%2].setVisible(true);
@@ -37,9 +41,9 @@ public class buttArrMaker {
                         JButton src = (JButton) e.getSource();
                         // BoardDraw.paintComponent()
                         // Board[i][j][0] = getCurrentPlayer();
-                        t.add(new TileDraw());
+                        //t.add(new TileDraw());
                         p.repaint();
-                        t.repaint();
+                        //t.repaint();
                         p.remove(src);
                     }
                 });
