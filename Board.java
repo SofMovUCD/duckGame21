@@ -1,6 +1,6 @@
 public class Board {
 	
-	public static int[][][] board = new int[21][21][2];
+	public static int[][][] board = new int[11][21][2];
 	private Player player1;
 	private Player player2;
 
