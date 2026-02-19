@@ -37,8 +37,8 @@ public class TileDraw extends JPanel {
             g2.drawPolygon(x, y, 8);
         } else {
             // Full 35x35 coverage for the Rhombus
-            int[] x = {17, 34, 17, 1};
-            int[] y = {1, 17, 34, 17};
+            int[] x = {17, 36, 17, -2};
+            int[] y = {-2, 17, 36, 17};
             g2.setColor(FtileColor);
             g2.fillPolygon(x, y, 4);
             g2.setColor(borderColor);

@@ -48,7 +48,7 @@ public class BoardDraw extends JPanel {
 
 
     public static void main(String[] args) {
-        System.setProperty("sun.java2d.uiScale", "1.5");
+        //System.setProperty("sun.java2d.uiScale", "1.5");
         JFrame boardFrame = new JFrame("Quax Game");
         boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
