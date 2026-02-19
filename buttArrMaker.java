@@ -32,7 +32,6 @@ public class buttArrMaker {
                             t.add(newTile);
                             isBlackTurn = !isBlackTurn;
                             p.remove(src);
-                            p.repaint();
                             t.repaint();
                         }
                     });
@@ -62,7 +61,6 @@ public class buttArrMaker {
                         t.add(newTile);
                         isBlackTurn = !isBlackTurn;
                         p.remove(src);
-                        p.repaint();
                         t.repaint();
                     }
                 });
