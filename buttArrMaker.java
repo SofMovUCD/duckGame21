@@ -9,6 +9,7 @@ public class buttArrMaker {
 
     public static JButton[][] initButtArr(JLayeredPane p, JLayeredPane t) {
         JButton[][] buttArr = new JButton[21][21];
+        Color usingBlack = new Color(45, 45, 45);
 
             for(int i = 0; i < 10; i++){ //draw the rhombus buttons
                 for(int j = 0; j <  10; j++){
@@ -26,9 +27,9 @@ public class buttArrMaker {
                     buttArr[row][col].addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
                             JButton src = (JButton) e.getSource();
-                            Color currentColor = isBlackTurn ? Color.BLACK : Color.WHITE;
+                            Color currentColor = isBlackTurn ? usingBlack : Color.WHITE;
                             TileDraw newTile = new TileDraw(currentColor, false);
-                            newTile.setBounds(src.getX()-7 , src.getY()-7, 35, 35);
+                            newTile.setBounds(src.getX()-8 , src.getY()-7, 40, 40);
                             t.add(newTile);
                             isBlackTurn = !isBlackTurn;
                             p.remove(src);
@@ -56,7 +57,7 @@ public class buttArrMaker {
                 buttArr[row][col].addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         JButton src = (JButton) e.getSource();
-                        Color currentColor = isBlackTurn ? Color.BLACK : Color.WHITE;
+                        Color currentColor = isBlackTurn ? usingBlack : Color.WHITE;
                         TileDraw newTile = new TileDraw(currentColor, true);
                         newTile.setBounds(src.getX(), src.getY()-20, 68, 68);
                         t.add(newTile);
