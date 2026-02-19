@@ -5,7 +5,7 @@ import javax.swing.*;
 public class buttArrMaker {
 
     // tryout color elbetel.
-    private static int isBlackTurn = 1;
+    public static int isBlackTurn = 1;
 
     public static JButton[][] initButtArr(JLayeredPane p, JLayeredPane t) {
         JButton[][] buttArr = new JButton[21][21];
