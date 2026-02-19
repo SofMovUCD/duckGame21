@@ -18,7 +18,6 @@ public class TileDraw extends JPanel {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         // Determine the border color based on the tile color
-        Color FtileColor = (tileColor == Color.BLACK) ? Color.BLACK : Color.WHITE;
 
         Color borderColor;
         if (tileColor == Color.BLACK) {
@@ -30,7 +29,7 @@ public class TileDraw extends JPanel {
             // Full 68x68 coverage
             int[] x = {20, 48, 68, 68, 48, 20, 0, 0};
             int[] y = {0, 0, 20, 48, 68, 68, 48, 20};
-            g2.setColor(FtileColor);
+            g2.setColor(tileColor);
             g2.fillPolygon(x, y, 8);
             g2.setColor(borderColor);
             g2.setStroke(new BasicStroke(2));
@@ -39,7 +38,7 @@ public class TileDraw extends JPanel {
             // Full 35x35 coverage for the Rhombus
             int[] x = {17, 36, 17, -2};
             int[] y = {-2, 17, 36, 17};
-            g2.setColor(FtileColor);
+            g2.setColor(tileColor);
             g2.fillPolygon(x, y, 4);
             g2.setColor(borderColor);
             g2.setStroke(new BasicStroke(2));
