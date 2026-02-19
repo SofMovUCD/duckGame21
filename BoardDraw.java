@@ -81,6 +81,16 @@ public class BoardDraw extends JPanel {
         //create label
         nextMove = new JLabel("Black to move");
         nextMove.setBounds(400, 830, 150, 50);
+        //do the numbers and letters at edge of board
+        for(int i = 0; i < 11; i++){
+            JLabel num = new JLabel(Integer.toString(i+1));
+            JLabel chars = new JLabel(Character.toString(i+65));
+            num.setBounds(10, 50 + i*68, 15,15);
+            chars.setBounds(60 + i*68, 10, 15,15 );
+            chars.setForeground(Color.WHITE);
+            boardFrame.add(num);
+            boardFrame.add(chars);
+        }
         //l.size
         nextMove.setOpaque(true);
         placedPane.add(nextMove);
