@@ -4,11 +4,13 @@ import javax.swing.*;
 public class TileDraw extends JPanel {
     private Color tileColor;
     private boolean isOctagon;
+    private int nextMove;
 
     public TileDraw(Color color, boolean isOctagon) {
         this.tileColor = color;
         this.isOctagon = isOctagon;
         this.setOpaque(false);
+        nextMove = -1;
     }
 
     @Override
@@ -37,8 +39,9 @@ public class TileDraw extends JPanel {
             g2.setStroke(new BasicStroke(2));
             g2.drawPolygon(x, y, 4);
         }
+
         //update __ to move
-        if(tileColor == Color.WHITE){//whites turn, black to move
+        if(nextMove == 1){//whites turn, black to move
             g2.setColor(new Color(45,45,45));
         }
         else{
@@ -53,7 +56,7 @@ public class TileDraw extends JPanel {
         int[] newNewX = {18+330, 38+330, 18+330, -2+330};
         int[] newNewY = {25 + 815, 45 + 815, 65 + 815,  45 + 815};
 
-        if(tileColor == Color.WHITE){//whites turn, black to move
+        if(nextMove == 1){//whites turn, black to move
             g2.setColor(new Color(45,45,45));
         }
         else{
@@ -64,12 +67,13 @@ public class TileDraw extends JPanel {
         g2.setColor(Color.BLACK);
         g2.drawPolygon(newNewX, newNewY, 4);
 
-        if(tileColor == Color.WHITE){//whites turn, black to move
+        if(nextMove == 1){//whites turn, black to move
             BoardDraw.nextMove.setText("Black to move");
         }
         else{
             BoardDraw.nextMove.setText("White to move");
         }
+        nextMove*= -1;
 
     }
 }
