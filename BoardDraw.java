@@ -36,94 +36,34 @@ public class BoardDraw extends JPanel {
                 g2.drawLine(x[0], y[0], x[numberOfPoints - 1], y[numberOfPoints - 1]);
             }
         }
-        
-
-        // Connect the first and last vertex
-        
     }
-
-    public Dimension getPreferredSize() {
-        return new Dimension(810,800);
-    }
-
 
     public static void main(String[] args) {
-        System.setProperty("sun.java2d.uiScale", "1.5");
+        //Init board name and closing function
         JFrame boardFrame = new JFrame("Quax Game");
         boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel centerWrapper = new JPanel(new GridBagLayout());
-        centerWrapper.setBackground(new Color(45, 45, 45)); // Dar
-
+        //overlay panel to place above
         JPanel overlayPanel = new JPanel();
         overlayPanel.setLayout(new OverlayLayout(overlayPanel));
-        //cahnges to fix my screen
-        overlayPanel.setPreferredSize(new Dimension(810, 800));
+        overlayPanel.setPreferredSize(new Dimension(810, 830));
+
+        //Create Panes for placing buttons
         JLayeredPane buttonPane = new JLayeredPane(); 
         JLayeredPane placedPane = new JLayeredPane();
-        //boardFrame.setLayout(new BorderLayout()); // Explicitly set BorderLayout
-        
-        // Add BoardDraw to CENTER (takes most space)
-        //boardFrame.add(new BoardDraw(), BorderLayout.CENTER);
 
-        /* // aidan's code i will uncommet later.
-        buttArrMaker.initButtArr(buttonPane, placedPane);
-        overlayPanel.add(buttonPane); //add the buttons
-        overlayPanel.add(placedPane);
-        overlayPanel.add(new BoardDraw()); //below add the actual board
-        //buttonPane.setOpaque(false);
-        //buttonPane.setBackground(new Color(0, 0, 0, 0)); */
-
-        //test code
-
-        buttonPane.setLayout(null);
-        buttonPane.setOpaque(false);
-        placedPane.setLayout(null);
-        placedPane.setOpaque(false);
-
-        // test code
+        //create buttons
         buttArrMaker.initButtArr(buttonPane, placedPane);
 
-        // i added this codes for testing
-        // this ones aswell
-        // Correct order for the overlay
+        //Add Buttons, Tiles and Board to working Panel
         overlayPanel.add(buttonPane); // Top Layer (Invisible buttons)
         overlayPanel.add(placedPane); // Middle Layer (Tiles being placed)
         overlayPanel.add(new BoardDraw()); // Bottom Layer (The Brown Board)
-// fix my screen
-        centerWrapper.add(overlayPanel);
-        boardFrame.add(centerWrapper);
+        boardFrame.add(overlayPanel);
 
-// Ensure these are absolutely transparent
-       /* buttonPane.setOpaque(false);
-        placedPane.setOpaque(false); */
-
-        // ending of my testing
-        
-        // Add buttonPane to SOUTH or another region
-        //boardFrame.add(overlayPanel, BorderLayout.CENTER);
-
-        boardFrame.setSize(1200,1200);
-        //boardFrame.pack(); //sets the size of the stuff in the frame
-       // mine code
+        //Set board properties
+        boardFrame.setSize(810,830);
         boardFrame.setLocationRelativeTo(null);
-       // aidans code i will change for now trying things out
-        //boardFrame.setLocation(100,100); //chhange position of where displayed on screen
         boardFrame.setVisible(true);
     }
 }
-/*
-    public static void main(String[] args) {
-        JFrame boardFrame = new JFrame("Quax Game");
-        JLayeredPane buttonPane = new JLayeredPane();
-        boardFrame.setBounds(0,0,810,800);
-        buttonPane.setBounds(0,0,810,800);
-        boardFrame.add(new BoardDraw());
-        boardFrame.add(buttonPane);
-        buttArrMaker.initButtArr(buttonPane);
-        boardFrame.setVisible(true);
-
-    }
-}
-*/
-
