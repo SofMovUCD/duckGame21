@@ -2,7 +2,7 @@ import java.awt.*;
 import javax.swing.*;
 
 public class BoardDraw extends JPanel {
-
+    public static JLabel nextMove;
     public void paint(Graphics g) {
 
         int myboard[][][] = Board.board;
@@ -36,6 +36,20 @@ public class BoardDraw extends JPanel {
                 g2.drawLine(x[0], y[0], x[numberOfPoints - 1], y[numberOfPoints - 1]);
             }
         }
+        //add the back to move visual initially
+
+        g2.setColor(new Color(45,45,45));
+        int[] newX = {50 + 200, 78 + 200, 98 + 200, 98 + 200, 78 + 200, 50 + 200, 30 + 200, 30 + 200, 50 + 200};
+        int[] newY = {25 + 800, 25 + 800, 45 + 800, 73 + 800, 93 + 800, 93 + 800, 73 + 800, 45 + 800, 25 + 800};
+        g2.fillPolygon(newX, newY, 8);
+        g2.setColor(Color.BLACK);
+        g2.drawPolygon(newX, newY, 8);
+        int[] newNewX = {18+330, 38+330, 18+330, -2+330};
+        int[] newNewY = {25 + 815, 45 + 815, 65 + 815,  45 + 815};
+        g2.setColor(new Color(45,45,45));
+        g2.fillPolygon(newNewX, newNewY, 4);
+        g2.setColor(Color.BLACK);
+        g2.drawPolygon(newNewX, newNewY, 4);
     }
 
     public static void main(String[] args) {
@@ -46,15 +60,21 @@ public class BoardDraw extends JPanel {
         //overlay panel to place above
         JPanel overlayPanel = new JPanel();
         overlayPanel.setLayout(new OverlayLayout(overlayPanel));
-        overlayPanel.setPreferredSize(new Dimension(810, 830));
+        overlayPanel.setPreferredSize(new Dimension(810, 1000));
 
         //Create Panes for placing buttons
         JLayeredPane buttonPane = new JLayeredPane(); 
         JLayeredPane placedPane = new JLayeredPane();
+        placedPane.setSize(810, 1000);
+        //create label
+        nextMove = new JLabel("Black to move");
+        nextMove.setBounds(400, 830, 150, 50);
+        //l.size
+        nextMove.setOpaque(true);
+        placedPane.add(nextMove);
 
         //create buttons
         buttArrMaker.initButtArr(buttonPane, placedPane);
-
         //Add Buttons, Tiles and Board to working Panel
         overlayPanel.add(buttonPane); // Top Layer (Invisible buttons)
         overlayPanel.add(placedPane); // Middle Layer (Tiles being placed)
@@ -62,7 +82,7 @@ public class BoardDraw extends JPanel {
         boardFrame.add(overlayPanel);
 
         //Set board properties
-        boardFrame.setSize(810,830);
+        boardFrame.setSize(810,1000);
         boardFrame.setLocationRelativeTo(null);
         boardFrame.setVisible(true);
     }

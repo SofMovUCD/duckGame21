@@ -37,5 +37,39 @@ public class TileDraw extends JPanel {
             g2.setStroke(new BasicStroke(2));
             g2.drawPolygon(x, y, 4);
         }
+        //update __ to move
+        if(tileColor == Color.WHITE){//whites turn, black to move
+            g2.setColor(new Color(45,45,45));
+        }
+        else{
+            g2.setColor(Color.WHITE);
+        }
+
+        int[] newX = {50 + 200, 78 + 200, 98 + 200, 98 + 200, 78 + 200, 50 + 200, 30 + 200, 30 + 200, 50 + 200};
+        int[] newY = {25 + 800, 25 + 800, 45 + 800, 73 + 800, 93 + 800, 93 + 800, 73 + 800, 45 + 800, 25 + 800};
+        g2.fillPolygon(newX, newY, 8);
+        g2.setColor(Color.BLACK);
+        g2.drawPolygon(newX, newY, 8);
+        int[] newNewX = {18+330, 38+330, 18+330, -2+330};
+        int[] newNewY = {25 + 815, 45 + 815, 65 + 815,  45 + 815};
+
+        if(tileColor == Color.WHITE){//whites turn, black to move
+            g2.setColor(new Color(45,45,45));
+        }
+        else{
+            g2.setColor(Color.WHITE);
+        }
+
+        g2.fillPolygon(newNewX, newNewY, 4);
+        g2.setColor(Color.BLACK);
+        g2.drawPolygon(newNewX, newNewY, 4);
+
+        if(tileColor == Color.WHITE){//whites turn, black to move
+            BoardDraw.nextMove.setText("Black to move");
+        }
+        else{
+            BoardDraw.nextMove.setText("White to move");
+        }
+
     }
 }
