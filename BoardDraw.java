@@ -36,17 +36,29 @@ public class BoardDraw extends JPanel {
                 g2.drawLine(x[0], y[0], x[numberOfPoints - 1], y[numberOfPoints - 1]);
             }
         }
-        //add the back to move visual initially
-
-        g2.setColor(new Color(45,45,45));
+        //update __ to move
+        if(buttArrMaker.isBlackTurn == 1){//whites turn, black to move
+            g2.setColor(new Color(45,45,45));
+        }
+        else{
+            g2.setColor(Color.WHITE);
+        }
         int[] newX = {50 + 200, 78 + 200, 98 + 200, 98 + 200, 78 + 200, 50 + 200, 30 + 200, 30 + 200, 50 + 200};
         int[] newY = {25 + 800, 25 + 800, 45 + 800, 73 + 800, 93 + 800, 93 + 800, 73 + 800, 45 + 800, 25 + 800};
         g2.fillPolygon(newX, newY, 8);
         g2.setColor(Color.BLACK);
         g2.drawPolygon(newX, newY, 8);
+
         int[] newNewX = {18+330, 38+330, 18+330, -2+330};
         int[] newNewY = {25 + 815, 45 + 815, 65 + 815,  45 + 815};
-        g2.setColor(new Color(45,45,45));
+
+        if(buttArrMaker.isBlackTurn == 1){//whites turn, black to move
+            g2.setColor(new Color(45,45,45));
+        }
+        else{
+            g2.setColor(Color.WHITE);
+        }
+
         g2.fillPolygon(newNewX, newNewY, 4);
         g2.setColor(Color.BLACK);
         g2.drawPolygon(newNewX, newNewY, 4);
