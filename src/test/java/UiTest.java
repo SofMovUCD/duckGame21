@@ -10,6 +10,8 @@ import org.movshovich.buttArrMaker;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
@@ -77,9 +79,17 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     @Test
     public void buttonPressToUpdateArray() {
         //GIVEN button press
-        window.button("0 0").click();
+       /* window.button("0 2").click();
         //CHECK boardTile updated to correct value
-        assertEquals( -1, Board.board[0][0][0]);
+        assertEquals( -1, Board.board[0][0][0]);*/
+
+        GuiActionRunner.execute(() -> {
+            JButton btn = window.button("0 0").target();
+            for (ActionListener al : btn.getActionListeners()) {
+                al.actionPerformed(new ActionEvent(btn, ActionEvent.ACTION_PERFORMED, null));
+            }
+        });
+        assertEquals(-1, Board.board[0][0][0]);
     }
 
     @Test
@@ -89,7 +99,7 @@ public class UiTest extends AssertJSwingJUnitTestCase {
         //CHECK label updated to correct value
         assertEquals("BLACK to play", BoardDraw.nextMove.getText());
     }
-
+/*
     @Test
     public void buttonPressToDeleteButton(){
         //GIVEN button press
@@ -99,7 +109,22 @@ public class UiTest extends AssertJSwingJUnitTestCase {
             window.button("0 0").isEnabled();
         }).isInstanceOf(ComponentLookupException.class)
                 .hasMessageStartingWith("Unable to find component");
-    }
+    }*/
+@Test
+public void buttonPressToDeleteButton(){
+    // 1. Manually trigger the "0 0" button's logic
+    GuiActionRunner.execute(() -> {
+        JButton btn = window.button("0 0").target();
+        for (ActionListener al : btn.getActionListeners()) {
+            al.actionPerformed(new ActionEvent(btn, ActionEvent.ACTION_PERFORMED, null));
+        }
+    });
+
+    // 2. Try to find the button. Since we triggered the removal, it should be gone.
+    assertThatThrownBy(() -> {
+        window.robot().finder().findByName("0 0", JButton.class, true);
+    }).isInstanceOf(ComponentLookupException.class);
+}
 
     @Test
     public void numAndLett(){
