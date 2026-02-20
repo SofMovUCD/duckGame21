@@ -3,6 +3,7 @@ import org.assertj.swing.exception.ComponentLookupException;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.movshovich.Board;
 import org.movshovich.BoardDraw;
@@ -40,10 +41,12 @@ public class UiTest extends AssertJSwingJUnitTestCase {
 
             // Add numbers and letters
             for (int i = 0; i < 11; i++) {
-                JLabel num = new JLabel(Integer.toString(i + 1));
-                JLabel chars = new JLabel(Character.toString(i + 65));
-                num.setBounds(10, 50 + i * 68, 15, 15);
-                chars.setBounds(60 + i * 68, 10, 15, 15);
+                JLabel num = new JLabel(Integer.toString(i+1));
+                num.setName(Integer.toString(i+1));
+                JLabel chars = new JLabel(Character.toString(i+65));
+                chars.setName(Character.toString(i+65));
+                num.setBounds(10, 50 + i*68, 15,15);
+                chars.setBounds(60 + i*68, 10, 15,15 );
                 chars.setForeground(Color.WHITE);
                 placedPane.add(num);
                 placedPane.add(chars);
@@ -98,5 +101,21 @@ public class UiTest extends AssertJSwingJUnitTestCase {
             window.button("0 0").isEnabled();
         }).isInstanceOf(ComponentLookupException.class)
                 .hasMessageStartingWith("Unable to find component");
+    }
+
+    @Test
+    public void numAndLett(){
+        //test all the letters and number on the sides and top exist and are correct
+        for(int i = 0; i < 11; i++){
+            //JLabel num = new JLabel(Integer.toString(i+1));
+            //JLabel chars = new JLabel(Character.toString(i+65));
+            assertEquals(window.label(Integer.toString(i+1)).text(), Integer.toString(i+1));
+            assertEquals(window.label(Character.toString(i+65)).text(), Character.toString(i+65));
+        }
+    }
+    @Test
+    public void switchTurn(){
+        window.button("0 0").click();
+        assertEquals(-1, buttArrMaker.isBlackTurn);
     }
 }
