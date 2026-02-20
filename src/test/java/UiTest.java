@@ -3,7 +3,6 @@ import org.assertj.swing.exception.ComponentLookupException;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.movshovich.Board;
 import org.movshovich.BoardDraw;
@@ -11,7 +10,6 @@ import org.movshovich.buttArrMaker;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
@@ -123,7 +121,7 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     public void checkAllRhombusButtonsExist(){
         for(int i = 0; i < 10; i++){
             for(int j = 0; j < 10; j++){
-                window.button(Integer.toString(i)+ " "+ Integer.toString(2*j+1)).isEnabled();
+                window.button(i+ " "+ 2*j+1).isEnabled();
             }
         }
     }
@@ -132,7 +130,7 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     public void checkAllOctagonalButtonsExist(){
         for(int i = 0; i < 11; i++){
             for(int j = 0; j < 11; j++){
-                window.button(Integer.toString(i)+ " "+ Integer.toString(2*j)).isEnabled();
+                window.button(i+ " "+ 2*j).isEnabled();
             }
         }
     }
