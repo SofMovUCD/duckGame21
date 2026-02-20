@@ -107,8 +107,6 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     public void numAndLett(){
         //test all the letters and number on the sides and top exist and are correct
         for(int i = 0; i < 11; i++){
-            //JLabel num = new JLabel(Integer.toString(i+1));
-            //JLabel chars = new JLabel(Character.toString(i+65));
             assertEquals(window.label(Integer.toString(i+1)).text(), Integer.toString(i+1));
             assertEquals(window.label(Character.toString(i+65)).text(), Character.toString(i+65));
         }
@@ -117,6 +115,8 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     public void switchTurn(){
         window.button("0 0").click();
         assertEquals(-1, buttArrMaker.isBlackTurn);
+        window.button("0 1").click();
+        assertEquals(1, buttArrMaker.isBlackTurn);
     }
 
     @Test
