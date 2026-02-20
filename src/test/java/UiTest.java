@@ -1,20 +1,24 @@
 import org.assertj.swing.edt.GuiActionRunner;
+import org.assertj.swing.exception.ComponentLookupException;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.movshovich.Board;
 import org.movshovich.BoardDraw;
 import org.movshovich.buttArrMaker;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 
-public class UiTest  extends AssertJSwingJUnitTestCase {
+public class UiTest extends AssertJSwingJUnitTestCase {
     private FrameFixture window;
 
-    @Override
+    @BeforeEach
     protected void onSetUp() {
             JFrame frame = GuiActionRunner.execute(() -> {
             JFrame boardFrame = new JFrame("Quax Game");
@@ -75,5 +79,24 @@ public class UiTest  extends AssertJSwingJUnitTestCase {
         window.button("0 0").click();
         //CHECK boardTile updated to correct value
         assertEquals( -1, Board.board[0][0][0]);
+    }
+
+    @Test
+    public void buttonPressToUpdateLabel() {
+        //GIVEN button press
+        window.button("0 0").click();
+        //CHECK label updated to correct value
+        assertEquals("Black to move", BoardDraw.nextMove.getText());
+    }
+
+    @Test
+    public void buttonPressToDeleteButton(){
+        //GIVEN button press
+        window.button("0 0").click();
+        //CHECK button does not exist anymore
+        assertThatThrownBy(() -> {
+            window.button("0 0").isEnabled();
+        }).isInstanceOf(ComponentLookupException.class)
+                .hasMessageStartingWith("Unable to find component");
     }
 }
