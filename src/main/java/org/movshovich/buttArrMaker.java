@@ -20,8 +20,8 @@ public class buttArrMaker {
                     int row = i;
                     int col = j * 2 + 1;
                     buttArr[row][col] = new JButton();
-
                     buttArr[row][col].setBounds(88 + j * 68, 82 + i * 68, 20, 18);
+                    buttArr[row][col].setName(Integer.toString(i)+ " "+ Integer.toString(col));
 
                     buttArr[row][col].setContentAreaFilled(false);
                     buttArr[row][col].setBorderPainted(false);
@@ -50,9 +50,10 @@ public class buttArrMaker {
 
                 // testing code
                 int row = i ;
-                int col = j+ j%2;
+                int col = j*2;
                 buttArr[row][col] = new JButton();
                 buttArr[row][col].setBounds(30 + j * 68, 45 + i * 68, 68, 30);
+                buttArr[row][col].setName(Integer.toString(i)+ " "+ Integer.toString(col));
 
                 buttArr[row][col].setContentAreaFilled(false);
                 buttArr[row][col].setBorderPainted(false);
