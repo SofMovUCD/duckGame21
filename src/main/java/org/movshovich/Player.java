@@ -1,3 +1,5 @@
+package org.movshovich;
+
 import java.awt.*;
 
 public class Player {

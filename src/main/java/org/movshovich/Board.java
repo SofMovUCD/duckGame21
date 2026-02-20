@@ -1,3 +1,5 @@
+package org.movshovich;
+
 public class Board {
 	
 	public static int[][][] board = new int[11][21][2];
