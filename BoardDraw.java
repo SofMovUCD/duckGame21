@@ -88,8 +88,8 @@ public class BoardDraw extends JPanel {
             num.setBounds(10, 50 + i*68, 15,15);
             chars.setBounds(60 + i*68, 10, 15,15 );
             chars.setForeground(Color.WHITE);
-            boardFrame.add(num);
-            boardFrame.add(chars);
+            placedPane.add(num);
+            placedPane.add(chars);
         }
         //l.size
         nextMove.setOpaque(true);

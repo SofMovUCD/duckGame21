@@ -34,8 +34,7 @@ public class buttArrMaker {
                             isBlackTurn *= -1;
                             p.remove(src);
                             t.repaint();
-                            p.repaint();
-                            System.out.println(((src.getY()-82) / 68) + " " + (((src.getX()-88) / 68)*2+1));
+                            //System.out.println(((src.getY()-82) / 68) + " " + (((src.getX()-88) / 68)*2+1));
                             Board.board[(src.getY()-82) / 68][((src.getX()-88) / 68)*2+1][0] = isBlackTurn;
                         }
                     });
@@ -66,8 +65,7 @@ public class buttArrMaker {
                         isBlackTurn *= -1;
                         p.remove(src);
                         t.repaint();
-                        p.repaint();
-                        System.out.println(((src.getY()-45)/ 68) + " " + (((src.getX()-30) / 68)*2));
+                        //System.out.println(((src.getY()-45)/ 68) + " " + (((src.getX()-30) / 68)*2));
                         Board.board[(src.getY()-45)/ 68][((src.getX()-30) / 68)*2][0] = isBlackTurn;
 
                     }
