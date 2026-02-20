@@ -118,4 +118,22 @@ public class UiTest extends AssertJSwingJUnitTestCase {
         window.button("0 0").click();
         assertEquals(-1, buttArrMaker.isBlackTurn);
     }
+
+    @Test
+    public void checkAllRhombusButtonsExist(){
+        for(int i = 0; i < 10; i++){
+            for(int j = 0; j < 10; j++){
+                window.button(Integer.toString(i)+ " "+ Integer.toString(2*j+1)).isEnabled();
+            }
+        }
+    }
+
+    @Test
+    public void checkAllOctagonalButtonsExist(){
+        for(int i = 0; i < 11; i++){
+            for(int j = 0; j < 11; j++){
+                window.button(Integer.toString(i)+ " "+ Integer.toString(2*j)).isEnabled();
+            }
+        }
+    }
 }
