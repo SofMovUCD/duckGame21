@@ -13,5 +13,13 @@
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <dependencies>
+        <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-swing-junit</artifactId>
+        <version>3.9.2</version>
+        <scope>test</scope>
+    </dependency>
+    </dependencies>
 
 </project>
