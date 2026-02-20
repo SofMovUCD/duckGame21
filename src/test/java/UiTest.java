@@ -34,7 +34,7 @@ public class UiTest extends AssertJSwingJUnitTestCase {
             placedPane.setSize(810, 1000);
 
             // Create label
-            BoardDraw.nextMove = new JLabel("Black to move");
+            BoardDraw.nextMove = new JLabel("BLACK to play");
             BoardDraw.nextMove.setBounds(400, 830, 150, 50);
 
             // Add numbers and letters
@@ -87,7 +87,7 @@ public class UiTest extends AssertJSwingJUnitTestCase {
         //GIVEN button press
         window.button("0 0").click();
         //CHECK label updated to correct value
-        assertEquals("Black to move", BoardDraw.nextMove.getText());
+        assertEquals("BLACK to play", BoardDraw.nextMove.getText());
     }
 
     @Test
@@ -121,7 +121,7 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     public void checkAllRhombusButtonsExist(){
         for(int i = 0; i < 10; i++){
             for(int j = 0; j < 10; j++){
-                window.button(i+ " "+ 2*j+1).isEnabled();
+                window.button(i+ " "+ (2*j+1)).isEnabled();
             }
         }
     }

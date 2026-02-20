@@ -81,7 +81,7 @@ public class BoardDraw extends JPanel {
         JLayeredPane placedPane = new JLayeredPane();
         placedPane.setSize(810, 1000);
         //create label
-        nextMove = new JLabel("Black to move");
+        nextMove = new JLabel("BLACK to play");
         nextMove.setBounds(400, 830, 150, 50);
         //do the numbers and letters at edge of board
         for(int i = 0; i < 11; i++){
