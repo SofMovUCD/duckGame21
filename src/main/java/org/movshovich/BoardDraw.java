@@ -5,6 +5,9 @@ import javax.swing.*;
 
 public class BoardDraw extends JPanel {
     public static JLabel nextMove;
+    public static JPanel overlayPanel;
+    public static JLayeredPane buttonPane;
+
     public void paint(Graphics g) {
 
         int myboard[][][] = Board.board;
@@ -39,12 +42,7 @@ public class BoardDraw extends JPanel {
             }
         }
         //update __ to move
-        if(buttArrMaker.isBlackTurn == 1){//whites turn, black to move
-            g2.setColor(new Color(45,45,45));
-        }
-        else{
-            g2.setColor(Color.WHITE);
-        }
+        g2.setColor(Board.plrByID(Board.currentPlayer).getPlayerColour());
         int[] newX = {50 + 200, 78 + 200, 98 + 200, 98 + 200, 78 + 200, 50 + 200, 30 + 200, 30 + 200, 50 + 200};
         int[] newY = {25 + 800, 25 + 800, 45 + 800, 73 + 800, 93 + 800, 93 + 800, 73 + 800, 45 + 800, 25 + 800};
         g2.fillPolygon(newX, newY, 8);
@@ -54,30 +52,24 @@ public class BoardDraw extends JPanel {
         int[] newNewX = {18+330, 38+330, 18+330, -2+330};
         int[] newNewY = {25 + 815, 45 + 815, 65 + 815,  45 + 815};
 
-        if(buttArrMaker.isBlackTurn == 1){//whites turn, black to move
-            g2.setColor(new Color(45,45,45));
-        }
-        else{
-            g2.setColor(Color.WHITE);
-        }
-
+        g2.setColor(Board.plrByID(Board.currentPlayer).getPlayerColour());
         g2.fillPolygon(newNewX, newNewY, 4);
         g2.setColor(Color.BLACK);
         g2.drawPolygon(newNewX, newNewY, 4);
     }
 
-    public static void main(String[] args) {
+    public static void initBoard() {
         //Init board name and closing function
-        JFrame boardFrame = new JFrame("Quax Game");
+        JFrame boardFrame = new JFrame("Quax Player vs Player");
         boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //overlay panel to place above
-        JPanel overlayPanel = new JPanel();
+        overlayPanel = new JPanel();
         overlayPanel.setLayout(new OverlayLayout(overlayPanel));
         overlayPanel.setPreferredSize(new Dimension(810, 1000));
 
         //Create Panes for placing buttons
-        JLayeredPane buttonPane = new JLayeredPane(); 
+        buttonPane = new JLayeredPane(); 
         JLayeredPane placedPane = new JLayeredPane();
         placedPane.setSize(810, 1000);
         //create label
@@ -100,7 +92,7 @@ public class BoardDraw extends JPanel {
         //create buttons
         buttArrMaker.initButtArr(buttonPane, placedPane);
         //Add Buttons, Tiles and Board to working Panel
-        overlayPanel.add(buttonPane); // Top Layer (Invisible buttons)
+         // Top Layer (Invisible buttons)
         overlayPanel.add(placedPane); // Middle Layer (Tiles being placed)
         overlayPanel.add(new BoardDraw()); // Bottom Layer (The Brown Board)
         boardFrame.add(overlayPanel);

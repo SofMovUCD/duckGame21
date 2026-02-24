@@ -1,10 +1,13 @@
 package org.movshovich;
 
+import java.util.ArrayList;
+
 public class Board {
 	
 	public static int[][][] board = new int[11][21][2];
-	private Player player1;
-	private Player player2;
+	public static ArrayList<Player> plrList = new ArrayList<>();
+	public static int currentPlayer = 1;
+	public static int movingFlag;
 
 	public Player checkWin(Board[][][] b){
 		//check if win condition satisfied
@@ -22,17 +25,26 @@ public class Board {
 
 	public void setTile(int x, int y, int z, int val) {
 		board[x][y][z] = val;
-	} 
-	
-	public Player getPlayer(int num){
-		if(num != 1 && num != 2){
-			throw new IllegalArgumentException("Wrong player number entered");
-		}
-		return num == 1? player1: player2;
 	}
-/* 
+
+	public static Player plrByID(int ID) {
+		for (Player plr : plrList) {
+			if (plr.getPlayerId() == ID) {
+				return plr;
+			}
+		}
+		throw new IllegalArgumentException("No Players of this ID");
+	}
+	
 	public static void main(String[] args) {
 		BoardDraw.initBoard();
+		plrList.add(new Player(1));
+		plrList.add(new Player(-1));
+
+		while (true) {
+			//System.out.println("Game Start!");
+			plrByID(currentPlayer).makeMove();
+			//System.out.println("move Made");
+		}
 	}
-	*/
 }

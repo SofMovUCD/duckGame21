@@ -22,7 +22,7 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     @BeforeEach
     protected void onSetUp() {
             JFrame frame = GuiActionRunner.execute(() -> {
-            JFrame boardFrame = new JFrame("Quax Game");
+            JFrame boardFrame = new JFrame("Quax Player vs Player");
             boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
             // Create overlay panel
@@ -137,9 +137,9 @@ public void buttonPressToDeleteButton(){
     @Test
     public void switchTurn(){
         window.button("0 0").click();
-        assertEquals(-1, buttArrMaker.isBlackTurn);
+        assertEquals(-1, Board.currentPlayer);
         window.button("0 1").click();
-        assertEquals(1, buttArrMaker.isBlackTurn);
+        assertEquals(1, Board.currentPlayer);
     }
 
     @Test

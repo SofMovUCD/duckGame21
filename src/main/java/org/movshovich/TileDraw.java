@@ -40,7 +40,7 @@ public class TileDraw extends JPanel {
             g2.drawPolygon(x, y, 4);
         }
         //update label on button press
-        if(buttArrMaker.isBlackTurn == 1){//whites turn, black to move
+        if(Board.currentPlayer == 1){//whites turn, black to move
             BoardDraw.nextMove.setText("BLACK to play");
         }
         else{
