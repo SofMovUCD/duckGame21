@@ -41,10 +41,10 @@ public class TileDraw extends JPanel {
         }
         //update label on button press
         if(buttArrMaker.isBlackTurn == 1){//whites turn, black to move
-            BoardDraw.nextMove.setText("Black to move");
+            BoardDraw.nextMove.setText("BLACK to play");
         }
         else{
-            BoardDraw.nextMove.setText("White to move");
+            BoardDraw.nextMove.setText("WHITE to play");
         }
 
     }
