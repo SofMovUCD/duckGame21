@@ -29,6 +29,10 @@ public class Board {
 			throw new IllegalArgumentException("Wrong player number entered");
 		}
 		return num == 1? player1: player2;
-	}	
-	
+	}
+/* 
+	public static void main(String[] args) {
+		BoardDraw.initBoard();
+	}
+	*/
 }
