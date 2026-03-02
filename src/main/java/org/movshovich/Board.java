@@ -87,7 +87,7 @@ public class Board {
 			//System.out.println("Game Start!");
 			plrByID(currentPlayer).makeMove();
 			//System.out.println("move Made");
-            System.out.println(checkWin()? "Black won" : "Back not won");
+            System.out.println(checkWin()? "Black won" : "Black not won");
 		}
 	}
 }
