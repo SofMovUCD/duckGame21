@@ -9,21 +9,23 @@ public class Board {
 	public static int currentPlayer = 1;
 	public static int movingFlag;
 
-	public static boolean checkWin(Board[][][] b){
+	public static boolean checkWin(){
 		//go through all the entries on the top/left row/column
         //1 -> check white (check path containing -1)
         //-1 -> check black (check path containing 1)
-
+        boolean isWin = false;
         if(currentPlayer == 1){ //black check
             for(int i = 0; i < 11; i++){ //check top row for existence of black tiles
                 if(board[0][i*2][0] == 1){ //top row has found a black octagon, should check if there is path to bottom
-                    checkBlackWin(0, i*2);
+                    System.out.println("found  black octagon at position: "+ i);
+                    isWin = isWin || checkBlackWin(0, i * 2);
                 }
             }
-        } else if (currentPlayer == -1) { //white check
-
         }
-        return true;
+        else { //white check
+            return false;
+        }
+        return isWin;
 	}
 
     //recursive function
@@ -31,10 +33,10 @@ public class Board {
         if(y == 10){
             return true;
         }
-        if(y > 11 && board[y+1][x][0] == 1){ //check above
+        if(y > 0 && board[y+1][x][0] == 1){ //check above
             checkBlackWin(y+1, x);
         }
-        if(x < 11 && board[y][x+2][0] == 1){ //check to the right ->
+        if(x < 0 && board[y][x+2][0] == 1){ //check to the right ->
             checkBlackWin(y, x+2);
         }
         if(y < 11 && board[y-1][x][0] == 1){//check below
@@ -85,6 +87,7 @@ public class Board {
 			//System.out.println("Game Start!");
 			plrByID(currentPlayer).makeMove();
 			//System.out.println("move Made");
+            System.out.println(checkWin()? "Black won" : "Back not won");
 		}
 	}
 }
