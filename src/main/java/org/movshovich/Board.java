@@ -97,14 +97,6 @@ public class Board {
         return result;
     }
 
-	public int[][][] getBoard(){
-		return board;
-	}
-
-	public void setTile(int x, int y, int z, int val) {
-		board[x][y][z] = val;
-	}
-
 	public static Player plrByID(int ID) {
 		for (Player plr : plrList) {
 			if (plr.getPlayerId() == ID) {
