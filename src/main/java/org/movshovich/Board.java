@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Board {
 	
-	public static int[][][] board = new int[11][21][2];
+	public static int[][][] board = new int[11][21][3];
 	public static ArrayList<Player> plrList = new ArrayList<>();
 	public static int currentPlayer = 1;
 	public static int movingFlag;
@@ -14,11 +14,13 @@ public class Board {
         //1 -> check white (check path containing -1)
         //-1 -> check black (check path containing 1)
         boolean isWin = false;
-        if(currentPlayer == 1){ //black check
+        if(currentPlayer == -1){ //black check
             for(int i = 0; i < 11; i++){ //check top row for existence of black tiles
                 if(board[0][i*2][0] == 1){ //top row has found a black octagon, should check if there is path to bottom
                     System.out.println("found  black octagon at position: "+ i);
-                    isWin = isWin || checkBlackWin(0, i * 2);
+                    if(checkBlackWin(0, i * 2)){
+                        return true;
+                    }
                 }
             }
         }
@@ -30,35 +32,45 @@ public class Board {
 
     //recursive function
     private static boolean checkBlackWin(int y, int x){
+		System.out.println(y);
+		if (board[y][x][2] == 1) {
+			return false;
+		}
+		
+		board[y][x][2] = 1;
+		
         if(y == 10){
             return true;
         }
-        if(y > 0 && board[y+1][x][0] == 1){ //check above
-            checkBlackWin(y+1, x);
+        
+        boolean result = false;
+        if(y > 0 && board[y-1][x][0] == 1 ){ //check above ^
+            result = result || checkBlackWin(y-1, x);
         }
-        if(x < 0 && board[y][x+2][0] == 1){ //check to the right ->
-            checkBlackWin(y, x+2);
+        if(x > 0 && board[y][x+2][0] == 1){ //check to the right →
+            result = result || checkBlackWin(y, x+2);
         }
-        if(y < 11 && board[y-1][x][0] == 1){//check below
-            checkBlackWin(y-1, x);
+        if(y < 11 && board[y+1][x][0] == 1){//check below ↓
+            result = result || checkBlackWin(y+1, x);
         }
-        if(x > 0 && board[y][x+2][0] == 1){ //check to the left ->
-            checkBlackWin(y, x+2);
+        if(x > 0 && board[y][x-2][0] == 1){ //check to the left ←
+            result = result || checkBlackWin(y, x-2);
         }
         //rhombus checks
         if(x > 0 && y < 11 && board[y][x-1][0] == 1 && board[y+1][x-2][0] == 1){ //bottom left
-            checkBlackWin(y+1, x-2);
+            result = result || checkBlackWin(y+1, x-2);
         }
         if(x < 11 && y < 11 && board[y][x+1][0] == 1 && board[y+1][x+2][0] == 1){ //bottom right
-            checkBlackWin(y+1, x+2);
+            result = result || checkBlackWin(y+1, x+2);
         }
-        if(x  > 0 && y > 0 && board[y-1][x-1][0] == 1 && board[y+1][x-2][0] == 1){ //upper left
-            checkBlackWin(y-1, x-2);
+        if(x > 0 && y > 0 && board[y-1][x-1][0] == 1 && board[y-1][x-2][0] == 1){ //upper left
+            result = result || checkBlackWin(y-1, x-2);
         }
         if(x < 11 && y > 0 && board[y-1][x+1][0] == 1 && board[y-1][x+2][0] == 1){ //upper right
-            checkBlackWin(y-1, x+2);
+            result = result || checkBlackWin(y-1, x+2);
         }
-        return false;
+        board[y][x][2] = 0;
+        return result;
     }
 
 	public int[][][] getBoard(){
@@ -83,11 +95,11 @@ public class Board {
 		plrList.add(new Player(1));
 		plrList.add(new Player(-1));
 
-		while (true) {
+		while (!checkWin()) {
 			//System.out.println("Game Start!");
 			plrByID(currentPlayer).makeMove();
 			//System.out.println("move Made");
-            System.out.println(checkWin()? "Black won" : "Back not won");
+            //System.out.println(checkWin()? "Black won" : "Black not won");
 		}
 	}
 }
