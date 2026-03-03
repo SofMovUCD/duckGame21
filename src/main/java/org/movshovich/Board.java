@@ -52,6 +52,7 @@ public class Board {
      * @param turn a value signifying whose turn it is (1 for black, -1 for white)
      * */
     private static boolean checkPlayerWin(int y, int x, int turn){
+        System.out.println("("+y+", "+x+")");
         if(turn == 1 && y == 10){ //check win for black
             System.out.println("Black wins!");
             return true;
