@@ -72,7 +72,7 @@ public class Board {
         if(y > 0 && board[y-1][x][0] == turn){ //check above ^
             result = checkPlayerWin(y-1, x, turn);
         }
-        if(x < 21 && board[y][x+2][0] == turn){ //check to the right →
+        if(x < 20 && board[y][x+2][0] == turn){ //check to the right →
             result = result || checkPlayerWin(y, x+2, turn);
         }
         if(y < 11 && board[y+1][x][0] == turn){//check below ↓
