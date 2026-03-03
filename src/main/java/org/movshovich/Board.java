@@ -13,7 +13,7 @@ public class Board {
 	public static int currentPlayer = 1;
 	public static int movingFlag;
     public static boolean whitefirst = true;
-    public static JButton piRuleBut = new JButton("pi Rule");
+    public static JButton piRuleBut;
 
 	public static boolean checkWin(){
 		//go through all the entries on the top/left row/column
@@ -97,39 +97,50 @@ public class Board {
 		throw new IllegalArgumentException("No Players of this ID");
 	}
 
-    public static void piRule() {
+    public static void initPiRuleButton() {
+        piRuleBut = new JButton("pi Rule");
         piRuleBut.setBounds(0, 900, 500, 50);
         piRuleBut.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                for (Player plr: plrList) {
-                    plr.setPlayerId(plr.getPlayerId() * -1);
-                }
-                BoardDraw.overlayPanel.remove(piRuleBut);
-                whitefirst = false;
-                movingFlag = 0;
+                piRule();
             }
         });
-        BoardDraw.overlayPanel.add(piRuleBut);
-        BoardDraw.overlayPanel.repaint();
+    }
+
+    public static void piRule() {
+        System.out.println("I am a PI Rule");
+        for (Player plr: plrList) {
+            plr.setPlayerId(plr.getPlayerId() * -1);
+            plr.refreshPlayerColour();
+        }
+
+        movingFlag = 0;
+        whitefirst = false;
+        currentPlayer *= -1;
+        BoardDraw.overlayPanel.remove(piRuleBut);
     }
 
 	public static void main(String[] args) {
 		BoardDraw.initBoard();
 		plrList.add(new Player(1));
 		plrList.add(new Player(-1));
+        initPiRuleButton();
 
 		while (!checkWin()) {
             if ((currentPlayer == -1) && whitefirst) {
-                piRule();
+                //System.out.println("PI Rule: Enforced");
+                BoardDraw.overlayPanel.add(piRuleBut);
+                BoardDraw.overlayPanel.repaint();
             }
-			//System.out.println("Game Start!");
+
 			plrByID(currentPlayer).makeMove();
-			//System.out.println("move Made");
-            System.out.println(checkWin()? "Black won" : "Black not won");
-            System.out.println(checkWin()? "Black won" : "Black not won");
-            if (whitefirst) {
+            //System.out.println(checkWin()? "Black won" : "Black not won");
+
+            if ((currentPlayer == 1) && whitefirst) {
+                whitefirst = false;
                 BoardDraw.overlayPanel.remove(piRuleBut);
-                //whitefirst = false;
+                //System.out.println("whitefirst: " + whitefirst);
+                BoardDraw.overlayPanel.repaint();
             }
 		}
 	}

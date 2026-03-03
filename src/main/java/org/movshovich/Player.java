@@ -17,6 +17,10 @@ public class Player {
     public int getPlayerId(){return playerId;}
     public void setPlayerId(int newId){playerId = newId;}
     public Color getPlayerColour(){return tileColour;}
+    
+    public void refreshPlayerColour() {
+        tileColour = playerId == 1? new Color(45, 45, 45): Color.white;
+        }
 
     public int getWins(){return wins;}
     public void incrementWins(){wins++;}
