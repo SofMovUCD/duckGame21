@@ -15,7 +15,7 @@ public class Player {
         this.losses = 0;
     }
     public int getPlayerId(){return playerId;}
-
+    public void setPlayerId(int newId){playerId = newId;}
     public Color getPlayerColour(){return tileColour;}
 
     public int getWins(){return wins;}
