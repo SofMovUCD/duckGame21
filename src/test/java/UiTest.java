@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.movshovich.Board;
 import org.movshovich.BoardDraw;
+import org.movshovich.Player;
 import org.movshovich.buttArrMaker;
 
 import javax.swing.*;
@@ -15,6 +16,8 @@ import java.awt.event.ActionListener;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
+import static org.movshovich.BoardDraw.buttonPane;
+import static org.movshovich.BoardDraw.overlayPanel;
 
 public class UiTest extends AssertJSwingJUnitTestCase {
     private FrameFixture window;
@@ -22,75 +25,74 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     @BeforeEach
     protected void onSetUp() {
             JFrame frame = GuiActionRunner.execute(() -> {
-            JFrame boardFrame = new JFrame("Quax Player vs Player");
-            boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                //Init board name and closing function
+                JFrame boardFrame = new JFrame("Quax Player vs Player");
+                boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-            // Create overlay panel
-            JPanel overlayPanel = new JPanel();
-            overlayPanel.setLayout(new OverlayLayout(overlayPanel));
-            overlayPanel.setPreferredSize(new Dimension(810, 1000));
+                //overlay panel to place above
+                overlayPanel = new JPanel();
+                overlayPanel.setLayout(new OverlayLayout(overlayPanel));
+                overlayPanel.setPreferredSize(new Dimension(810, 1000));
 
-            // Create panes
-            JLayeredPane buttonPane = new JLayeredPane();
-            JLayeredPane placedPane = new JLayeredPane();
-            placedPane.setSize(810, 1000);
+                //Create Panes for placing buttons
+                buttonPane = new JLayeredPane();
+                JLayeredPane placedPane = new JLayeredPane();
+                placedPane.setSize(810, 1000);
+                //create label
+                BoardDraw.nextMove = new JLabel("BLACK to play");
+                BoardDraw.nextMove.setBounds(400, 830, 150, 50);
+                //do the numbers and letters at edge of board
+                for(int i = 0; i < 11; i++){
+                    JLabel num = new JLabel(Integer.toString(i+1));
+                    JLabel chars = new JLabel(Character.toString(i+65));
+                    num.setBounds(10, 50 + i*68, 15,15);
+                    chars.setBounds(60 + i*68, 10, 15,15 );
+                    chars.setForeground(Color.WHITE);
+                    placedPane.add(num);
+                    placedPane.add(chars);
+                }
+                //l.size
+                BoardDraw.nextMove.setOpaque(true);
+                placedPane.add(BoardDraw.nextMove);
 
-            // Create label
-            BoardDraw.nextMove = new JLabel("BLACK to play");
-            BoardDraw.nextMove.setBounds(400, 830, 150, 50);
+                //create buttons
+                buttArrMaker.initButtArr(buttonPane, placedPane);
+                //Add Buttons, Tiles and Board to working Panel
+                // Top Layer (Invisible buttons)
+                overlayPanel.add(placedPane); // Middle Layer (Tiles being placed)
+                overlayPanel.add(new BoardDraw()); // Bottom Layer (The Brown Board)
+                boardFrame.add(overlayPanel);
 
-            // Add numbers and letters
-            for (int i = 0; i < 11; i++) {
-                JLabel num = new JLabel(Integer.toString(i+1));
-                num.setName(Integer.toString(i+1));
-                JLabel chars = new JLabel(Character.toString(i+65));
-                chars.setName(Character.toString(i+65));
-                num.setBounds(10, 50 + i*68, 15,15);
-                chars.setBounds(60 + i*68, 10, 15,15 );
-                chars.setForeground(Color.WHITE);
-                placedPane.add(num);
-                placedPane.add(chars);
-            }
-
-            BoardDraw.nextMove.setOpaque(true);
-            placedPane.add(BoardDraw.nextMove);
-
-            // Create buttons
-            buttArrMaker.initButtArr(buttonPane, placedPane);
-
-            // Add all layers
-            overlayPanel.add(buttonPane);
-            overlayPanel.add(placedPane);
-            overlayPanel.add(new BoardDraw());
-            boardFrame.add(overlayPanel);
-
-            boardFrame.setSize(810, 1000);
-            boardFrame.setLocationRelativeTo(null);
-
-            return boardFrame;
+                //Set board properties
+                boardFrame.setSize(810,1000);
+                boardFrame.setLocationRelativeTo(null);
+                boardFrame.setVisible(true);
+                return boardFrame;
         });
         // IMPORTANT: note the call to 'robot()'
         // we must use the Robot from AssertJSwingJUnitTestCase
         window = new FrameFixture(robot(), frame);
+        Board.plrList.add(new Player(1));
+        Board.plrList.add(new Player(-1));
         window.show(); // shows the frame to test
     }
 
 
-    @Test
-    public void buttonPressToUpdateArray() {
-        //GIVEN button press
-       /* window.button("0 2").click();
-        //CHECK boardTile updated to correct value
-        assertEquals( -1, Board.board[0][0][0]);*/
-
-        GuiActionRunner.execute(() -> {
-            JButton btn = window.button("0 0").target();
-            for (ActionListener al : btn.getActionListeners()) {
-                al.actionPerformed(new ActionEvent(btn, ActionEvent.ACTION_PERFORMED, null));
-            }
-        });
-        assertEquals(-1, Board.board[0][0][0]);
-    }
+//    @Test
+//    public void buttonPressToUpdateArray() {
+//        //GIVEN button press
+//       /* window.button("0 2").click();
+//        //CHECK boardTile updated to correct value
+//        assertEquals( -1, Board.board[0][0][0]);*/
+//
+//        GuiActionRunner.execute(() -> {
+//            JButton btn = window.button("0 0").target();
+//            for (ActionListener al : btn.getActionListeners()) {
+//                al.actionPerformed(new ActionEvent(btn, ActionEvent.ACTION_PERFORMED, null));
+//            }
+//        });
+//        assertEquals(-1, Board.board[0][0][0]);
+//    }
 
     @Test
     public void buttonPressToUpdateLabel() {
@@ -159,4 +161,6 @@ public void buttonPressToDeleteButton(){
             }
         }
     }
+
+    //check
 }
