@@ -75,7 +75,7 @@ public class Board {
         if(x < 20 && board[y][x+2][0] == turn){ //check to the right →
             result = result || checkPlayerWin(y, x+2, turn);
         }
-        if(y < 11 && board[y+1][x][0] == turn){//check below ↓
+        if(y < 10 && board[y+1][x][0] == turn){//check below ↓
             result = result || checkPlayerWin(y+1, x, turn);
         }
         if(x > 0 && board[y][x-2][0] == turn){ //check to the left ←
