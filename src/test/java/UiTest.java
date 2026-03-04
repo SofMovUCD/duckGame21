@@ -116,18 +116,8 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     }*/
 @Test
 public void buttonPressToDeleteButton(){
-    // 1. Manually trigger the "0 0" button's logic
-//    GuiActionRunner.execute(() -> {
-//        JButton btn = window.button("0 0").target();
-//        for (ActionListener al : btn.getActionListeners()) {
-//            al.actionPerformed(new ActionEvent(btn, ActionEvent.ACTION_PERFORMED, null));
-//        }
-//    });
-//
-//    // 2. Try to find the button. Since we triggered the removal, it should be gone.
-//    assertThatThrownBy(() -> {
-//        window.robot().finder().findByName("0 0", JButton.class, true);
-//    }).isInstanceOf(ComponentLookupException.class);
+    window.button("0 0").click();
+    assertEquals(1, Board.board[0][0][0]);
 }
 
     @Test
