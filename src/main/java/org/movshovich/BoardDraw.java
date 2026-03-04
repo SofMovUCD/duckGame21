@@ -11,8 +11,8 @@ public class BoardDraw extends JPanel {
     public void paint(Graphics g) {
 
         int myboard[][][] = Board.board;
-        int yC = 0;
-        int xC = 0;
+        int yC;
+        int xC;
         int numberOfPoints = 8;
 
         Graphics2D g2 = (Graphics2D) g;
