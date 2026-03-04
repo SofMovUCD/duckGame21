@@ -54,10 +54,12 @@ public class Board {
     private static boolean checkPlayerWin(int y, int x, int turn){
         System.out.println("("+y+", "+x+")");
         if(turn == 1 && y == 10){ //check win for black
+            BoardDraw.nextMove.setText("BLACK WINS!!");
             System.out.println("Black wins!");
             return true;
         }
         if(turn == -1 && x == 20) { //check win for white
+            BoardDraw.nextMove.setText("WHITE WINS!!");
             System.out.println("White wins!");
             return true;
         }
@@ -109,7 +111,8 @@ public class Board {
 
     public static void initPiRuleButton() {
         piRuleBut = new JButton("pi Rule");
-        piRuleBut.setBounds(0, 900, 500, 50);
+        piRuleBut.setName("pi Rule");
+        piRuleBut.setBounds(50, 830, 150, 50);
         piRuleBut.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 piRule();
@@ -128,6 +131,7 @@ public class Board {
         whitefirst = false;
         currentPlayer *= -1;
         BoardDraw.overlayPanel.remove(piRuleBut);
+        BoardDraw.overlayPanel.repaint();
     }
 
 	public static void main(String[] args) {
@@ -140,10 +144,12 @@ public class Board {
             if ((currentPlayer == -1) && whitefirst) {
                 //System.out.println("PI Rule: Enforced");
                 BoardDraw.overlayPanel.add(piRuleBut);
+                BoardDraw.overlayPanel.setComponentZOrder(piRuleBut, 0);
                 BoardDraw.overlayPanel.repaint();
             }
 
 			plrByID(currentPlayer).makeMove();
+            try { Thread.sleep(10); } catch (Exception e) {}
             //System.out.println(checkWin()? "Black won" : "Black not won");
 
             if ((currentPlayer == 1) && whitefirst) {

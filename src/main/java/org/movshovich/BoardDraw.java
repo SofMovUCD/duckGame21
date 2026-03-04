@@ -95,6 +95,8 @@ public class BoardDraw extends JPanel {
         buttArrMaker.initButtArr(buttonPane, placedPane);
         //Add Buttons, Tiles and Board to working Panel
          // Top Layer (Invisible buttons)
+        //line fix maybe??? elbetel wed
+        overlayPanel.add(buttonPane);
         overlayPanel.add(placedPane); // Middle Layer (Tiles being placed)
         overlayPanel.add(new BoardDraw()); // Bottom Layer (The Brown Board)
         boardFrame.add(overlayPanel);

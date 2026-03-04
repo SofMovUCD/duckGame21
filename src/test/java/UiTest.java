@@ -61,9 +61,12 @@ public class UiTest extends AssertJSwingJUnitTestCase {
                 buttArrMaker.initButtArr(buttonPane, placedPane);
                 //Add Buttons, Tiles and Board to working Panel
                 // Top Layer (Invisible buttons)
+                //line fix maybe???? elbetel?
+                overlayPanel.add(buttonPane);
                 overlayPanel.add(placedPane); // Middle Layer (Tiles being placed)
                 overlayPanel.add(new BoardDraw()); // Bottom Layer (The Brown Board)
                 boardFrame.add(overlayPanel);
+                Board.movingFlag = 0;
 
                 //Set board properties
                 boardFrame.setSize(810,1000);
@@ -101,7 +104,7 @@ public class UiTest extends AssertJSwingJUnitTestCase {
         //GIVEN button press
         window.button("0 0").click();
         //CHECK label updated to correct value
-        assertEquals("BLACK to play", BoardDraw.nextMove.getText());
+        assertEquals("WHITE to play", BoardDraw.nextMove.getText());
     }
 /*
     @Test
@@ -152,6 +155,20 @@ public void buttonPressToDeleteButton(){
                 window.button(i+ " "+ 2*j).isEnabled();
             }
         }
+    }
+
+    @Test
+    public void testPieRuleButtonSwapsPlayers() {
+        window.button("0 0").click(); // First move
+
+        GuiActionRunner.execute(() -> {
+            Board.initPiRuleButton();
+            BoardDraw.overlayPanel.add(Board.piRuleBut);
+            BoardDraw.overlayPanel.repaint();
+        });
+
+        window.button("pi Rule").click();
+        assertEquals(-1, Board.plrList.get(0).getPlayerId());
     }
 
     //check

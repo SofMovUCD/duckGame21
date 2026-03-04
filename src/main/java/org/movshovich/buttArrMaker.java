@@ -29,10 +29,37 @@ public class buttArrMaker {
                             newTile.setBounds(src.getX()-8 , src.getY()-7, 40, 40);
                             t.add(newTile);
                             p.remove(src);
-                            t.repaint();
+                            Board.board[row][col][0] = Board.plrByID(Board.currentPlayer).getPlayerId();
+                            /*
+                            //line fix maybe ??? elbetel???/
+                            Board.board[row][col][0] = Board.plrByID(Board.currentPlayer).getPlayerId();
+                            Board.currentPlayer *= -1;
                             Board.movingFlag = 0;
-                            Board.board[(src.getY()-82) / 68][((src.getX()-88) / 68)*2+1][0] = Board.plrByID(Board.currentPlayer).getPlayerId();
+                            t.repaint();
+                            if(Board.currentPlayer == 1){
+                                BoardDraw.nextMove.setText("BLACK to play");
+                            } else {
+                                BoardDraw.nextMove.setText("WHITE to play");
+                            }
+                            //Board.movingFlag = 0;
+                            //itBoard.board[(src.getY()-82) / 68][((src.getX()-88) / 68)*2+1][0] = Board.plrByID(Board.currentPlayer).getPlayerId();
+                        */
+                            if (Board.checkWin()) {
+                                Board.movingFlag = 0;
+                                t.repaint();
+                                BoardDraw.overlayPanel.repaint();
+                            } else {
+                                Board.currentPlayer *= -1;
+                                Board.movingFlag = 0;
+                                if(Board.currentPlayer == 1){
+                                    BoardDraw.nextMove.setText("BLACK to play");
+                                } else {
+                                    BoardDraw.nextMove.setText("WHITE to play");
+                                }
+                                t.repaint();
+                            }
                         }
+
                     });
                     p.add(buttArr[row][col]);
                 }
@@ -57,10 +84,35 @@ public class buttArrMaker {
                         newTile.setBounds(src.getX(), src.getY()-20, 68, 68);
                         t.add(newTile);
                         p.remove(src);
-                        t.repaint();
+                        Board.board[row][col][0] = Board.plrByID(Board.currentPlayer).getPlayerId();
+                        /*
+                        //line fix maybe ??? elbetel???/
+                        Board.board[row][col][0] = Board.plrByID(Board.currentPlayer).getPlayerId();
+                        Board.currentPlayer *= -1;
                         Board.movingFlag = 0;
-                        Board.board[(src.getY()-45)/ 68][((src.getX()-30) / 68)*2][0] = Board.plrByID(Board.currentPlayer).getPlayerId();
-
+                        t.repaint();
+                        if(Board.currentPlayer == 1){
+                            BoardDraw.nextMove.setText("BLACK to play");
+                        } else {
+                            BoardDraw.nextMove.setText("WHITE to play");
+                        }
+                        //Board.movingFlag = 0;
+                        //Board.board[(src.getY()-45)/ 68][((src.getX()-30) / 68)*2][0] = Board.plrByID(Board.currentPlayer).getPlayerId();
+*/
+                        if (Board.checkWin()) {
+                            Board.movingFlag = 0;
+                            t.repaint();
+                            BoardDraw.overlayPanel.repaint();
+                        } else {
+                            Board.currentPlayer *= -1;
+                            Board.movingFlag = 0;
+                            if(Board.currentPlayer == 1){
+                                BoardDraw.nextMove.setText("BLACK to play");
+                            } else {
+                                BoardDraw.nextMove.setText("WHITE to play");
+                            }
+                            t.repaint();
+                        }
                     }
                 });
                 p.add(buttArr[row][col]);
