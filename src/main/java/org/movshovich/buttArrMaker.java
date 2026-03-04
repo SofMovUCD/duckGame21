@@ -16,7 +16,7 @@ public class buttArrMaker {
                     int col = j * 2 + 1;
                     buttArr[row][col] = new JButton();
                     buttArr[row][col].setBounds(88 + j * 68, 82 + i * 68, 20, 18);
-                    buttArr[row][col].setName(Integer.toString(i)+ " "+ Integer.toString(col));
+                    buttArr[row][col].setName(i+ " "+ col); //for testing purposes
 
                     buttArr[row][col].setContentAreaFilled(false);
                     buttArr[row][col].setBorderPainted(false);
@@ -31,7 +31,6 @@ public class buttArrMaker {
                             p.remove(src);
                             t.repaint();
                             Board.movingFlag = 0;
-                            //System.out.println(((src.getY()-82) / 68) + " " + (((src.getX()-88) / 68)*2+1));
                             Board.board[(src.getY()-82) / 68][((src.getX()-88) / 68)*2+1][0] = Board.plrByID(Board.currentPlayer).getPlayerId();
                         }
                     });
@@ -41,14 +40,11 @@ public class buttArrMaker {
 
         for (int i = 0; i < 11; i++) { //draw the octagon buttons
             for (int j = 0; j < 11; j++) {
-                // aidans one uncommented for now buttArr[i][j+ j%2] = new JButton();
-
-                // testing code
                 int row = i ;
                 int col = j*2;
                 buttArr[row][col] = new JButton();
                 buttArr[row][col].setBounds(30 + j * 68, 45 + i * 68, 68, 30);
-                buttArr[row][col].setName(Integer.toString(i)+ " "+ Integer.toString(col));
+                buttArr[row][col].setName(i+ " "+ col); //for testing purposes
 
                 buttArr[row][col].setContentAreaFilled(false);
                 buttArr[row][col].setBorderPainted(false);
@@ -63,7 +59,6 @@ public class buttArrMaker {
                         p.remove(src);
                         t.repaint();
                         Board.movingFlag = 0;
-                        //System.out.println(((src.getY()-45)/ 68) + " " + (((src.getX()-30) / 68)*2));
                         Board.board[(src.getY()-45)/ 68][((src.getX()-30) / 68)*2][0] = Board.plrByID(Board.currentPlayer).getPlayerId();
 
                     }
