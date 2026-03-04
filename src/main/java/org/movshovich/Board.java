@@ -129,7 +129,7 @@ public class Board {
 
         movingFlag = 0;
         whitefirst = false;
-        currentPlayer *= -1;
+        //currentPlayer *= -1;
         BoardDraw.overlayPanel.remove(piRuleBut);
         BoardDraw.overlayPanel.repaint();
     }
