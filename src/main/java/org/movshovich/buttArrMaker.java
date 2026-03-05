@@ -44,7 +44,7 @@ public class buttArrMaker {
                             //Board.movingFlag = 0;
                             //itBoard.board[(src.getY()-82) / 68][((src.getX()-88) / 68)*2+1][0] = Board.plrByID(Board.currentPlayer).getPlayerId();
                         */
-                            if (Board.checkWin()) {
+                            if (Board.checkWin(Board.currentPlayer)) {
                                 Board.movingFlag = 0;
                                 t.repaint();
                                 BoardDraw.overlayPanel.repaint();
@@ -99,7 +99,7 @@ public class buttArrMaker {
                         //Board.movingFlag = 0;
                         //Board.board[(src.getY()-45)/ 68][((src.getX()-30) / 68)*2][0] = Board.plrByID(Board.currentPlayer).getPlayerId();
 */
-                        if (Board.checkWin()) {
+                        if (Board.checkWin(Board.currentPlayer)) {
                             Board.movingFlag = 0;
                             t.repaint();
                             BoardDraw.overlayPanel.repaint();
