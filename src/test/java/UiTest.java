@@ -227,4 +227,16 @@ public void buttonPressToDeleteButton(){
         assertEquals("BLACK WINS!!", BoardDraw.nextMove.getText());
     }
 
+    @Test
+    public void testWhiteWinCondition() {
+        for(int j = 0; j <= 20; j += 2) {
+            Board.board[0][j][0] = -1;
+        }
+        GuiActionRunner.execute(() -> {
+            Board.checkWin(-1);
+        });
+
+        assertEquals("WHITE WINS!!", BoardDraw.nextMove.getText());
+    }
+
 }
