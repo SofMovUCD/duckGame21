@@ -19,7 +19,8 @@ public class Board {
      * Check if a player has won
      * @return boolean value whether a player has won
      * */
-	public static boolean checkWin(){
+	public static boolean checkWin(int player) {
+        /*
         boolean isWin = false;
         if(currentPlayer == -1){ //black check
             for(int i = 0; i < 11; i++){ //check top row for existence of black tiles
@@ -41,7 +42,21 @@ public class Board {
                 }
             }
         }
-        return isWin;
+        return isWin;*/
+        if (player == 1) { // Check Black
+            for (int i = 0; i < 11; i++) {
+                if (board[0][i * 2][0] == 1) {
+                    if (checkPlayerWin(0, i * 2, 1)) return true;
+                }
+            }
+        } else { // Check White
+            for (int i = 0; i < 11; i++) {
+                if (board[i][0][0] == -1) {
+                    if (checkPlayerWin(i, 0, -1)) return true;
+                }
+            }
+        }
+        return false;
 	}
 
     /**
@@ -54,10 +69,12 @@ public class Board {
     private static boolean checkPlayerWin(int y, int x, int turn){
         System.out.println("("+y+", "+x+")");
         if(turn == 1 && y == 10){ //check win for black
+            BoardDraw.nextMove.setText("BLACK WINS!!");
             System.out.println("Black wins!");
             return true;
         }
         if(turn == -1 && x == 20) { //check win for white
+            BoardDraw.nextMove.setText("WHITE WINS!!");
             System.out.println("White wins!");
             return true;
         }
@@ -108,8 +125,9 @@ public class Board {
 	}
 
     public static void initPiRuleButton() {
-        piRuleBut = new JButton("pi Rule");
-        piRuleBut.setBounds(0, 900, 500, 50);
+        piRuleBut = new JButton("Activate Pi Rule");
+        piRuleBut.setName("Activate Pi Rule");
+        piRuleBut.setBounds(50, 830, 150, 50);
         piRuleBut.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 piRule();
@@ -126,8 +144,9 @@ public class Board {
 
         movingFlag = 0;
         whitefirst = false;
-        currentPlayer *= -1;
+        //currentPlayer *= -1;
         BoardDraw.overlayPanel.remove(piRuleBut);
+        BoardDraw.overlayPanel.repaint();
     }
 
 	public static void main(String[] args) {
@@ -135,15 +154,47 @@ public class Board {
 		plrList.add(new Player(1));
 		plrList.add(new Player(-1));
         initPiRuleButton();
+        while (true) {
+            // 1. Show Pie Rule if needed
+            if ((currentPlayer == -1) && whitefirst && piRuleBut.getParent() == null) {
+                BoardDraw.overlayPanel.add(piRuleBut);
+                BoardDraw.overlayPanel.setComponentZOrder(piRuleBut, 0);
+                BoardDraw.overlayPanel.repaint();
+            }
+
+            // 2. get who is moving now
+            int playerWhoMoved = currentPlayer;
+            plrByID(playerWhoMoved).makeMove();
+
+            // 3. Check for win immediately using that player's ID
+            if (checkWin(playerWhoMoved)) {
+                // The checkPlayerWin method already sets the text to "BLACK WINS" etc.
+                BoardDraw.overlayPanel.repaint();
+                break; // Exit the game loop
+            }
+
+            try { Thread.sleep(10); } catch (Exception e) {}
+
+            // 4. Handle Pie Rule cleanup and turn swap
+            if ((currentPlayer == 1) && whitefirst) {
+                whitefirst = false;
+                BoardDraw.overlayPanel.remove(piRuleBut);
+                BoardDraw.overlayPanel.repaint();
+            }
+        }
+
+        /*
 
 		while (!checkWin()) {
             if ((currentPlayer == -1) && whitefirst) {
                 //System.out.println("PI Rule: Enforced");
                 BoardDraw.overlayPanel.add(piRuleBut);
+                BoardDraw.overlayPanel.setComponentZOrder(piRuleBut, 0);
                 BoardDraw.overlayPanel.repaint();
             }
 
 			plrByID(currentPlayer).makeMove();
+            try { Thread.sleep(10); } catch (Exception e) {}
             //System.out.println(checkWin()? "Black won" : "Black not won");
 
             if ((currentPlayer == 1) && whitefirst) {
@@ -152,6 +203,18 @@ public class Board {
                 //System.out.println("whitefirst: " + whitefirst);
                 BoardDraw.overlayPanel.repaint();
             }
-		}
+		}*/
 	}
+
+    //resetting the board since the board doesn't reset in one run so the value stays the same for different tests.
+    public static void resetBoard() {
+        // Reset the array to all zeros
+        board = new int[11][21][3];
+        // Reset player list
+        plrList.clear();
+        // Reset game state variables
+        currentPlayer = 1;
+        whitefirst = true;
+        movingFlag = 0;
+    }
 }
