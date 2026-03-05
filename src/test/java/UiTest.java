@@ -88,21 +88,13 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     }
 
 
-//    @Test
-//    public void buttonPressToUpdateArray() {
-//        //GIVEN button press
-//       /* window.button("0 2").click();
-//        //CHECK boardTile updated to correct value
-//        assertEquals( -1, Board.board[0][0][0]);*/
-//
-//        GuiActionRunner.execute(() -> {
-//            JButton btn = window.button("0 0").target();
-//            for (ActionListener al : btn.getActionListeners()) {
-//                al.actionPerformed(new ActionEvent(btn, ActionEvent.ACTION_PERFORMED, null));
-//            }
-//        });
-//        assertEquals(-1, Board.board[0][0][0]);
-//    }
+    @Test
+    public void buttonPressToUpdateArray() {
+        //GIVEN button press
+        window.button("0 0").click();
+        //CHECK boardTile updated to correct value
+        assertEquals( 1, Board.board[0][0][0]);
+    }
 
     @Test
     public void buttonPressToUpdateLabel() {
