@@ -228,7 +228,7 @@ public void buttonPressToDeleteButton(){
     }
 
     @Test
-    public void testWhiteWinCondition() {
+    public void WhiteWinCondition() {
         for(int j = 0; j <= 20; j += 2) {
             Board.board[0][j][0] = -1;
         }
