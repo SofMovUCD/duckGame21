@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="DuckGame22:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/DuckGame22_jar</output-path>
+    <root id="archive" name="DuckGame22.jar">
+      <element id="module-output" name="DuckGame22" />
+    </root>
+  </artifact>
+</component>
