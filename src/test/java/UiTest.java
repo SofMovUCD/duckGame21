@@ -88,21 +88,16 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     }
 
 
-//    @Test
-//    public void buttonPressToUpdateArray() {
-//        //GIVEN button press
-//       /* window.button("0 2").click();
-//        //CHECK boardTile updated to correct value
-//        assertEquals( -1, Board.board[0][0][0]);*/
-//
-//        GuiActionRunner.execute(() -> {
-//            JButton btn = window.button("0 0").target();
-//            for (ActionListener al : btn.getActionListeners()) {
-//                al.actionPerformed(new ActionEvent(btn, ActionEvent.ACTION_PERFORMED, null));
-//            }
-//        });
-//        assertEquals(-1, Board.board[0][0][0]);
-//    }
+    @Test
+    public void buttonPressToUpdateArray() {
+        JButton btn = window.button("0 0").target();
+
+        GuiActionRunner.execute(() -> {
+            btn.doClick();
+        });
+
+        assertEquals("The board array at 0,0 should be updated to 1", 1, Board.board[0][0][0]);
+    }
 
     @Test
     public void buttonPressToUpdateLabel() {
@@ -225,6 +220,18 @@ public void buttonPressToDeleteButton(){
         });
         // Check win for Black
         assertEquals("BLACK WINS!!", BoardDraw.nextMove.getText());
+    }
+
+    @Test
+    public void WhiteWinCondition() {
+        for(int j = 0; j <= 20; j += 2) {
+            Board.board[0][j][0] = -1;
+        }
+        GuiActionRunner.execute(() -> {
+            Board.checkWin(-1);
+        });
+
+        assertEquals("WHITE WINS!!", BoardDraw.nextMove.getText());
     }
 
 }
