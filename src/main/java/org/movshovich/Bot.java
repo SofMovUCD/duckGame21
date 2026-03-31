@@ -27,20 +27,21 @@ public class Bot extends Player{
         if (lowestRow == -1) {
             target = Board.buttonGrid[0][col];
         }
-        // 3. Try to go directly down to the next Octagon
-        else if (lowestRow < 10 && Board.board[lowestRow + 1][col][0] == 0) {
-            target = Board.buttonGrid[lowestRow + 1][col];
-        }
-        // 4. strategy, if vertical is blocked  Use a Rhombus to move
         else if (lowestRow < 10) {
-            // Try the Rhombus to the bottom-right (row, col+1)
-            // leading to Octagon (row+1, col+2)
-            if (col + 1 < 21 && Board.board[lowestRow][col + 1][0] == 0) {
-                target = Board.buttonGrid[lowestRow][col + 1];
+            // Try to go directly down (Octagon)
+            if (Board.board[lowestRow + 1][col][0] == 0) {
+                target = Board.buttonGrid[lowestRow + 1][col];
             }
-            // Or the Rhombus to the bottom-left (row, col-1)
-            else if (col - 1 >= 0 && Board.board[lowestRow][col - 1][0] == 0) {
-                target = Board.buttonGrid[lowestRow][col - 1];
+            // blocked Try Rhombus to maneuver around
+            else {
+                // Try Rhombus Right (leads to col + 2)
+                if (col + 1 < 21 && Board.board[lowestRow][col + 1][0] == 0) {
+                    target = Board.buttonGrid[lowestRow][col + 1];
+                }
+                // Try Rhombus Left (leads to col - 2)
+                else if (col - 1 >= 0 && Board.board[lowestRow][col - 1][0] == 0) {
+                    target = Board.buttonGrid[lowestRow][col - 1];
+                }
             }
         }
 
@@ -53,12 +54,16 @@ public class Bot extends Player{
         if (target != null) {
             try { Thread.sleep(400); } catch (Exception e) {}
             target.doClick();
+        }else {
+            System.out.println("Bot has no moves left!");
+            // Force a turn swap if trapped to prevent infinite loop
+            Board.currentPlayer *= -1;
         }
     }
 
     private JButton findAnyAvailableOctagon() {
-        for (int r = 0; r < 11; r++) {
-            for (int c = 0; c < 21; c += 2) {
+        for (int r = 0; r < BoardDraw.BOARD_Y; r++) {
+            for (int c = 0; c < BoardDraw.BOARD_X; c ++) {
                 if (Board.board[r][c][0] == 0 && Board.buttonGrid[r][c].getParent() != null) {
                     return Board.buttonGrid[r][c];
                 }
