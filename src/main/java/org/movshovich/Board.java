@@ -104,7 +104,7 @@ public class Board {
         if (y < BoardDraw.BOARD_Y - 1 && board[y + 1][x][0] == turn) {
             result = result || checkPlayerWin(y + 1, x, turn);
         }
-        // Right (Octagons are at even X indices, so we jump by 2)
+        // Right (Octagons are at even X indices, jump by 2)
         if (x + 2 < BoardDraw.BOARD_X && board[y][x + 2][0] == turn) {
             result = result || checkPlayerWin(y, x + 2, turn);
         }
