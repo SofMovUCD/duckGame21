@@ -4,13 +4,18 @@ import java.awt.*;
 import javax.swing.*;
 
 public class BoardDraw extends JPanel {
+    public static final int OCTAGON_LENGTH = 11;
+    public static final int RHOMBUS_LENGTH = 10;
+    public static final int BOARD_X = 21;
+    public static final int BOARD_Y = 11; 
+    public static final int OCTAGON_DISTANCE = 68;
+
     public static JLabel nextMove;
     public static JPanel overlayPanel;
     public static JLayeredPane buttonPane;
 
     public void paint(Graphics g) {
 
-        int myboard[][][] = Board.board;
         int yC;
         int xC;
         int numberOfPoints = 8;
@@ -27,10 +32,19 @@ public class BoardDraw extends JPanel {
 
         g2.setColor(Color.black);
         g2.setStroke(new BasicStroke(3));
-        for (yC = 0; yC < 11; ++yC) {
-            int[] y = {25 + yC*68, 25 + yC*68, 45 + yC*68, 73 + yC*68, 93 + yC*68, 93 + yC*68, 73 + yC*68, 45 + yC*68, 25 + yC*68};
-            for (xC = 0; xC < 11; ++xC) {
-                int[] x = {50 + xC*68, 78 + xC*68, 98 + xC*68, 98 + xC*68, 78 + xC*68, 50 + xC*68, 30 + xC*68, 30 + xC*68, 50 + xC*68};
+        for (yC = 0; yC < OCTAGON_LENGTH; ++yC) {
+            int[] y = {25 + yC*OCTAGON_DISTANCE, 25 + yC*OCTAGON_DISTANCE, 
+                        45 + yC*OCTAGON_DISTANCE, 73 + yC*OCTAGON_DISTANCE, 
+                        93 + yC*OCTAGON_DISTANCE, 93 + yC*OCTAGON_DISTANCE, 
+                        73 + yC*OCTAGON_DISTANCE, 45 + yC*OCTAGON_DISTANCE, 
+                        25 + yC*OCTAGON_DISTANCE};
+                        
+            for (xC = 0; xC < OCTAGON_LENGTH; ++xC) {
+                int[] x = {50 + xC*OCTAGON_DISTANCE, 78 + xC*OCTAGON_DISTANCE,
+                            98 + xC*OCTAGON_DISTANCE, 98 + xC*OCTAGON_DISTANCE,
+                            78 + xC*OCTAGON_DISTANCE, 50 + xC*OCTAGON_DISTANCE,
+                            30 + xC*OCTAGON_DISTANCE, 30 + xC*OCTAGON_DISTANCE,
+                            50 + xC*OCTAGON_DISTANCE};
                 g2.setColor(new Color(173, 111, 49));
                 g2.fillPolygon(x, y, numberOfPoints);
                 for (int i = 0; i < numberOfPoints - 1; i++) {
@@ -76,7 +90,7 @@ public class BoardDraw extends JPanel {
         nextMove = new JLabel("BLACK to play");
         nextMove.setBounds(400, 830, 150, 50);
         //do the numbers and letters at edge of board
-        for(int i = 0; i < 11; i++){
+        for(int i = 0; i < OCTAGON_LENGTH; i++){
             JLabel num = new JLabel(Integer.toString(i+1));
             JLabel chars = new JLabel(Character.toString(i+65));
             num.setBounds(10, 50 + i*68, 15,15);

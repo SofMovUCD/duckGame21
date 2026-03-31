@@ -9,13 +9,13 @@ public class buttArrMaker {
     public static JButton[][] initButtArr(JLayeredPane p, JLayeredPane t) {
         JButton[][] buttArr = new JButton[21][21];
         
-
-            for(int i = 0; i < 10; i++){ //draw the rhombus buttons
-                for(int j = 0; j <  10; j++){
+            for(int i = 0; i < BoardDraw.RHOMBUS_LENGTH; i++){ //draw the rhombus buttons
+                for(int j = 0; j <  BoardDraw.RHOMBUS_LENGTH; j++){
                     int row = i;
                     int col = j * 2 + 1;
                     buttArr[row][col] = new JButton();
-                    buttArr[row][col].setBounds(88 + j * 68, 82 + i * 68, 20, 18);
+                    buttArr[row][col].setBounds(88 + j * BoardDraw.OCTAGON_DISTANCE, 
+                                                82 + i * BoardDraw.OCTAGON_DISTANCE, 20, 18);
                     buttArr[row][col].setName(i+ " "+ col); //for testing purposes
 
                     buttArr[row][col].setContentAreaFilled(false);
@@ -30,20 +30,7 @@ public class buttArrMaker {
                             t.add(newTile);
                             p.remove(src);
                             Board.board[row][col][0] = Board.plrByID(Board.currentPlayer).getPlayerId();
-                            /*
-                            //line fix maybe ??? elbetel???/
-                            Board.board[row][col][0] = Board.plrByID(Board.currentPlayer).getPlayerId();
-                            Board.currentPlayer *= -1;
-                            Board.movingFlag = 0;
-                            t.repaint();
-                            if(Board.currentPlayer == 1){
-                                BoardDraw.nextMove.setText("BLACK to play");
-                            } else {
-                                BoardDraw.nextMove.setText("WHITE to play");
-                            }
-                            //Board.movingFlag = 0;
-                            //itBoard.board[(src.getY()-82) / 68][((src.getX()-88) / 68)*2+1][0] = Board.plrByID(Board.currentPlayer).getPlayerId();
-                        */
+                           
                             if (Board.checkWin(Board.currentPlayer)) {
                                 Board.movingFlag = 0;
                                 t.repaint();
@@ -65,12 +52,14 @@ public class buttArrMaker {
                 }
             }
 
-        for (int i = 0; i < 11; i++) { //draw the octagon buttons
-            for (int j = 0; j < 11; j++) {
+        for (int i = 0; i < BoardDraw.OCTAGON_LENGTH; i++) { //draw the octagon buttons
+            for (int j = 0; j < BoardDraw.OCTAGON_LENGTH; j++) {
                 int row = i ;
                 int col = j*2;
                 buttArr[row][col] = new JButton();
-                buttArr[row][col].setBounds(30 + j * 68, 45 + i * 68, 68, 30);
+                buttArr[row][col].setBounds(30 + j * BoardDraw.OCTAGON_DISTANCE,
+                                            45 + i * BoardDraw.OCTAGON_DISTANCE,
+                                                     BoardDraw.OCTAGON_DISTANCE, 30);
                 buttArr[row][col].setName(i+ " "+ col); //for testing purposes
 
                 buttArr[row][col].setContentAreaFilled(false);
@@ -81,24 +70,12 @@ public class buttArrMaker {
                         JButton src = (JButton) e.getSource();
                         Color currentColor = Board.plrByID(Board.currentPlayer).getPlayerColour();
                         TileDraw newTile = new TileDraw(currentColor, true);
-                        newTile.setBounds(src.getX(), src.getY()-20, 68, 68);
+                        newTile.setBounds(src.getX(), src.getY()-20, BoardDraw.OCTAGON_DISTANCE,
+                                                                     BoardDraw.OCTAGON_DISTANCE);
                         t.add(newTile);
                         p.remove(src);
                         Board.board[row][col][0] = Board.plrByID(Board.currentPlayer).getPlayerId();
-                        /*
-                        //line fix maybe ??? elbetel???/
-                        Board.board[row][col][0] = Board.plrByID(Board.currentPlayer).getPlayerId();
-                        Board.currentPlayer *= -1;
-                        Board.movingFlag = 0;
-                        t.repaint();
-                        if(Board.currentPlayer == 1){
-                            BoardDraw.nextMove.setText("BLACK to play");
-                        } else {
-                            BoardDraw.nextMove.setText("WHITE to play");
-                        }
-                        //Board.movingFlag = 0;
-                        //Board.board[(src.getY()-45)/ 68][((src.getX()-30) / 68)*2][0] = Board.plrByID(Board.currentPlayer).getPlayerId();
-*/
+                        
                         if (Board.checkWin(Board.currentPlayer)) {
                             Board.movingFlag = 0;
                             t.repaint();

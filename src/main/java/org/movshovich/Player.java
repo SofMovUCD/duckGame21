@@ -30,20 +30,15 @@ public class Player {
 
 
     public void makeMove(){
-        //should add button pane
-                //System.out.println(Board.currentPlayer + "'s turn");
         BoardDraw.overlayPanel.add(BoardDraw.buttonPane);
-                //System.out.println("Buttons added");
+                
         Board.movingFlag = 1;
         while (Board.movingFlag == 1) {
                     System.out.print("");
         }
-                //System.out.println("Move Made");
+
         BoardDraw.overlayPanel.remove(BoardDraw.buttonPane);
-                //System.out.println("buttons removed");
-       // Board.currentPlayer *= -1;
-                //System.out.println("Next turn...");
-        //should remove button pane
+     
     }
 
 }

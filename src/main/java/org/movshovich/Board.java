@@ -8,7 +8,7 @@ import javax.swing.JButton;
 
 public class Board {
 	
-	public static int[][][] board = new int[11][21][3];
+	public static int[][][] board = new int[BoardDraw.BOARD_Y][BoardDraw.BOARD_X][3];
 	public static ArrayList<Player> plrList = new ArrayList<>();
 	public static int currentPlayer = 1;
 	public static int movingFlag;
@@ -20,29 +20,7 @@ public class Board {
      * @return boolean value whether a player has won
      * */
 	public static boolean checkWin(int player) {
-        /*
-        boolean isWin = false;
-        if(currentPlayer == -1){ //black check
-            for(int i = 0; i < 11; i++){ //check top row for existence of black tiles
-                if(board[0][i*2][0] == 1){ //top row has found a black octagon, should check if there is path to the bottom
-                    System.out.println("found  black octagon at position: "+ i);
-                    if(checkPlayerWin(0, i * 2, 1)){
-                        return true;
-                    }
-                }
-            }
-        }
-        else { //white check
-            for(int i = 0; i < 11; i++){ //check left column for existence of white tiles
-                if(board[i][0][0] == -1){ //left column has found a white octagon, should check if there is path to the right
-                    System.out.println("found  white octagon at position: "+ i);
-                    if(checkPlayerWin(i, 0, -1)){
-                        return true;
-                    }
-                }
-            }
-        }
-        return isWin;*/
+        
         if (player == 1) { // Check Black
             for (int i = 0; i < 11; i++) {
                 if (board[0][i * 2][0] == 1) {
@@ -89,31 +67,33 @@ public class Board {
         if(y > 0 && board[y-1][x][0] == turn){ //check above ^
             result = checkPlayerWin(y-1, x, turn);
         }
-        if(x < 20 && board[y][x+2][0] == turn){ //check to the right →
+        if(x < (BoardDraw.BOARD_X - 1) && board[y][x+2][0] == turn){ //check to the right →
             result = result || checkPlayerWin(y, x+2, turn);
         }
-        if(y < 10 && board[y+1][x][0] == turn){//check below ↓
+        if(y < (BoardDraw.BOARD_Y - 1) && board[y+1][x][0] == turn){//check below ↓
             result = result || checkPlayerWin(y+1, x, turn);
         }
         if(x > 0 && board[y][x-2][0] == turn){ //check to the left ←
             result = result || checkPlayerWin(y, x-2, turn);
         }
         //rhombus checks
-        if(x > 0 && y < 11 && board[y][x-1][0] == turn && board[y+1][x-2][0] == turn){ //bottom left
+        if(x > 0 && y < (BoardDraw.BOARD_Y - 1) && board[y][x-1][0] == turn && board[y+1][x-2][0] == turn){ //bottom left
             result = result || checkPlayerWin(y+1, x-2, turn);
         }
-        if(x < 21 && y < 11 && board[y][x+1][0] == turn && board[y+1][x+2][0] == turn){ //bottom right
+        if(x < BoardDraw.BOARD_X && y < BoardDraw.BOARD_Y && board[y][x+1][0] == turn && board[y+1][x+2][0] == turn){ //bottom right
             result = result || checkPlayerWin(y+1, x+2, turn);
         }
         if(x > 0 && y > 0 && board[y-1][x-1][0] == turn && board[y-1][x-2][0] == turn){ //upper left
             result = result || checkPlayerWin(y-1, x-2, turn);
         }
-        if(x < 21 && y > 0 && board[y-1][x+1][0] == turn && board[y-1][x+2][0] == turn){ //upper right
+        if(x < BoardDraw.BOARD_X && y > 0 && board[y-1][x+1][0] == turn && board[y-1][x+2][0] == turn){ //upper right
             result = result || checkPlayerWin(y-1, x+2, turn);
         }
         board[y][x][2] = 0;
         return result;
     }
+
+
 
 	public static Player plrByID(int ID) {
 		for (Player plr : plrList) {
@@ -182,34 +162,12 @@ public class Board {
                 BoardDraw.overlayPanel.repaint();
             }
         }
-
-        /*
-
-		while (!checkWin()) {
-            if ((currentPlayer == -1) && whitefirst) {
-                //System.out.println("PI Rule: Enforced");
-                BoardDraw.overlayPanel.add(piRuleBut);
-                BoardDraw.overlayPanel.setComponentZOrder(piRuleBut, 0);
-                BoardDraw.overlayPanel.repaint();
-            }
-
-			plrByID(currentPlayer).makeMove();
-            try { Thread.sleep(10); } catch (Exception e) {}
-            //System.out.println(checkWin()? "Black won" : "Black not won");
-
-            if ((currentPlayer == 1) && whitefirst) {
-                whitefirst = false;
-                BoardDraw.overlayPanel.remove(piRuleBut);
-                //System.out.println("whitefirst: " + whitefirst);
-                BoardDraw.overlayPanel.repaint();
-            }
-		}*/
 	}
 
     //resetting the board since the board doesn't reset in one run so the value stays the same for different tests.
     public static void resetBoard() {
         // Reset the array to all zeros
-        board = new int[11][21][3];
+        board = new int[BoardDraw.BOARD_Y][BoardDraw.BOARD_X][3];
         // Reset player list
         plrList.clear();
         // Reset game state variables
