@@ -4,12 +4,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
+import javax.swing.*;
 
 public class Board {
 	
 	public static int[][][] board = new int[11][21][3];
 	public static ArrayList<Player> plrList = new ArrayList<>();
+    public static JButton[][] buttonGrid = new JButton[11][21];
 	public static int currentPlayer = 1;
 	public static int movingFlag;
     public static boolean whitefirst = true;
@@ -149,62 +150,113 @@ public class Board {
         BoardDraw.overlayPanel.repaint();
     }
 
-	public static void main(String[] args) {
-		BoardDraw.initBoard();
-		plrList.add(new Player(1));
-		plrList.add(new Player(-1));
+//	public static void main(String[] args) {
+//		BoardDraw.initBoard();
+//		//plrList.add(new Player(1));
+//		//plrList.add(new Player(-1));
+//
+//        initPiRuleButton();
+//        while (true) {
+//            // 1. Show Pie Rule if needed
+//            if ((currentPlayer == -1) && whitefirst && piRuleBut.getParent() == null) {
+//                BoardDraw.overlayPanel.add(piRuleBut);
+//                BoardDraw.overlayPanel.setComponentZOrder(piRuleBut, 0);
+//                BoardDraw.overlayPanel.repaint();
+//            }
+//
+//            // 2. get who is moving now
+//            int playerWhoMoved = currentPlayer;
+//            plrByID(playerWhoMoved).makeMove();
+//
+//            // 3. Check for win immediately using that player's ID
+//            if (checkWin(playerWhoMoved)) {
+//                // The checkPlayerWin method already sets the text to "BLACK WINS" etc.
+//                BoardDraw.overlayPanel.repaint();
+//                break; // Exit the game loop
+//            }
+//
+//            try { Thread.sleep(10); } catch (Exception e) {}
+//
+//            // 4. Handle Pie Rule cleanup and turn swap
+//            if ((currentPlayer == 1) && whitefirst) {
+//                whitefirst = false;
+//                BoardDraw.overlayPanel.remove(piRuleBut);
+//                BoardDraw.overlayPanel.repaint();
+//            }
+//        }
+//        /*
+//
+//		while (!checkWin()) {
+//            if ((currentPlayer == -1) && whitefirst) {
+//                //System.out.println("PI Rule: Enforced");
+//                BoardDraw.overlayPanel.add(piRuleBut);
+//                BoardDraw.overlayPanel.setComponentZOrder(piRuleBut, 0);
+//                BoardDraw.overlayPanel.repaint();
+//            }
+//
+//			plrByID(currentPlayer).makeMove();
+//            try { Thread.sleep(10); } catch (Exception e) {}
+//            //System.out.println(checkWin()? "Black won" : "Black not won");
+//
+//            if ((currentPlayer == 1) && whitefirst) {
+//                whitefirst = false;
+//                BoardDraw.overlayPanel.remove(piRuleBut);
+//                //System.out.println("whitefirst: " + whitefirst);
+//                BoardDraw.overlayPanel.repaint();
+//            }
+//		}*/
+//	}
+
+    public static void main(String[] args) {
+        // 1. Initialize the GUI on the Event Dispatch Thread
+        SwingUtilities.invokeLater(() -> {
+            BoardDraw.initBoard();
+        });
+        // 2. Setup Players
+        plrList.add(new Bot(1));   // Bot is Black
+        plrList.add(new Player(-1)); // Human is White
+
         initPiRuleButton();
-        while (true) {
-            // 1. Show Pie Rule if needed
-            if ((currentPlayer == -1) && whitefirst && piRuleBut.getParent() == null) {
-                BoardDraw.overlayPanel.add(piRuleBut);
-                BoardDraw.overlayPanel.setComponentZOrder(piRuleBut, 0);
-                BoardDraw.overlayPanel.repaint();
+
+        // 3. Start the Game Logic in a background thread
+        new Thread(() -> {
+            // Wait a second for the GUI to actually pop up
+            try { Thread.sleep(1000); } catch (InterruptedException e) {}
+
+            while (true) {
+                // Handle Pie Rule Visibility
+                if ((currentPlayer == -1) && whitefirst && piRuleBut.getParent() == null) {
+                    SwingUtilities.invokeLater(() -> {
+                        BoardDraw.overlayPanel.add(piRuleBut);
+                        BoardDraw.overlayPanel.setComponentZOrder(piRuleBut, 0);
+                        BoardDraw.overlayPanel.repaint();
+                    });
+                }
+
+                // Execute the move for the current player
+                int playerWhoMoved = currentPlayer;
+                plrByID(playerWhoMoved).makeMove();
+
+                // Check for win
+                if (checkWin(playerWhoMoved)) {
+                    System.out.println("Game Over!");
+                    break;
+                }
+
+                // ie Rule Cleanup if turn 1 is over
+                if ((currentPlayer == 1) && whitefirst) {
+                    whitefirst = false;
+                    SwingUtilities.invokeLater(() -> {
+                        BoardDraw.overlayPanel.remove(piRuleBut);
+                        BoardDraw.overlayPanel.repaint();
+                    });
+                }
+
+                // E. Small delay to prevent the CPU from redlining
+                try { Thread.sleep(100); } catch (InterruptedException e) {}
             }
-
-            // 2. get who is moving now
-            int playerWhoMoved = currentPlayer;
-            plrByID(playerWhoMoved).makeMove();
-
-            // 3. Check for win immediately using that player's ID
-            if (checkWin(playerWhoMoved)) {
-                // The checkPlayerWin method already sets the text to "BLACK WINS" etc.
-                BoardDraw.overlayPanel.repaint();
-                break; // Exit the game loop
-            }
-
-            try { Thread.sleep(10); } catch (Exception e) {}
-
-            // 4. Handle Pie Rule cleanup and turn swap
-            if ((currentPlayer == 1) && whitefirst) {
-                whitefirst = false;
-                BoardDraw.overlayPanel.remove(piRuleBut);
-                BoardDraw.overlayPanel.repaint();
-            }
-        }
-
-        /*
-
-		while (!checkWin()) {
-            if ((currentPlayer == -1) && whitefirst) {
-                //System.out.println("PI Rule: Enforced");
-                BoardDraw.overlayPanel.add(piRuleBut);
-                BoardDraw.overlayPanel.setComponentZOrder(piRuleBut, 0);
-                BoardDraw.overlayPanel.repaint();
-            }
-
-			plrByID(currentPlayer).makeMove();
-            try { Thread.sleep(10); } catch (Exception e) {}
-            //System.out.println(checkWin()? "Black won" : "Black not won");
-
-            if ((currentPlayer == 1) && whitefirst) {
-                whitefirst = false;
-                BoardDraw.overlayPanel.remove(piRuleBut);
-                //System.out.println("whitefirst: " + whitefirst);
-                BoardDraw.overlayPanel.repaint();
-            }
-		}*/
-	}
+        }).start(); // Starts the background thread
+    }
 
     //resetting the board since the board doesn't reset in one run so the value stays the same for different tests.
     public static void resetBoard() {

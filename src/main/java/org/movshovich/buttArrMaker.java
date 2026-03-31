@@ -21,6 +21,8 @@ public class buttArrMaker {
                     buttArr[row][col].setContentAreaFilled(false);
                     buttArr[row][col].setBorderPainted(false);
 
+                    Board.buttonGrid[row][col] = buttArr[row][col];
+
                     buttArr[row][col].addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
                             JButton src = (JButton) e.getSource();
@@ -75,6 +77,8 @@ public class buttArrMaker {
 
                 buttArr[row][col].setContentAreaFilled(false);
                 buttArr[row][col].setBorderPainted(false);
+
+                Board.buttonGrid[row][col] = buttArr[row][col];
 
                 buttArr[row][col].addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {

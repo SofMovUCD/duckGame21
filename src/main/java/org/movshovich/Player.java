@@ -35,9 +35,16 @@ public class Player {
         BoardDraw.overlayPanel.add(BoardDraw.buttonPane);
                 //System.out.println("Buttons added");
         Board.movingFlag = 1;
-        while (Board.movingFlag == 1) {
-                    System.out.print("");
+        if (!(this instanceof Bot)) {
+            while (Board.movingFlag == 1) {
+                try {
+                    Thread.sleep(50); // allows the thread to breathe
+                } catch (InterruptedException e) {}
+            }
         }
+//            while (Board.movingFlag == 1) {
+//                        System.out.print("");
+//        }
                 //System.out.println("Move Made");
         BoardDraw.overlayPanel.remove(BoardDraw.buttonPane);
                 //System.out.println("buttons removed");
