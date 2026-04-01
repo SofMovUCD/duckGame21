@@ -4,15 +4,17 @@ import java.awt.*;
 import javax.swing.JButton;
 
 public class Bot extends Player{
+
     public Bot(int playerId) {
         super(playerId);
     }
+
+    private int col = 10; // Our preferred vertical lane
 
     @Override
     public void makeMove() {
         //A* algorithm?
         JButton target = null;
-        int col = 10; // Our preferred vertical lane
 
         // 1. Find our "lowest" currently placed Octagon in this column
         int lowestRow = -1;
@@ -32,7 +34,21 @@ public class Bot extends Player{
             if (Board.board[lowestRow + 1][col][0] == 0) {
                 target = Board.buttonGrid[lowestRow + 1][col];
             }
-            // blocked Try Rhombus to maneuver around
+            //Try below right rhombus (if exists)
+            else if (Board.board[lowestRow][col + 1][0] == getPlayerId() && Board.board[lowestRow+1][col+2][0] == 0 && col < 20){
+                //try to the right
+                target = Board.buttonGrid[lowestRow + 1][col + 2];
+                col += 2;
+
+            }
+            //Try below left rhombus (if exists)
+            else if (Board.board[lowestRow][col + 1][0] == getPlayerId() && Board.board[lowestRow+1][col-2][0] == 0 && col > 1){
+                //try to the right
+                target = Board.buttonGrid[lowestRow + 1][col - 2];
+                col -= 2;
+
+            }
+            //fully blocked Try Rhombus to maneuver around
             else {
                 // Try Rhombus Right (leads to col + 2)
                 if (col + 1 < 21 && Board.board[lowestRow][col + 1][0] == 0) {
@@ -46,24 +62,24 @@ public class Bot extends Player{
         }
 
         // 5. fallback: If strategy fails, find any empty Octagon
-        if (target == null || target.getParent() == null) {
+        if (target == null /*|| target.getParent() == null*/) {
             target = findAnyAvailableOctagon();
         }
 
         // Execute
         if (target != null) {
-            try { Thread.sleep(400); } catch (Exception e) {}
+            try { Thread.sleep(400); } catch (Exception e) {} //sleep for no reason
             target.doClick();
-        }else {
+        }/*else { //will never happen
             System.out.println("Bot has no moves left!");
             // Force a turn swap if trapped to prevent infinite loop
             Board.currentPlayer *= -1;
-        }
+        }*/
     }
 
     private JButton findAnyAvailableOctagon() {
         for (int r = 0; r < BoardDraw.BOARD_Y; r++) {
-            for (int c = 0; c < BoardDraw.BOARD_X; c ++) {
+            for (int c = 0; c < BoardDraw.BOARD_X; c++) {
                 if (Board.board[r][c][0] == 0 && Board.buttonGrid[r][c].getParent() != null) {
                     return Board.buttonGrid[r][c];
                 }
