@@ -137,7 +137,7 @@ public class Bot extends Player{
 
     private JButton findAnyAvailableOctagonBlack() {
         for (int r = 0; r < BoardDraw.BOARD_Y; r++) {
-            for (int c = 0; c < BoardDraw.BOARD_X; c++) {
+            for (int c = 0; c < BoardDraw.BOARD_X; c+=2) {
                 if (Board.board[r][c][0] == 0 && Board.buttonGrid[r][c].getParent() != null) {
                     col = c;
                     return Board.buttonGrid[r][c];
@@ -148,10 +148,10 @@ public class Bot extends Player{
     }
 
     private JButton findAnyAvailableOctagonWhite() {
-        for (int c = 0; c < BoardDraw.BOARD_X; c++) {
+        for (int c = 0; c < BoardDraw.BOARD_X; c+=2) {
             for (int r = 0; r < BoardDraw.BOARD_Y; r++) {
                 if (Board.board[r][c][0] == 0 && Board.buttonGrid[r][c].getParent() != null) {
-                    row = c;
+                    row = r;
                     return Board.buttonGrid[r][c];
                 }
             }
