@@ -2,6 +2,7 @@ package org.movshovich;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 
 public class BoardDraw extends JPanel {
     public static final int OCTAGON_LENGTH = 11;
@@ -10,7 +11,7 @@ public class BoardDraw extends JPanel {
     public static final int BOARD_Y = 11; 
     public static final int OCTAGON_DISTANCE = 68;
 
-    public static JLabel nextMove;
+    public static JLabel nextMove, bot, player;
     public static JPanel overlayPanel;
     public static JLayeredPane buttonPane;
 
@@ -90,14 +91,16 @@ public class BoardDraw extends JPanel {
         nextMove = new JLabel("BLACK to play");
         nextMove.setBounds(400, 830, 150, 50);
         //display text to display which player is which colour
-        JLabel bot = new JLabel("     Bot");
-        bot.setForeground(Color.BLACK);
-        bot.setBackground(Color.WHITE);
-        bot.setBounds(900, 400, 50, 50);
-        JLabel player = new JLabel("  Player");
-        player.setForeground(Color.WHITE);
-        player.setBackground(Color.BLACK);
-        player.setBounds(900, 500, 50, 50);
+        bot = new JLabel("    Bot");
+        bot.setForeground(Color.WHITE);
+        bot.setBackground(new Color(45,45,45));
+        bot.setBounds(580, 830, 50, 50);
+        bot.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(), BorderFactory.createLoweredBevelBorder()));
+        player = new JLabel("  Player");
+        player.setForeground(new Color(45,45,45));
+        player.setBackground(Color.WHITE);
+        player.setBounds(660, 830, 55, 50);
+        player.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(), BorderFactory.createLoweredBevelBorder()));
         //do the numbers and letters at edge of board
         for(int i = 0; i < OCTAGON_LENGTH; i++){
             JLabel num = new JLabel(Integer.toString(i+1));
@@ -129,7 +132,7 @@ public class BoardDraw extends JPanel {
         boardFrame.add(overlayPanel);
 
         //Set board properties
-        boardFrame.setSize(1000,1000);
+        boardFrame.setSize(810,1000);
         boardFrame.setLocationRelativeTo(null);
         boardFrame.setVisible(true);
     }
