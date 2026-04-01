@@ -83,7 +83,7 @@ public class Bot extends Player{
                     System.out.println("placing white octagon in center");
                     target = Board.buttonGrid[row][0];
                 } else {
-                    target = findAnyAvailableOctagonBlack();
+                    target = findAnyAvailableOctagonWhite();
                 }
             } else if (RightmostColumn < 21) {
                 // Try to go directly right (Octagon)
@@ -108,11 +108,11 @@ public class Bot extends Player{
                 //fully blocked Try Rhombus to maneuver around
                 else {
                     // Try Rhombus Lower (leads to row)
-                    if (row < 20 && Board.board[row][RightmostColumn + 1][0] == 0) {
+                    if (row != 10 && Board.board[row][RightmostColumn + 1][0] == 0) {
                         target = Board.buttonGrid[row][RightmostColumn + 1];
                     }
                     // Try Rhombus Above (leads to row + 1)
-                    else if (col - 1 >= 0 && Board.board[row - 1][RightmostColumn + 1][0] == 0) {
+                    else if (row != 0 && Board.board[row - 1][RightmostColumn + 1][0] == 0) {
                         target = Board.buttonGrid[row - 1][RightmostColumn + 1];
                     }
                 }
@@ -121,7 +121,7 @@ public class Bot extends Player{
 
         // 5. fallback: If strategy fails, find any empty Octagon
         if (target == null /*|| target.getParent() == null*/) {
-            target = findAnyAvailableOctagonBlack();
+            target = getPlayerId() == 1? findAnyAvailableOctagonBlack() : findAnyAvailableOctagonWhite() ;
         }
 
         // Execute
@@ -139,6 +139,19 @@ public class Bot extends Player{
         for (int r = 0; r < BoardDraw.BOARD_Y; r++) {
             for (int c = 0; c < BoardDraw.BOARD_X; c++) {
                 if (Board.board[r][c][0] == 0 && Board.buttonGrid[r][c].getParent() != null) {
+                    col = c;
+                    return Board.buttonGrid[r][c];
+                }
+            }
+        }
+        return null;
+    }
+
+    private JButton findAnyAvailableOctagonWhite() {
+        for (int c = 0; c < BoardDraw.BOARD_X; c++) {
+            for (int r = 0; r < BoardDraw.BOARD_Y; r++) {
+                if (Board.board[r][c][0] == 0 && Board.buttonGrid[r][c].getParent() != null) {
+                    row = c;
                     return Board.buttonGrid[r][c];
                 }
             }
