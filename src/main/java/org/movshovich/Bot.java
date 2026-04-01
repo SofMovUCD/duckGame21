@@ -10,6 +10,7 @@ public class Bot extends Player{
     }
 
     private int col = 10; // Our preferred vertical lane
+    private int step = 1; //distance between octagons in array (1 for black, 2 for white)
 
     @Override
     public void makeMove() {
@@ -25,9 +26,14 @@ public class Bot extends Player{
             }
         }
 
-        // 2. If we haven't started yet, take the top-center Octagon
+        // 2. If we or pi rule haven't started yet, take the top-center Octagon
         if (lowestRow == -1) {
-            target = Board.buttonGrid[0][col];
+            if(Board.board[0][col][0] == 0) {
+                target = Board.buttonGrid[0][col];
+            }
+            else{
+                target = findAnyAvailableOctagon();
+            }
         }
         else if (lowestRow < 10) {
             // Try to go directly down (Octagon)
