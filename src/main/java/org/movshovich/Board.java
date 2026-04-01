@@ -219,7 +219,7 @@ public class Board {
         // 3. start thread
         new Thread(() -> {
             // UI to load
-            try { Thread.sleep(1000); } catch (Exception e) {}
+            //try { Thread.sleep(1000); } catch (Exception e) {}
 
             while (true) {
                 // Pie Rule Logic
