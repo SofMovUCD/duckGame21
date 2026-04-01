@@ -35,14 +35,15 @@ public class Bot extends Player{
                 target = Board.buttonGrid[lowestRow + 1][col];
             }
             //Try below right rhombus (if exists)
-            else if (Board.board[lowestRow][col + 1][0] == getPlayerId() && Board.board[lowestRow+1][col+2][0] == 0 && col < 20){
+            else if (col < 19 && Board.board[lowestRow][col + 1][0] == getPlayerId() && Board.board[lowestRow+1][col+2][0] == 0){
                 //try to the right
+                System.out.println("checking right rhombus");
                 target = Board.buttonGrid[lowestRow + 1][col + 2];
                 col += 2;
 
             }
             //Try below left rhombus (if exists)
-            else if (Board.board[lowestRow][col + 1][0] == getPlayerId() && Board.board[lowestRow+1][col-2][0] == 0 && col > 1){
+            else if (col > 1 && Board.board[lowestRow][col - 1][0] == getPlayerId() && Board.board[lowestRow+1][col-2][0] == 0){
                 //try to the right
                 target = Board.buttonGrid[lowestRow + 1][col - 2];
                 col -= 2;
