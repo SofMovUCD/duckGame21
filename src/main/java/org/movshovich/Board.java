@@ -1,10 +1,11 @@
 package org.movshovich;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
+import javax.swing.*;
 
 public class Board {
 
@@ -172,7 +173,11 @@ public class Board {
 
         movingFlag = 0;
         whitefirst = false;
-        //currentPlayer *= -1;
+        //change colours
+        BoardDraw.bot.setForeground(new Color(45,45,45));
+        BoardDraw.bot.setBackground(Color.WHITE);
+        BoardDraw.player.setForeground(Color.WHITE);
+        BoardDraw.player.setBackground(new Color(45,45,45));
         BoardDraw.overlayPanel.remove(piRuleBut);
         BoardDraw.overlayPanel.repaint();
     }
