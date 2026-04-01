@@ -74,7 +74,7 @@ public class BoardDraw extends JPanel {
 
     public static void initBoard() {
         //Init board name and closing function
-        JFrame boardFrame = new JFrame("Quax Player vs Player");
+        JFrame boardFrame = new JFrame("Quax Player vs Bot");
         boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //overlay panel to place above
@@ -89,6 +89,15 @@ public class BoardDraw extends JPanel {
         //create label
         nextMove = new JLabel("BLACK to play");
         nextMove.setBounds(400, 830, 150, 50);
+        //display text to display which player is which colour
+        JLabel bot = new JLabel("     Bot");
+        bot.setForeground(Color.BLACK);
+        bot.setBackground(Color.WHITE);
+        bot.setBounds(900, 400, 50, 50);
+        JLabel player = new JLabel("  Player");
+        player.setForeground(Color.WHITE);
+        player.setBackground(Color.BLACK);
+        player.setBounds(900, 500, 50, 50);
         //do the numbers and letters at edge of board
         for(int i = 0; i < OCTAGON_LENGTH; i++){
             JLabel num = new JLabel(Integer.toString(i+1));
@@ -101,9 +110,13 @@ public class BoardDraw extends JPanel {
             placedPane.add(num);
             placedPane.add(chars);
         }
-        //l.size
+        //add labels
         nextMove.setOpaque(true);
+        bot.setOpaque(true);
+        player.setOpaque(true);
         placedPane.add(nextMove);
+        placedPane.add(player);
+        placedPane.add(bot);
 
         //create buttons
         buttArrMaker.initButtArr(buttonPane, placedPane);
@@ -116,7 +129,7 @@ public class BoardDraw extends JPanel {
         boardFrame.add(overlayPanel);
 
         //Set board properties
-        boardFrame.setSize(810,1000);
+        boardFrame.setSize(1000,1000);
         boardFrame.setLocationRelativeTo(null);
         boardFrame.setVisible(true);
     }
