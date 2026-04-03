@@ -8,10 +8,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.movshovich.Board;
-import org.movshovich.BoardDraw;
-import org.movshovich.Player;
-import org.movshovich.buttArrMaker;
+import org.movshovich.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,7 +25,11 @@ public class UiTest extends AssertJSwingJUnitTestCase {
 
     @BeforeEach
     public void onSetUp() {
-             Board.resetBoard();
+            Board.resetBoard();
+            Board.plrList.clear();
+            Board.plrList.add(new Player(1));
+            Board.plrList.add(new Player(-1));
+            Board.currentPlayer = 1;
             JFrame frame = GuiActionRunner.execute(() -> {
                 //Init board name and closing function
                 JFrame boardFrame = new JFrame("Quax Player vs Player");
@@ -45,7 +46,16 @@ public class UiTest extends AssertJSwingJUnitTestCase {
                 placedPane.setSize(810, 1000);
                 //create label
                 BoardDraw.nextMove = new JLabel("BLACK to play");
+                BoardDraw.nextMove.setName("nextMoveLabelName");
                 BoardDraw.nextMove.setBounds(400, 830, 150, 50);
+
+                BoardDraw.bot = new JLabel("  Bot");
+                BoardDraw.bot.setName("botLabel");//testing
+                placedPane.add(BoardDraw.bot);
+
+                BoardDraw.player = new JLabel("  Player");
+                BoardDraw.player.setName("playerLabel"); //testing
+                placedPane.add(BoardDraw.player);
                 //do the numbers and letters at edge of board
                 for(int i = 0; i < 11; i++){
                     JLabel num = new JLabel(Integer.toString(i+1));
@@ -82,8 +92,6 @@ public class UiTest extends AssertJSwingJUnitTestCase {
         // IMPORTANT: note the call to 'robot()'
         // we must use the Robot from AssertJSwingJUnitTestCase
         window = new FrameFixture(robot(), frame);
-        Board.plrList.add(new Player(1));
-        Board.plrList.add(new Player(-1));
         window.show(); // shows the frame to test
     }
 
@@ -107,7 +115,8 @@ public class UiTest extends AssertJSwingJUnitTestCase {
         robot().click(btn); // More precise than .click()
         robot().waitForIdle();
         //CHECK label updated to correct value
-        assertEquals("WHITE to play", BoardDraw.nextMove.getText());
+        //assertEquals("WHITE to play", BoardDraw.nextMove.getText());
+        window.label("nextMoveLabelName").requireText("WHITE to play");
     }
 /*
     @Test
@@ -232,6 +241,64 @@ public void buttonPressToDeleteButton(){
         });
 
         assertEquals("WHITE WINS!!", BoardDraw.nextMove.getText());
+    }
+
+    @Test
+    public void botChoosesVerticalPath() {
+        Board.plrList.clear();
+        Bot blackBot = new Bot(1);
+        Player whitePlayer = new Player(-1); // Add the opponent!
+        Board.plrList.add(blackBot);
+        Board.plrList.add(whitePlayer);
+        Board.currentPlayer = 1;
+
+        GuiActionRunner.execute(() -> blackBot.makeMove());
+        assertEquals(1, Board.board[0][10][0]);
+    }
+
+    @Test
+    public void botManeuversAroundObstacle() {
+        Board.plrList.set(0, new Bot(1));
+        Board.board[0][10][0] = 1;
+        Board.board[1][10][0] = -1;
+
+        GuiActionRunner.execute(() -> ((Bot)Board.plrList.get(0)).makeMove());
+        assertEquals("Bot should use Rhombus to maneuver", 1, Board.board[0][11][0]);
+    }
+
+    @Test
+    public void botTakesWinningMove() {
+        Board.plrList.set(0, new Bot(1));
+        Bot blackBot = (Bot) Board.plrList.get(0);
+        for(int i = 0; i < 10; i++) {
+            Board.board[i][10][0] = 1;
+        }
+        Board.currentPlayer = 1;
+        GuiActionRunner.execute(() -> blackBot.makeMove());
+
+        GuiActionRunner.execute(() -> Board.checkWin(1));
+        assertEquals("BLACK WINS!!", BoardDraw.nextMove.getText());
+    }
+
+    @Test
+    public void botHandlesFullBoard() {
+        Board.plrList.set(0, new Bot(1));
+        Bot blackBot = (Bot) Board.plrList.get(0);
+        for (int i = 0; i < 11; i++) {
+            for (int j = 0; j < 21; j++) {
+                Board.board[i][j][0] = 5;
+            }
+        }
+        GuiActionRunner.execute(() -> blackBot.makeMove());
+    }
+
+    @Test
+    public void botUsesFallbackWhenColumnFull() {
+        Board.plrList.set(0, new Bot(1));
+        for(int i = 0; i < 11; i++) { Board.board[i][10][0] = -1; }
+
+        GuiActionRunner.execute(() -> ((Bot)Board.plrList.get(0)).makeMove());
+        assertEquals("Bot should fallback to column 0", 1, Board.board[0][0][0]);
     }
 
 }

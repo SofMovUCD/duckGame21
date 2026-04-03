@@ -89,6 +89,7 @@ public class BoardDraw extends JPanel {
         placedPane.setSize(810, 1000);
         //create label
         nextMove = new JLabel("BLACK to play");
+        nextMove.setName("nextMoveLabelName");
         nextMove.setBounds(400, 830, 150, 50);
         //display text to display which player is which colour
         bot = new JLabel("    Bot");
