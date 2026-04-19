@@ -1,3 +1,4 @@
+package org.movshovich.QuaxRebuild.src;
 import java.awt.*;
 
 public class Player {
