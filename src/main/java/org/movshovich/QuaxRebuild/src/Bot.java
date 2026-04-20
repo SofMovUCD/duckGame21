@@ -27,30 +27,31 @@ public class Bot extends Player {
         Tile next = path.poll();
         Tile fallback;
 
-        if (next == null) {
+        if (next == null) { //no path constructed (first move)
             
-            if (placed.isEmpty()) {
+            if (placed.isEmpty()) { //no placed/usable tile
                 fallback = findNewStart();
-                createPath(fallback);
+                createPath(fallback); //make path to highest weight tile
             }
 
-            else {
+            else { //placed/usable tile exists (move has been made)
                 last = placed.peek();
 
-                if (last.isBlocked()) {
-                    while (last.isBlocked() && !placed.isEmpty()) {
+                if (last.isBlocked()) { //last placed tile is blocked
+                    while (last.isBlocked() && !placed.isEmpty()) { //get to unblocked tile
                         placed.pop();
-                        last = placed.pop();
+                        last = placed.peek();
                     }
 
-                    if (placed.isEmpty()) {
+                    if (placed.isEmpty()) { //no available unblocked placed tiles
                     fallback = findNewStart();
                     createPath(fallback);
                     }
-
-                    createPath(last);
+                    else { //found available unblocked placed tile
+                        createPath(last);
+                    }
                 }
-                else {
+                else { //last placed tile is not blocked
                     createPath(last);
                 }
             }
@@ -58,22 +59,21 @@ public class Bot extends Player {
             next = path.poll();
         }
 
-        if (next.isBlocked()) {
+        if (next.isBlocked()) { //current next move is blocked
 
         }
         
 
-        if (next.getValue() != 0) {
-            path.clear();
+        if (next.getValue() != 0) { //current next move already is full
             createPath(Board.getTile(next.getX() + 2, next.getY() - 1));
             next = path.poll();
         }
 
         
 
-        next.getTileButton().doClick();
-        Game.flipMovingFlag();
-        placed.push(next);
+        next.getTileButton().doClick(); //place tile
+        Game.flipMovingFlag(); //go to next move
+        placed.push(next); //add placed tile to stack
         
     }
 
@@ -90,7 +90,7 @@ public class Bot extends Player {
     }
 
     private void createPath(Tile start) {
-            path.addAll(A_Star(start, Board.largestWeight()));
+            path = A_Star(start, Board.largestWeight());
     }
 
     private static Queue<Tile> A_Star(Tile start, Tile goal) {
