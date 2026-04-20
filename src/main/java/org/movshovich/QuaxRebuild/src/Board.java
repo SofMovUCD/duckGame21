@@ -142,7 +142,7 @@ public class Board {
     public static void piRuleWeight() {
         for (int i = 0; i < 21; i += 2) {
             board[10][i].setWeight(0);
-            board[i][21].setWeight(1);
+            board[i/2][20].setWeight(1);
         }
     }
 }

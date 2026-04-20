@@ -12,6 +12,19 @@ public class Tile {
     private int value; //1 for black, -1 for white
     private int weight; //weight for the bot
     private JButton tileButton;
+    private int g;
+    private int h;
+    private int f;
+
+    public Tile getParent() {
+        return parent;
+    }
+
+    public void setParent(Tile parent) {
+        this.parent = parent;
+    }
+
+    private Tile parent;
 
     public Tile(int x, int y, int value, int weight) {
         this.x = x;
@@ -28,12 +41,20 @@ public class Tile {
     public void setY(int y) {this.y = y;}
 
     public int getValue() {return value;}
-
     public void setValue(int value) {this.value = value;}
 
     public int getWeight() {return weight;}
-
     public void setWeight(int weight) {this.weight = weight;}
+
+    public int getG() {return g;}
+    public void setG(int g) {this.g = g;}
+
+    public int getH() {return h;}
+    public void setH(int h) {this.h = h;}
+
+    public int getF() {return f;}
+    public void setF() {this.f = g + h;}
+
 
     public JButton getTileButton() {return tileButton;}
 
