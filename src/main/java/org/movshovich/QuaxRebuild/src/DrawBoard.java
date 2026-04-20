@@ -78,21 +78,8 @@ public class DrawBoard extends JPanel{
         g2.drawPolygon(newNewX, newNewY, 4);
     }
 
-    public static void initBoard() {
-        //Init board name and closing function
-        JFrame boardFrame = new JFrame("Quax Player vs Bot");
-        boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //overlay panel to place above
-        overlayPanel = new JPanel();
-        overlayPanel.setLayout(new OverlayLayout(overlayPanel));
-        overlayPanel.setPreferredSize(new Dimension(810, 1000));
-
-        //Create Panes for placing buttons
-        buttonPane = new JLayeredPane(); 
-        placedPane = new JLayeredPane();
-        placedPane.setSize(810, 1000);
-        //create label
+    public static void initDash() {
+    
         nextMove = new JLabel("BLACK to play");
         nextMove.setName("nextMoveLabelName");
         nextMove.setBounds(400, 830, 150, 50);
@@ -126,6 +113,25 @@ public class DrawBoard extends JPanel{
         placedPane.add(nextMove);
         placedPane.add(player);
         placedPane.add(bot);
+    
+    }
+
+    public static void initBoard() {
+        //Init board name and closing function
+        JFrame boardFrame = new JFrame("Quax Player vs Bot");
+        boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        //overlay panel to place above
+        overlayPanel = new JPanel();
+        overlayPanel.setLayout(new OverlayLayout(overlayPanel));
+        overlayPanel.setPreferredSize(new Dimension(810, 1000));
+
+        //Create Panes for placing buttons
+        buttonPane = new JLayeredPane(); 
+        placedPane = new JLayeredPane();
+        placedPane.setSize(810, 1000);
+        //create label
+        initDash();
 
         overlayPanel.add(buttonPane);
         overlayPanel.add(placedPane); // Middle Layer (Tiles being placed)
@@ -143,4 +149,11 @@ public class DrawBoard extends JPanel{
         placedPane.repaint();
         buttonPane.repaint();
     } 
+
+    public static void resetBoard() {
+        placedPane.removeAll();
+        buttonPane.removeAll();
+        initDash();
+        repaintAll();
+    }
 }

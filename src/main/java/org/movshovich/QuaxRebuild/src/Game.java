@@ -4,9 +4,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import javax.swing.JButton;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 
 public class Game {
@@ -19,6 +21,7 @@ public class Game {
     private static List<Player> plrList = new ArrayList<>();
     private static JButton piRuleBut;
     private static boolean ongoing;
+    private static boolean piRulePressed = false;
     
 
     public Game() {
@@ -71,7 +74,7 @@ public class Game {
         return (plr.getPlayerId()  == 1 ? a : b);
     }
 
-    public void initPiRuleButton() {
+    public static void initPiRuleButton() {
         piRuleBut = new JButton("Activate Pi Rule");
         piRuleBut.setName("Activate Pi Rule");
         piRuleBut.setBounds(50, 830, 150, 50);
@@ -84,15 +87,17 @@ public class Game {
     }
 
     public static void piRule() {
-        System.out.println("I am a PI Rule");
+        //System.out.println("I am a PI Rule");
         for (Player plr: plrList) {
             plr.setPlayerId(plr.getPlayerId() * -1);
             plr.refreshPlayerColour();
+            Bot.piRule();
         }
 
         currentPlayer *= -1;
         movingFlag = false;
         whiteFirst = false;
+        piRulePressed = true;
         //change colours
         DrawBoard.bot.setForeground(playingBlack);
         DrawBoard.bot.setBackground(Color.WHITE);
@@ -101,6 +106,56 @@ public class Game {
         DrawBoard.buttonPane.remove(piRuleBut);
         Board.piRuleWeight();
         //DrawBoard.buttonPane.repaint();
+    }
+
+    private static void winLoseWind(Player winner, Player loser) {
+        movingFlag = true;
+        JInternalFrame WL = new JInternalFrame();
+        WL.setVisible(true);
+        WL.setBounds(250, 450, 400, 200);
+        JButton AB = new JButton("Play Again");
+        AB.setBounds(20, 100, 100, 50);
+        AB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                movingFlag = false;
+                whiteFirst = true;
+                ongoing = true;
+                currentPlayer = 1;
+
+                if (piRulePressed == true) {
+                    for (Player plr: plrList) {
+                        plr.setPlayerId(-plr.getPlayerId());
+                    }
+                    piRulePressed = false;
+                }
+
+                DrawBoard.resetBoard();
+                Board board = new Board();
+                initPiRuleButton();
+                DrawBoard.placedPane.remove(WL);
+                Bot.piRule();
+            }
+        });
+        WL.add(AB);
+
+        JButton QB = new JButton("Quit");
+        QB.setBounds(145, 100, 100, 50);
+        QB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+        WL.add(QB);
+
+        JLabel results = new JLabel("Winner: " + (winner.getPlayerId() == 1? "Black" : "White") + "\n" + "Score:\n" + "\n" + "\n" + "Play Again?");
+        results.setBounds(360, 460, 90, 90);
+
+        WL.add(results);
+
+        DrawBoard.placedPane.add(WL);
+        DrawBoard.repaintAll();
     }
 
     public static void main(String[] args) {
@@ -127,17 +182,13 @@ public class Game {
 
             Player winner = (-currentPlayer == 1? plrByID(1) : plrByID(-1));
             Player loser = plrByID(-winner.getPlayerId());
-            System.out.println("Winner: " + (winner.getPlayerId() == 1? "Black" : "White"));
+            
             winner.incrementWins();
             loser.incrementLosses();
-            System.out.println("Score:");
-            for (Player plr: plrList) {
-                System.out.println(plr.getWins() + " - " + plr.getlosses());
+            winLoseWind(winner, loser);
+            while (movingFlag) {
+                System.out.print("");
             }
-            System.out.println("Play again? Y / N");
-            //scan for response Y N
-            //Y reset board
-            //Exit program
 
         }
     }

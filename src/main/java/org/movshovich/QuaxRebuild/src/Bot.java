@@ -12,64 +12,40 @@ import java.util.Set;
 import java.util.Stack;
 
 public class Bot extends Player {
-    private Queue<Tile> path  = new LinkedList<>();
-    private Stack<Tile> placed = new Stack<>();
+    private static Queue<Tile> path  = new LinkedList<>();
+    private static Stack<Tile> placed = new Stack<>();
 
     public Bot(int playerId) {
         super(playerId);
     }
 
+    public static void piRule() {
+        path.clear();
+        placed.clear();
+    }
 
     @Override
     public void makeMove() {
+        Tile next;
 
-        Tile last;
-        Tile next = path.poll();
-        Tile fallback;
-
-        if (next == null) { //no path constructed (first move)
-            
-            if (placed.isEmpty()) { //no placed/usable tile
-                fallback = findNewStart();
-                createPath(fallback); //make path to highest weight tile
-            }
-
-            else { //placed/usable tile exists (move has been made)
-                last = placed.peek();
-
-                if (last.isBlocked()) { //last placed tile is blocked
-                    while (last.isBlocked() && !placed.isEmpty()) { //get to unblocked tile
-                        placed.pop();
-                        last = placed.peek();
-                    }
-
-                    if (placed.isEmpty()) { //no available unblocked placed tiles
-                    fallback = findNewStart();
-                    createPath(fallback);
-                    }
-                    else { //found available unblocked placed tile
-                        createPath(last);
-                    }
-                }
-                else { //last placed tile is not blocked
-                    createPath(last);
-                }
-            }
-
-            next = path.poll();
+        if (placed.isEmpty()) {
+            next = createPath(findNewStart()).poll();
         }
 
-        if (next.isBlocked()) { //current next move is blocked
+        else {
+            path = createPath(placed.peek());
 
+            if (path == null) {
+                placed.pop();
+                next = createPath(placed.peek()).poll();
+            }
+            else {
+                path.poll();
+                next = createPath(path.poll()).poll();
+            }
         }
         
-
-        if (next.getValue() != 0) { //current next move already is full
-            createPath(Board.getTile(next.getX() + 2, next.getY() - 1));
-            next = path.poll();
-        }
-
-        
+        System.out.println(next);
 
         next.getTileButton().doClick(); //place tile
         Game.flipMovingFlag(); //go to next move
@@ -89,8 +65,8 @@ public class Bot extends Player {
         return null;
     }
 
-    private void createPath(Tile start) {
-            path = A_Star(start, Board.largestWeight());
+    private Queue<Tile> createPath(Tile start) {
+            return A_Star(start, Board.largestWeight());
     }
 
     private static Queue<Tile> A_Star(Tile start, Tile goal) {
@@ -120,7 +96,7 @@ public class Bot extends Player {
 
             // Check all neighboring nodes
             for (Tile neighbor : Board.getNeighbours(current)){
-                if (closedList.contains(neighbor) || neighbor.getValue() != 0) {
+                if (closedList.contains(neighbor) || neighbor.getValue() != 0|| neighbor.isBlocked()) {
                     continue;  // Skip already evaluated nodes
                 }
                 // Calculate tentative g score
