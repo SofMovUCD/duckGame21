@@ -87,8 +87,7 @@ public class Board {
     }
 
     private static boolean inBounds(int x, int y) {
-        if ((x > -1 && x < 21) && (y > -1 && y < 11) && board[y][x] != null) return true;
-        else return false;
+        return (x > -1 && x < 21) && (y > -1 && y < 11) && board[y][x] != null;
     }
 
     public static boolean checkWin(Player plr) {
@@ -98,7 +97,7 @@ public class Board {
         for (int i = 0; i < BOARD_X; i+= 2) {
             if (plr.getPlayerId() == ((Tile)Game.valueForID(getTile(i, 0), getTile(0, i/2), plr)).getValue()) {
             output = checkWinRecur(plr, (Tile)Game.valueForID(getTile(i, 0), getTile(0, i/2), plr), visited);
-            if (output == true) break;
+            if (output) break;
             }
         }
         //System.out.println(visualBoard());
