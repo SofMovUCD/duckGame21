@@ -10,6 +10,7 @@ public class DrawBoard extends JPanel{
     public static final int OCTAGON_DISTANCE = 68;
 
     public static JLabel nextMove, bot, player;
+    public static JFrame boardFrame;
     public static JLayeredPane placedPane;
     public static JPanel overlayPanel;
     public static JLayeredPane buttonPane;
@@ -119,7 +120,7 @@ public class DrawBoard extends JPanel{
 
     public static void initBoard() {
         //Init board name and closing function
-        JFrame boardFrame = new JFrame("Quax Player vs Bot");
+        boardFrame = new JFrame("Quax Player vs Bot");
         boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //overlay panel to place above
