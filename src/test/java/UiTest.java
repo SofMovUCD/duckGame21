@@ -8,7 +8,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.movshovich.QuaxRebuild.src.*;
 
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -18,7 +17,7 @@ public class UiTest extends AssertJSwingJUnitTestCase {
 
     @BeforeEach
     public void onSetUp() {
-        Game quax = new Game(); //start game
+        SwingUtilities.invokeLater(Game::new); //start game
         window = new FrameFixture(robot(), DrawBoard.boardFrame);
         window.show(); // shows the frame to test
     }
