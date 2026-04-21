@@ -44,7 +44,7 @@ public class Game {
 
     public boolean getMovingFlag() {return movingFlag;}
     public boolean isWhiteFirst() {return whiteFirst;}
-    public List<Player> getPlrList() {return plrList;}
+    public static List<Player> getPlrList() {return plrList;}
 
     public static void nextTurn() { 
 

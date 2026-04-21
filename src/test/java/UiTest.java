@@ -26,9 +26,9 @@ public class UiTest extends AssertJSwingJUnitTestCase {
         GuiActionRunner.execute(Game::new); // starts game
         System.out.println("ok1");
         //Game.plrByID(Game.getCurrentPlayer()).makeMove();
-        windowF = new FrameFixture(robot(), DrawBoard.boardFrame); //so this wont initialise correctly (NULL)
+        windowF = new FrameFixture(robot(), DrawBoard.boardFrame); //so this won't initialise correctly (NULL)
         System.out.println("ok2");
-        windowP = showInFrame(DrawBoard.overlayPanel); //so this wont initialise correctly (NULL)
+        windowP = showInFrame(DrawBoard.overlayPanel); //so this won't initialise correctly (NULL)
         System.out.println("ok3");
         windowP.show(); // shows the frame to test
 
