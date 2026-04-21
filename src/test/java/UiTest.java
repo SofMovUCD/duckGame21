@@ -19,27 +19,16 @@ import java.lang.reflect.InvocationTargetException;
 public class UiTest extends AssertJSwingJUnitTestCase {
     private FrameFixture windowF;
     private FrameFixture windowP;
-    private final Thread newThread = new Thread() {
-        public void run() {
-            try {
-                SwingUtilities.invokeAndWait(new Runnable() {
-                    public void run() {
-                        new Game(); //start game (after all other events on thread)
-                    }
-                });
-            } catch (InterruptedException | InvocationTargetException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    };
+
 
     @BeforeEach
     public void onSetUp() {
-        newThread.run(); //starts the game using the thread
+        GuiActionRunner.execute(Game::new); // starts game
         System.out.println("ok1");
+        //Game.plrByID(Game.getCurrentPlayer()).makeMove();
         windowF = new FrameFixture(robot(), DrawBoard.boardFrame); //so this wont initialise correctly (NULL)
         System.out.println("ok2");
-        //windowP = showInFrame(DrawBoard.overlayPanel); //so this wont initialise correctly (NULL)
+        windowP = showInFrame(DrawBoard.overlayPanel); //so this wont initialise correctly (NULL)
         System.out.println("ok3");
         windowP.show(); // shows the frame to test
 
