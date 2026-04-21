@@ -1,4 +1,6 @@
 package org.movshovich.QuaxRebuild.src;
+import java.awt.Color;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,16 +118,17 @@ public class Board {
         return false;
     }
 
-    public static Tile largestWeight() {
+    public static Tile largestWeight(Tile start) {
         List<Tile> visited = new ArrayList<>();
-        return largestWeightRecur(getTile(10, 5), visited);
+        return largestWeightRecur(start, visited);
     }
 
     private static Tile largestWeightRecur(Tile tile, List<Tile> visited) {
         visited.add(tile);
+
         Tile max = tile;
         for (Tile neighbour : getNeighbours(tile)) {
-            if (!visited.contains(neighbour) && neighbour.getValue() == 0) {
+            if (!visited.contains(neighbour) && neighbour.getValue() == 0 && neighbour != null) {
                 max = max.largerWeight(largestWeightRecur(neighbour, visited));
             }
         }
