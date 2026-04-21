@@ -35,11 +35,11 @@ public class UiTest extends AssertJSwingJUnitTestCase {
 
     @BeforeEach
     public void onSetUp() {
-        newThread.start();
+        newThread.run(); //starts the game using the thread
         System.out.println("ok1");
         windowF = new FrameFixture(robot(), DrawBoard.boardFrame); //so this wont initialise correctly (NULL)
         System.out.println("ok2");
-        windowP = showInFrame(DrawBoard.overlayPanel); //so this wont initialise correctly (NULL)
+        //windowP = showInFrame(DrawBoard.overlayPanel); //so this wont initialise correctly (NULL)
         System.out.println("ok3");
         windowP.show(); // shows the frame to test
 
