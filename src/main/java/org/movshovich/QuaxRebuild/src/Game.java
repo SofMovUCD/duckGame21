@@ -41,7 +41,7 @@ public class Game {
 
     public boolean getMovingFlag() {return movingFlag;}
     public boolean isWhiteFirst() {return whiteFirst;}
-    public List<Player> getPlrList() {return plrList;}
+    public static List<Player> getPlrList() {return plrList;}
 
     public static void nextTurn() { 
 
@@ -123,7 +123,7 @@ public class Game {
                 ongoing = true;
                 currentPlayer = 1;
 
-                if (piRulePressed == true) {
+                if (piRulePressed) {
                     for (Player plr: plrList) {
                         plr.setPlayerId(-plr.getPlayerId());
                     }
