@@ -8,12 +8,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Set;
 import java.util.Stack;
 
 public class Bot extends Player {
     private static Queue<Tile> path  = new LinkedList<>();
     private static Stack<Tile> placed = new Stack<>();
+    private static Stack<Tile> allPlaced = new Stack<>();
 
     public Bot(int playerId) {
         super(playerId);
@@ -26,7 +28,7 @@ public class Bot extends Player {
 
     @Override
     public void makeMove() {
-        Tile next;
+        Tile next = null;
 
         if (placed.isEmpty()) {
             next = createPath(findNewStart()).poll();
@@ -36,8 +38,16 @@ public class Bot extends Player {
             path = createPath(placed.peek());
 
             if (path == null) {
-                placed.pop();
-                next = createPath(placed.peek()).poll();
+                while (next == null) {
+                    placed.pop();
+                    Queue<Tile> nextQ = createPath(placed.peek());
+                    if (nextQ == null) {
+                        next = createPath(findNewStart()).poll();
+                    }
+                    else {
+                        next = nextQ.poll();
+                    }
+                }
             }
             else {
                 path.poll();
@@ -50,23 +60,30 @@ public class Bot extends Player {
         next.getTileButton().doClick(); //place tile
         Game.flipMovingFlag(); //go to next move
         placed.push(next); //add placed tile to stack
+        allPlaced.push(next);
         
     }
 
     private Tile findNewStart() {
         Tile newStart;
+        Random tileFinder = new Random();
 
-        for (int i = 0; i < Board.BOARD_X; i += 2) {
-            newStart = (Tile) Game.valueForID(Board.getTile(i, 0), Board.getTile(0, i/2), this);
-            if (!newStart.isBlocked() && !placed.contains(newStart) && newStart.getValue() == 0) {
-                return newStart;
-            }
+        do {
+        if (getPlayerId() == 1) {
+                newStart = Board.getTile((tileFinder.nextInt() % 10) * 2, 0);
         }
-        return null;
+
+        else {
+                newStart = Board.getTile(0, tileFinder.nextInt() % 10);
+        }
+
+        } while (newStart == null || newStart.isBlocked() || newStart.getValue() != 0);
+
+        return newStart;
     }
 
     private Queue<Tile> createPath(Tile start) {
-            return A_Star(start, Board.largestWeight());
+            return A_Star(start, Board.largestWeight(start));
     }
 
     private static Queue<Tile> A_Star(Tile start, Tile goal) {
@@ -96,7 +113,7 @@ public class Bot extends Player {
 
             // Check all neighboring nodes
             for (Tile neighbor : Board.getNeighbours(current)){
-                if (closedList.contains(neighbor) || neighbor.getValue() != 0|| neighbor.isBlocked()) {
+                if (closedList.contains(neighbor) || neighbor.getValue() != 0|| neighbor.isBlocked() || allPlaced.contains(neighbor)) {
                     continue;  // Skip already evaluated nodes
                 }
                 // Calculate tentative g score
@@ -109,7 +126,6 @@ public class Bot extends Player {
                 neighbor.setG(tentative_g);
                 neighbor.setH(heuristic(neighbor, goal));
                 neighbor.setF();
-            
             }
         }
     return null;  // No path exists
