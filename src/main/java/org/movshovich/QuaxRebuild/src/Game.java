@@ -25,7 +25,7 @@ public class Game {
     
 
     public Game() {
-
+        System.out.println("i have started"); //testing
         plrList.add(new Bot(1));
         plrList.add(new Player(-1));
         movingFlag = false;
@@ -159,7 +159,7 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        Game quax = new Game();
+        new Game();
 
         while(true) {
             if (ongoing) {
