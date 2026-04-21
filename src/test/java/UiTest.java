@@ -1,26 +1,16 @@
 import org.assertj.swing.edt.GuiActionRunner;
-import org.assertj.swing.exception.ComponentLookupException;
 import org.assertj.swing.fixture.FrameFixture;
-import org.assertj.swing.fixture.JButtonFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
-import org.junit.After;
+
 import org.junit.Test;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeEach;
+import static org.junit.Assert.assertEquals;
 
 import org.movshovich.QuaxRebuild.src.*;
 
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
 
 
 public class UiTest extends AssertJSwingJUnitTestCase {
@@ -38,9 +28,7 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     public void buttonPressToUpdateArray() {
         JButton btn = window.button("0 0").target();
 
-        GuiActionRunner.execute(() -> {
-            btn.doClick();
-        });
+        btn.doClick();
 
         assertEquals("The board array at 0,0 should be updated to 1", 1, Board.getTile(0,0).getValue());
     }
@@ -69,11 +57,8 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     }*/
 @Test
 public void buttonPressToDeleteButton(){
-    //window.button("0 0").click();
     JButton btn = window.button("0 0").target();
-    GuiActionRunner.execute(() -> {
-        btn.doClick();
-    });
+    btn.doClick();
     assertEquals("The array should be 1 (Black) after first move",1, Board.getTile(0,0).getValue());
 }
 
