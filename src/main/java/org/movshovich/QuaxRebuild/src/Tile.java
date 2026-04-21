@@ -98,18 +98,17 @@ public class Tile {
 
     private Rectangle drawnBounds(int x) {
         if (x % 2 ==0) {
-            return new Rectangle((x/2)*DrawBoard.OCTAGON_DISTANCE + 30, 
-                                   (y)*DrawBoard.OCTAGON_DISTANCE + 25, 
-                                       DrawBoard.OCTAGON_DISTANCE, 
+            return new Rectangle((x/2)*DrawBoard.OCTAGON_DISTANCE + 30,
+                                   (y)*DrawBoard.OCTAGON_DISTANCE + 25,
+                                       DrawBoard.OCTAGON_DISTANCE,
                                        DrawBoard.OCTAGON_DISTANCE);
         } else {
-            return new Rectangle((x/2)*DrawBoard.OCTAGON_DISTANCE + 80, 
-                                 (y)*DrawBoard.OCTAGON_DISTANCE + 75, 
-                                 40, 
+            return new Rectangle((x/2)*DrawBoard.OCTAGON_DISTANCE + 80,
+                                 (y)*DrawBoard.OCTAGON_DISTANCE + 75,
+                                 40,
                                  40);
         }
     }
-
     public String toString() {
         return "Tile X: " + x +", Y: " + y + ", value: " + value;
     }

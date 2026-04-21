@@ -20,12 +20,14 @@ public class Game {
     private static boolean whiteFirst;
     private static List<Player> plrList = new ArrayList<>();
     private static JButton piRuleBut;
+    private static JButton showStrategyBut;
+    private static JButton hideStrategyBut;
     private static boolean ongoing;
     private static boolean piRulePressed = false;
     
 
     public Game() {
-        System.out.println("i have started"); //testing
+
         plrList.add(new Bot(1));
         plrList.add(new Player(-1));
         movingFlag = false;
@@ -34,6 +36,7 @@ public class Game {
         DrawBoard.initBoard();
         Board board = new Board();
         initPiRuleButton();
+        initStrategyButtons();
     }
 
     public static int getCurrentPlayer() {return currentPlayer;}
@@ -41,7 +44,7 @@ public class Game {
 
     public boolean getMovingFlag() {return movingFlag;}
     public boolean isWhiteFirst() {return whiteFirst;}
-    public static List<Player> getPlrList() {return plrList;}
+    public List<Player> getPlrList() {return plrList;}
 
     public static void nextTurn() { 
 
@@ -86,6 +89,42 @@ public class Game {
         });
     }
 
+    public static void initStrategyButtons() {
+        // Show Strategy button
+        showStrategyBut = new JButton("Show Strategy");
+        showStrategyBut.setName("Show Strategy");
+        showStrategyBut.setBounds(690, 830, 150, 50);
+        showStrategyBut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Bot.showStrategy();
+                // swap Show -> Hide
+                DrawBoard.placedPane.remove(showStrategyBut);
+                DrawBoard.placedPane.add(hideStrategyBut);
+                DrawBoard.placedPane.setComponentZOrder(hideStrategyBut, 0);
+                DrawBoard.repaintAll();
+            }
+        });
+
+        // Hide Strategy button (starts hidden)
+        hideStrategyBut = new JButton("Hide Strategy");
+        hideStrategyBut.setName("Hide Strategy");
+        hideStrategyBut.setBounds(690, 830, 150, 50);
+        hideStrategyBut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Bot.hideStrategy();
+                DrawBoard.placedPane.remove(hideStrategyBut);
+                DrawBoard.placedPane.add(showStrategyBut);
+                DrawBoard.placedPane.setComponentZOrder(showStrategyBut, 0);
+                DrawBoard.repaintAll();
+            }
+        });
+
+        DrawBoard.placedPane.add(showStrategyBut);
+        DrawBoard.placedPane.setComponentZOrder(showStrategyBut, 0);
+    }
+
     public static void piRule() {
         //System.out.println("I am a PI Rule");
         for (Player plr: plrList) {
@@ -123,7 +162,7 @@ public class Game {
                 ongoing = true;
                 currentPlayer = 1;
 
-                if (piRulePressed) {
+                if (piRulePressed == true) {
                     for (Player plr: plrList) {
                         plr.setPlayerId(-plr.getPlayerId());
                     }
@@ -133,6 +172,7 @@ public class Game {
                 DrawBoard.resetBoard();
                 Board board = new Board();
                 initPiRuleButton();
+                initStrategyButtons();
                 DrawBoard.placedPane.remove(WL);
                 Bot.piRule();
             }
@@ -159,7 +199,7 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        new Game();
+        Game quax = new Game();
 
         while(true) {
             if (ongoing) {
