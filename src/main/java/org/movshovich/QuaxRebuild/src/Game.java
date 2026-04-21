@@ -151,7 +151,7 @@ public class Game {
         movingFlag = true;
         JInternalFrame WL = new JInternalFrame();
         WL.setVisible(true);
-        WL.setBounds(250, 450, 400, 200);
+        WL.setBounds(250, 450, 300, 200);
         JButton AB = new JButton("Play Again");
         AB.setBounds(20, 100, 100, 50);
         AB.addActionListener(new ActionListener() {
@@ -189,10 +189,23 @@ public class Game {
         });
         WL.add(QB);
 
-        JLabel results = new JLabel("Winner: " + (winner.getPlayerId() == 1? "Black" : "White") + "\n" + "Score:\n" + "\n" + "\n" + "Play Again?");
-        results.setBounds(360, 460, 90, 90);
+        JLabel results = new JLabel("Winner: " + (winner.getPlayerId() == 1? "Black" : "White"));
+        results.setBounds(10, -30, 90, 90);
+        JLabel score = new JLabel("Score:");
+        score.setBounds(10, -10, 90, 90);
+        JLabel P1Score = new JLabel("Bot: " + plrList.get(0).getWins() + " - " + plrList.get(0).getlosses());
+        P1Score.setBounds(10, 10, 90, 90);
+        JLabel P2Score = new JLabel("Bot: " + plrList.get(1).getWins() + " - " + plrList.get(1).getlosses());
+        P2Score.setBounds(10, 30, 90, 90);
+        JLabel PA = new JLabel("Play Again?");
+        PA.setBounds(40, 30, 90, 90);
 
         WL.add(results);
+        WL.add(score);
+        WL.add(P1Score);
+        WL.add(P2Score);
+        WL.add(PA);
+            
 
         DrawBoard.placedPane.add(WL);
         DrawBoard.repaintAll();
