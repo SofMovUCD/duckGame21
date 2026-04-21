@@ -13,7 +13,7 @@ public class DrawBoard extends JPanel{
     public static JLayeredPane placedPane;
     public static JPanel overlayPanel;
     public static JLayeredPane buttonPane;
-    public static JFrame boardFrame; //just for testing
+    public static JLayeredPane strategyPane; // top layer for strategy overlay
 
     public DrawBoard() {
 
@@ -83,17 +83,17 @@ public class DrawBoard extends JPanel{
     
         nextMove = new JLabel("BLACK to play");
         nextMove.setName("nextMoveLabelName");
-        nextMove.setBounds(400, 830, 150, 50);
+        nextMove.setBounds(390, 830, 150, 50);
         //display text to display which player is which colour
         bot = new JLabel("    Bot");
         bot.setForeground(Color.WHITE);
         bot.setBackground(new Color(45,45,45));
-        bot.setBounds(580, 830, 50, 50);
+        bot.setBounds(560, 830, 50, 50);
         bot.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(), BorderFactory.createLoweredBevelBorder()));
         player = new JLabel("  Player");
         player.setForeground(new Color(45,45,45));
         player.setBackground(Color.WHITE);
-        player.setBounds(660, 830, 55, 50);
+        player.setBounds(620, 830, 55, 50);
         player.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(), BorderFactory.createLoweredBevelBorder()));
         //do the numbers and letters at edge of board
         for(int i = 0; i < OCTAGON_LENGTH; i++){
@@ -119,7 +119,7 @@ public class DrawBoard extends JPanel{
 
     public static void initBoard() {
         //Init board name and closing function
-        boardFrame = new JFrame("Quax Player vs Bot");
+        JFrame boardFrame = new JFrame("Quax Player vs Bot");
         boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //overlay panel to place above
@@ -131,9 +131,15 @@ public class DrawBoard extends JPanel{
         buttonPane = new JLayeredPane(); 
         placedPane = new JLayeredPane();
         placedPane.setSize(810, 1000);
+
+        //stratgey testingggg
+        strategyPane = new JLayeredPane(); // top layer -> strategy arrows drawn here
+        strategyPane.setSize(810, 1000);
+        strategyPane.setOpaque(false);
         //create label
         initDash();
 
+        overlayPanel.add(strategyPane); // Top Layer (Strategy overlay)
         overlayPanel.add(buttonPane);
         overlayPanel.add(placedPane); // Middle Layer (Tiles being placed)
         overlayPanel.add(new DrawBoard()); // Bottom Layer (The Brown Board)
@@ -149,11 +155,13 @@ public class DrawBoard extends JPanel{
         overlayPanel.repaint();
         placedPane.repaint();
         buttonPane.repaint();
+        strategyPane.repaint();
     } 
 
     public static void resetBoard() {
         placedPane.removeAll();
         buttonPane.removeAll();
+        strategyPane.removeAll();
         initDash();
         repaintAll();
     }
