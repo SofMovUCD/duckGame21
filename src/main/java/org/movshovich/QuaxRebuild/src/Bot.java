@@ -2,13 +2,11 @@ package org.movshovich.QuaxRebuild.src;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Deque;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
-import java.util.Set;
 import java.util.Stack;
 import javax.swing.JPanel;
 import java.awt.Font;
@@ -83,7 +81,7 @@ public class Bot extends Player {
         return newStart;
     }
 
-    private Queue<Tile> createPath(Tile start) {
+    private static Queue<Tile> createPath(Tile start) {
             return A_Star(start, Board.largestWeight(start));
     }
 
@@ -187,10 +185,10 @@ public class Bot extends Player {
 
                 // For each tile in placed, compute the A* path and draw arrows
                 List<Tile> placedList = new ArrayList<>(placed); // snapshot, no new data
-                Tile goal = Board.largestWeight();
+                Tile goal = Board.largestWeight(placed.peek());
 
                 for (Tile start : placedList) {
-                    Queue<Tile> pathQ = computePath(start);
+                    Queue<Tile> pathQ = createPath(start);
                     if (pathQ == null) continue;
 
                     List<Tile> pathTiles = new ArrayList<>(pathQ);
@@ -255,9 +253,5 @@ public class Bot extends Player {
     public static void hideStrategy() {
         DrawBoard.strategyPane.removeAll();
         DrawBoard.repaintAll();
-    }
-
-    private static Queue<Tile> computePath(Tile start) {
-        return A_Star(start, Board.largestWeight());
     }
 }
