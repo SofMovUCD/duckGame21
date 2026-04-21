@@ -66,7 +66,7 @@ public class Bot extends Player {
         return null;
     }
 
-    private Queue<Tile> createPath(Tile start) {
+    private static Queue<Tile> createPath(Tile start) {
             return A_Star(start, Board.largestWeight());
     }
 
@@ -174,7 +174,7 @@ public class Bot extends Player {
                 Tile goal = Board.largestWeight();
 
                 for (Tile start : placedList) {
-                    Queue<Tile> pathQ = computePath(start);
+                    Queue<Tile> pathQ = createPath(start);
                     if (pathQ == null) continue;
 
                     List<Tile> pathTiles = new ArrayList<>(pathQ);
@@ -239,9 +239,5 @@ public class Bot extends Player {
     public static void hideStrategy() {
         DrawBoard.strategyPane.removeAll();
         DrawBoard.repaintAll();
-    }
-
-    private static Queue<Tile> computePath(Tile start) {
-        return A_Star(start, Board.largestWeight());
     }
 }
