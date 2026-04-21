@@ -1,9 +1,12 @@
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
+import org.assertj.swing.fixture.JButtonFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+
+import static org.assertj.swing.fixture.Containers.showInFrame;
 import static org.junit.Assert.assertEquals;
 
 import org.movshovich.QuaxRebuild.src.*;
@@ -13,19 +16,22 @@ import java.awt.*;
 
 
 public class UiTest extends AssertJSwingJUnitTestCase {
-    private FrameFixture window;
+    private FrameFixture windowF;
+    private FrameFixture windowP;
 
     @BeforeEach
     public void onSetUp() {
-        SwingUtilities.invokeLater(Game::new); //start game
-        window = new FrameFixture(robot(), DrawBoard.boardFrame);
-        window.show(); // shows the frame to test
+        SwingUtilities.invokeLater(Game::new); //start game (after all other events on thread)
+        windowF = new FrameFixture(robot(), DrawBoard.boardFrame); //so this wont initialise correctly (NULL)
+        windowP = showInFrame(DrawBoard.overlayPanel); //so this wont initialise correctly (NULL)
+        windowP.show(); // shows the frame to test
+
     }
 
 
     @Test
     public void buttonPressToUpdateArray() {
-        JButton btn = window.button("0 0").target();
+        JButton btn = windowP.button("0 0").target();
 
         btn.doClick();
 
@@ -35,13 +41,11 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     @Test
     public void buttonPressToUpdateLabel() {
         //GIVEN button press
-       // window.button("0 0").click();
-        JButton btn = window.button("0 0").target();
+        JButton btn = windowP.button("0 0").target();
         robot().click(btn); // More precise than .click()
         robot().waitForIdle();
         //CHECK label updated to correct value
-        //assertEquals("WHITE to play", BoardDraw.nextMove.getText());
-        window.label("nextMoveLabelName").requireText("WHITE to play");
+        windowF.label("nextMoveLabelName").requireText("WHITE to play");
     }
 /*
     @Test
@@ -56,7 +60,7 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     }*/
 @Test
 public void buttonPressToDeleteButton(){
-    JButton btn = window.button("0 0").target();
+    JButton btn = windowP.button("0 0").target();
     btn.doClick();
     assertEquals("The array should be 1 (Black) after first move",1, Board.getTile(0,0).getValue());
 }
@@ -65,15 +69,15 @@ public void buttonPressToDeleteButton(){
     public void numAndLett(){
         //test all the letters and number on the sides and top exist and are correct
         for(int i = 0; i < 11; i++){
-            assertEquals(window.label(Integer.toString(i+1)).text(), Integer.toString(i+1));
-            assertEquals(window.label(Character.toString(i+65)).text(), Character.toString(i+65));
+            assertEquals(windowF.label(Integer.toString(i+1)).text(), Integer.toString(i+1));
+            assertEquals(windowF.label(Character.toString(i+65)).text(), Character.toString(i+65));
         }
     }
     @Test
     public void switchTurn(){
-        window.button("0 0").click();
+        windowP.button("0 0").click();
         assertEquals(-1, Game.getCurrentPlayer());
-        window.button("0 1").click();
+        windowP.button("0 1").click();
         assertEquals(1, Game.getCurrentPlayer());
     }
 
@@ -81,7 +85,7 @@ public void buttonPressToDeleteButton(){
     public void checkAllRhombusButtonsExist(){
         for(int i = 0; i < 10; i++){
             for(int j = 0; j < 10; j++){
-                window.button(i+ " "+ (2*j+1)).isEnabled();
+                windowP.button(i+ " "+ (2*j+1)).isEnabled();
             }
         }
     }
@@ -90,20 +94,21 @@ public void buttonPressToDeleteButton(){
     public void checkAllOctagonalButtonsExist(){
         for(int i = 0; i < 11; i++){
             for(int j = 0; j < 11; j++){
-                window.button(i+ " "+ 2*j).isEnabled();
+                windowP.button(i+ " "+ 2*j).isEnabled();
             }
         }
     }
 
     @Test
     public void PieRuleButtonSwapsPlayers() {
-        window.button("0 0").click(); // First move
-        robot().waitForIdle();
+        Game.plrByID(Game.getCurrentPlayer()).makeMove(); //bot should make move // First move
+//        robot().waitForIdle();
 
-        GuiActionRunner.execute(Game::initPiRuleButton);
+        //GuiActionRunner.execute(Game::initPiRuleButton);
 
-        JButton piBtn = window.button("Activate Pi Rule").target();
-        GuiActionRunner.execute(() -> piBtn.doClick());
+        JButtonFixture piBtn = windowF.button("Activate Pi Rule").click();
+//        piBtn.doClick();
+//        GuiActionRunner.execute(() -> );
         assertEquals("Player 0 ID should now be -1",-1, Game.getPlrList().getFirst().getPlayerId());
     }
 
@@ -121,7 +126,7 @@ public void buttonPressToDeleteButton(){
     @Test
     public void testLabelColorChange() {
         assertEquals("BLACK to play", DrawBoard.nextMove.getText());
-        window.button("0 0").click();
+        windowF.button("0 0").click();
         assertEquals("WHITE to play", DrawBoard.nextMove.getText());
     }
 
