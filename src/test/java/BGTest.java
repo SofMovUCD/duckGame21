@@ -131,4 +131,21 @@ public class BGTest {
         target.setWeight(50);
         assertEquals(Board.largestWeight(Board.getTile(0, 0)), target);
     }
+
+    @Test
+    public void gameTests() {
+        Game testGame = new Game();
+        Game.flipMovingFlag();
+        assertEquals(testGame.getMovingFlag(), true);
+        assertEquals(testGame.isWhiteFirst(), true);
+
+        
+        assertEquals(Game.getPlrList().get(0).getPlayerId(), 1);
+        assertEquals(Game.getPlrList().get(1).getPlayerId(), -1);
+
+        Game.piRule();
+
+        assertEquals(Game.getPlrList().get(0).getPlayerId(), -1);
+        assertEquals(Game.getPlrList().get(1).getPlayerId(), 1);
+    }
 }
