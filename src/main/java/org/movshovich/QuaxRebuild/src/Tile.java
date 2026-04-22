@@ -69,7 +69,8 @@ public class Tile {
         tileButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             JButton src = (JButton) e.getSource();
-            setValue(Game.getCurrentPlayer());
+            value = Game.getCurrentPlayer();
+            weight = -10;
             Color currentColor = Game.plrByID(Game.getCurrentPlayer()).getPlayerColour();
             TileDraw newTile = new TileDraw(currentColor, (x % 2 == 0? true: false));
             newTile.setBounds(drawnBounds(x));

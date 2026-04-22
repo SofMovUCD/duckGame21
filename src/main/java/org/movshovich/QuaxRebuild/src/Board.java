@@ -128,7 +128,7 @@ public class Board {
 
         Tile max = tile;
         for (Tile neighbour : getNeighbours(tile)) {
-            if (!visited.contains(neighbour) && neighbour.getValue() == 0 && neighbour != null) {
+            if (!visited.contains(neighbour) && neighbour != null) {
                 max = max.largerWeight(largestWeightRecur(neighbour, visited));
             }
         }

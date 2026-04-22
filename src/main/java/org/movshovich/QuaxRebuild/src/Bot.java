@@ -44,6 +44,7 @@ public class Bot extends Player {
                         next = createPath(findNewStart()).poll();
                     }
                     else {
+                        nextQ.poll();
                         next = nextQ.poll();
                     }
                 }
@@ -144,19 +145,6 @@ public class Bot extends Player {
         return (int) Math.sqrt(Math.pow((b.getX() - a.getX()),2) + Math.pow((b.getY() - a.getY()),2));
     }
 
-    private Rectangle drawnBounds(Tile tile) {
-        if (tile.getX() % 2 ==0) {
-            return new Rectangle((tile.getX()/2)*DrawBoard.OCTAGON_DISTANCE + 30, 
-                                   (tile.getY())*DrawBoard.OCTAGON_DISTANCE + 25, 
-                                       DrawBoard.OCTAGON_DISTANCE, 
-                                       DrawBoard.OCTAGON_DISTANCE);
-        } else {
-            return new Rectangle((tile.getX()/2)*DrawBoard.OCTAGON_DISTANCE + 80, 
-                                 (tile.getY())*DrawBoard.OCTAGON_DISTANCE + 75, 
-                                 40, 
-                                 40);
-        }
-    }
     /* Returns the pixel center of a tile for drawing arrows */
     private static Point tileCenter(Tile tile) {
         if (tile.getX() % 2 == 0) {
