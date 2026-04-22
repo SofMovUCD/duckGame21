@@ -143,7 +143,7 @@ public class Bot extends Player {
 
     private static int heuristic(Tile a, Tile b) {
         
-        return (int) Math.floor(Math.sqrt(Math.pow((b.getX()/2 - a.getX())/2,2) + Math.pow((b.getY() - a.getY()),2)));
+        return (int) Math.floor(Math.sqrt(Math.pow((double) (b.getX() / 2 - a.getX()) /2,2) + Math.pow((b.getY() - a.getY()),2)));
     }
 
     /* Returns the pixel center of a tile for drawing arrows */
@@ -242,5 +242,22 @@ public class Bot extends Player {
     public static void hideStrategy() {
         DrawBoard.strategyPane.removeAll();
         DrawBoard.repaintAll();
+    }
+
+    //called when reached the line and need to fill in rhombus or when blocked off
+    //will place rhombuses around already placed tiles
+    private static Tile putRhombus(){
+        Tile secondLast,last = placed.pop();
+
+        while(!placed.isEmpty()) {
+            secondLast = placed.pop();
+            if(heuristic(last,secondLast) != 1 && Board.getTile((last.getX()+secondLast.getX())/2,Math.max(last.getY(),secondLast.getY())).getValue() == 0){
+                placed.push(secondLast);
+                return Board.getTile((last.getX()+secondLast.getX())/2,Math.max(last.getY(),secondLast.getY())); //find and return rhombus
+            }
+            last = secondLast;
+        }
+        //couldn't find tile
+        return null;
     }
 }
