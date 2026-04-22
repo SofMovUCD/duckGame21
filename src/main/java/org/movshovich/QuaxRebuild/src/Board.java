@@ -91,12 +91,21 @@ public class Board {
     public static List<Tile> furthNeighbours(Tile inputTile) {
         List<Tile> nList = new ArrayList<>();
         if (inputTile.getX() % 2 == 0) {
-            int[] dx = {0, 2, -2, 1, -1, -2,  2, -2, -1,  1,  2,  0};
-            int[] dy = {1, 1,  1, 0,  0,  0,  0, -1, -1, -1, -1, -1};
+            int[] dxb = {0, 2, -2, 1, -1, -2, 2, -2, -1,  1,  2,  0};
+            int[] dyb = {1, 1,  1, 0,  0,  0, 0, -1, -1, -1, -1, -1};
+            int[] dxw = {2, 2,  2, 1,  1,  0, 0, -2, -2, -1, -1, -2};
+            int[] dyw = {0, 1, -1, 0, -1, -1, 1,  1, -1,  0, -1,  0};
+            
+            if (Game.getCurrentPlayer() == 1) {
+                
+                
+            } else {
+
+            }
 
             for (int i = 0; i < 12; ++i) {
-                int neighbourX = inputTile.getX() + dx[i];
-                int neighbourY = inputTile.getY() + dy[i];
+                int neighbourX = inputTile.getX() + (int) Game.valueForID(dxb[i], dxw[i], Game.plrByID(Game.getCurrentPlayer()));
+                int neighbourY = inputTile.getY() + (int) Game.valueForID(dyb[i], dyw[i], Game.plrByID(Game.getCurrentPlayer()));
                 if (inBounds(neighbourX, neighbourY)) {
                     nList.add(board[neighbourY][neighbourX]);
                 }
