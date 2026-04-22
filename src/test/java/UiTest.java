@@ -235,7 +235,7 @@ public void buttonPressToDeleteButton(){
     }
 
     @Test
-    public void PopUpIsWorking() throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    public void PopUpIsShowing() throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         Class[] cArg = new Class[2];
         cArg[0] = Player.class;
         cArg[1] = Player.class;
