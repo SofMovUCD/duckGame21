@@ -1,12 +1,15 @@
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+import java.util.Stack;
 
+import org.assertj.swing.edt.GuiActionRunner;
 import org.junit.*;
 //import org.junit.jupiter.api;
 import org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import org.movshovich.QuaxRebuild.src.Board;
@@ -16,10 +19,18 @@ import org.movshovich.QuaxRebuild.src.Game;
 import org.movshovich.QuaxRebuild.src.Player;
 import org.movshovich.QuaxRebuild.src.Tile;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class BGTest {
+
+    @BeforeAll
+    public static void setUp() {
+        GuiActionRunner.execute(Game::new);
+    }
+
     @Test
     public void TileGettersSettersTest() {
-        DrawBoard.initBoard();
+        //DrawBoard.initBoard();
         Tile testTile = new Tile(10, 5, 1, 3);
         Tile parentTile = new Tile(0, 0, -1, 3);
 
@@ -147,5 +158,56 @@ public class BGTest {
 
         assertEquals(Game.getPlrList().get(0).getPlayerId(), -1);
         assertEquals(Game.getPlrList().get(1).getPlayerId(), 1);
+    }
+
+    @Test
+    public void botPiRuleClearsStacks() throws Exception {
+        Field placedField = Bot.class.getDeclaredField("placed");
+        placedField.setAccessible(true);
+        Stack<Tile> placed = (Stack<Tile>) placedField.get(null);
+        placed.push(Board.getTile(0, 0));
+        assertFalse(placed.isEmpty(), "placed should have a tile before piRule");
+
+        Bot.piRule();
+
+        assertTrue(placed.isEmpty(), "placed stack should be empty after piRule()");
+
+        Field pathField = Bot.class.getDeclaredField("path");
+        pathField.setAccessible(true);
+        Queue<Tile> path = (Queue<Tile>) pathField.get(null);
+        assertTrue(path.isEmpty(), "path queue should be empty after piRule()");
+    }
+
+    @Test
+    public void botMakeMoveplacesATile() throws Exception {
+        Field endField = Bot.class.getDeclaredField("endReached");
+        endField.setAccessible(true);
+        endField.set(null, false);
+
+        Field placedField = Bot.class.getDeclaredField("placed");
+        placedField.setAccessible(true);
+        Stack<Tile> placed = (Stack<Tile>) placedField.get(null);
+        assertTrue(placed.isEmpty(), "placed should be empty before makeMove");
+
+        Method findNewStart = Bot.class.getDeclaredMethod("findNewStart");
+        findNewStart.setAccessible(true);
+        Bot bot = new Bot(1);
+        Tile start = (Tile) findNewStart.invoke(bot);
+
+        assertNotNull(start, "findNewStart should return a non-null tile on empty board");
+        assertEquals(0, start.getValue(), "findNewStart tile should be unoccupied");
+    }
+
+    @Test
+    public void botFindNewStartReturnsValidTile() throws Exception {
+        Bot bot = new Bot(1);
+        Method findNewStart = Bot.class.getDeclaredMethod("findNewStart");
+        findNewStart.setAccessible(true);
+
+        Tile result = (Tile) findNewStart.invoke(bot);
+
+        assertNotNull(result, "findNewStart must not return null on a fresh board");
+        assertEquals(0, result.getValue(), "Start tile must be unoccupied");
+        assertEquals(0, result.getX() % 2, "BLACK start tile should be an octagon (even x)");
     }
 }
