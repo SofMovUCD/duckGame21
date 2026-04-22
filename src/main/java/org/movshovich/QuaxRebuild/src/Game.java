@@ -170,6 +170,7 @@ public class Game {
                 if (piRulePressed) {
                     for (Player plr: plrList) {
                         plr.setPlayerId(-plr.getPlayerId());
+                        plr.refreshPlayerColour();
                     }
                     piRulePressed = false;
                 }
