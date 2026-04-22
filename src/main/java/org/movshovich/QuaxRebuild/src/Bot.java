@@ -126,7 +126,7 @@ public class Bot extends Player {
                 neighbor.setG(tentative_g);
                 neighbor.setH(heuristic(neighbor, goal));
                 neighbor.setF();
-                System.out.println(neighbor.toString() + " F: " + neighbor.getF());
+                //System.out.println(neighbor.toString() + " F: " + neighbor.getF());
             }
         }
     return null;  // No path exists
