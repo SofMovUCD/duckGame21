@@ -166,12 +166,16 @@ public void buttonPressToDeleteButton(){
 
     @Test
     public void BlackWinCondition() {
-        for(int i = 0; i <= 11; i++) {
+        for(int i = 0; i < 11; i++) {
            //may need to create tile
-            Board.getTile(i,0).setValue(1);
+            Board.getTile(0,i).setValue(1);
         }
         GuiActionRunner.execute(() -> {
-            Board.checkWin(Game.plrByID(1));
+            if(Board.checkWin(Game.plrByID(1))){
+                DrawBoard.nextMove.setText("BLACK WINS!!");
+            } else if (Board.checkWin(Game.plrByID(-1))){
+                DrawBoard.nextMove.setText("WHITE WINS!!");
+            }
         });
         // Check win for Black
         assertEquals("BLACK WINS!!", DrawBoard.nextMove.getText()); //doesnt exist yet
@@ -180,10 +184,14 @@ public void buttonPressToDeleteButton(){
     @Test
     public void WhiteWinCondition() {
         for(int j = 0; j <= 20; j += 2) {
-            Board.getTile(0,j).setValue(-1);
+            Board.getTile(j,0).setValue(-1);
         }
         GuiActionRunner.execute(() -> {
-            Board.checkWin(Game.plrByID(-1));
+            if(Board.checkWin(Game.plrByID(1))){
+                DrawBoard.nextMove.setText("BLACK WINS!!");
+            } else if (Board.checkWin(Game.plrByID(-1))){
+                DrawBoard.nextMove.setText("WHITE WINS!!");
+            }
         });
 
         assertEquals("WHITE WINS!!", DrawBoard.nextMove.getText()); //doesnt exist yet
@@ -232,6 +240,8 @@ public void buttonPressToDeleteButton(){
         GuiActionRunner.execute(() -> {
             if(Board.checkWin(Game.plrByID(1))){
                 DrawBoard.nextMove.setText("BLACK WINS!!");
+            } else if (Board.checkWin(Game.plrByID(-1))){
+                DrawBoard.nextMove.setText("WHITE WINS!!");
             }
         });
         assertEquals("BLACK WINS!!", DrawBoard.nextMove.getText()); //doesnt exist yet
