@@ -25,8 +25,22 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     @BeforeEach
     public void onSetUp() {
         GuiActionRunner.execute(Game::new); // starts game
+
+        Field field = null;
+        try {
+            field = Game.class.getDeclaredField("currentPlayer");
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
+        field.setAccessible(true);
+        try {
+            field.setInt(null, 1); //always start with the starting player having id 1
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+
         windowF = new FrameFixture(robot(), DrawBoard.boardFrame);
-        windowF.show(); // shows the frame to test
+        System.out.println(Game.getCurrentPlayer());
     }
 
 
@@ -42,10 +56,8 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     public void buttonPressToUpdateLabel() {
         //GIVEN button press
         JButton btn = windowF.button("0 0").target();
-        System.out.println(Game.getCurrentPlayer()); //should be 1
         GuiActionRunner.execute(() ->{btn.doClick();});
         GuiActionRunner.execute(Game::nextTurn);
-        System.out.println(Game.getCurrentPlayer()); //should be -1
         //CHECK label updated to correct value
         windowF.label("nextMoveLabelName").requireText("WHITE to play");
     }
