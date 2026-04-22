@@ -30,7 +30,7 @@ public class UiTest extends AssertJSwingJUnitTestCase {
         System.out.println("ok2");
         //windowP = showInFrame(DrawBoard.overlayPanel);
         System.out.println("ok3");
-        windowP.show(); // shows the frame to test
+        windowF.show(); // shows the frame to test
 
 
     }
@@ -38,9 +38,10 @@ public class UiTest extends AssertJSwingJUnitTestCase {
 
     @Test
     public void buttonPressToUpdateArray() {
-        JButton btn = windowP.button("0 0").target();
-
+        JButton btn = windowF.button("0 0").target();
+        System.out.println("EDT?");
         btn.doClick();
+        System.out.println("EDT?");
 
         assertEquals("The board array at 0,0 should be updated to 1", 1, Board.getTile(0,0).getValue());
     }
@@ -48,7 +49,7 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     @Test
     public void buttonPressToUpdateLabel() {
         //GIVEN button press
-        JButton btn = windowP.button("0 0").target();
+        JButton btn = windowF.button("0 0").target();
         robot().click(btn); // More precise than .click()
         robot().waitForIdle();
         //CHECK label updated to correct value
@@ -67,7 +68,7 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     }*/
 @Test
 public void buttonPressToDeleteButton(){
-    JButton btn = windowP.button("0 0").target();
+    JButton btn = windowF.button("0 0").target();
     btn.doClick();
     assertEquals("The array should be 1 (Black) after first move",1, Board.getTile(0,0).getValue());
 }
@@ -82,9 +83,9 @@ public void buttonPressToDeleteButton(){
     }
     @Test
     public void switchTurn(){
-        windowP.button("0 0").click();
+        windowF.button("0 0").click();
         assertEquals(-1, Game.getCurrentPlayer());
-        windowP.button("0 1").click();
+        windowF.button("0 1").click();
         assertEquals(1, Game.getCurrentPlayer());
     }
 
@@ -92,7 +93,7 @@ public void buttonPressToDeleteButton(){
     public void checkAllRhombusButtonsExist(){
         for(int i = 0; i < 10; i++){
             for(int j = 0; j < 10; j++){
-                windowP.button(i+ " "+ (2*j+1)).isEnabled();
+                windowF.button(i+ " "+ (2*j+1)).isEnabled();
             }
         }
     }
@@ -101,14 +102,14 @@ public void buttonPressToDeleteButton(){
     public void checkAllOctagonalButtonsExist(){
         for(int i = 0; i < 11; i++){
             for(int j = 0; j < 11; j++){
-                windowP.button(i+ " "+ 2*j).isEnabled();
+                windowF.button(i+ " "+ 2*j).isEnabled();
             }
         }
     }
 
     @Test
     public void PieRuleButtonSwapsPlayers() {
-        Game.plrByID(Game.getCurrentPlayer()).makeMove(); //bot should make move // First move
+        Game.plrByID(Game.getCurrentPlayer()).makeMove(); //bot should make move // First move //EDT violation
 //        robot().waitForIdle();
 
         //GuiActionRunner.execute(Game::initPiRuleButton);
