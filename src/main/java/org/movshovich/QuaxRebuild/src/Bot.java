@@ -59,9 +59,6 @@ public class Bot extends Player {
             next = findingGap();
         }
         //System.out.println(next);
-        if (findWeakPoints()) {
-            next = path.poll();
-        }
 
         if (next == null) {
             next = givenUp();
@@ -278,6 +275,7 @@ public class Bot extends Player {
 
         return randTile;
     }
+    /*
 
     private boolean findWeakPoints() {
         Stack<Tile> temp = new Stack<Tile>();
@@ -316,4 +314,5 @@ public class Bot extends Player {
         }
         return output;
     }
+        */
 }
