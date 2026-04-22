@@ -72,7 +72,7 @@ public class Tile {
             value = Game.getCurrentPlayer();
             weight = -10;
             Color currentColor = Game.plrByID(Game.getCurrentPlayer()).getPlayerColour();
-            TileDraw newTile = new TileDraw(currentColor, (x % 2 == 0? true: false));
+            TileDraw newTile = new TileDraw(currentColor, (x % 2 == 0));
             newTile.setBounds(drawnBounds(x));
             DrawBoard.placedPane.add(newTile);
             DrawBoard.buttonPane.remove(src);
