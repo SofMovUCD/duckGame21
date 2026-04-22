@@ -39,9 +39,7 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     @Test
     public void buttonPressToUpdateArray() {
         JButton btn = windowF.button("0 0").target();
-        System.out.println("EDT?");
-        btn.doClick();
-        System.out.println("EDT?");
+        GuiActionRunner.execute(() ->{btn.doClick();});
 
         assertEquals("The board array at 0,0 should be updated to 1", 1, Board.getTile(0,0).getValue());
     }
