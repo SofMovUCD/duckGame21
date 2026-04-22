@@ -236,6 +236,12 @@ public class Game {
 
             Player winner = (-currentPlayer == 1? plrByID(1) : plrByID(-1));
             Player loser = plrByID(-winner.getPlayerId());
+            if(winner.getPlayerColour() == Color.WHITE) {
+                DrawBoard.nextMove.setText("WHITE WINS!!");
+            }
+            else{
+                DrawBoard.nextMove.setText("BLACK WINS!!");
+            }
             
             winner.incrementWins();
             loser.incrementLosses();

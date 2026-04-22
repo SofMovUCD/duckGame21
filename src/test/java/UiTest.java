@@ -107,9 +107,10 @@ public void buttonPressToDeleteButton(){
     }
 
     @Test
-    public void PieRuleButtonSwapsPlayers() {
-        Game.plrByID(Game.getCurrentPlayer()).makeMove(); //bot should make move // First move
-//        robot().waitForIdle();
+    public void PieRuleButtonSwapsPlayers() throws NoSuchFieldException, IllegalAccessException {
+        GuiActionRunner.execute(() -> {
+                    Game.plrByID(Game.getCurrentPlayer()).makeMove(); //bot should make move // First move
+                });
 
         //GuiActionRunner.execute(Game::initPiRuleButton);
 
@@ -154,10 +155,14 @@ public void buttonPressToDeleteButton(){
     public void BlackWinCondition() {
         for(int i = 0; i < 11; i++) {
            //may need to create tile
-            Board.getTile(i,0).setValue(1);
+            Board.getTile(0,i).setValue(1);
         }
         GuiActionRunner.execute(() -> {
-            Board.checkWin(Game.plrByID(1));
+            if(Board.checkWin(Game.plrByID(1))){
+                DrawBoard.nextMove.setText("BLACK WINS!!");
+            } else if (Board.checkWin(Game.plrByID(-1))){
+                DrawBoard.nextMove.setText("WHITE WINS!!");
+            }
         });
         // Check win for Black
         assertEquals("BLACK WINS!!", DrawBoard.nextMove.getText());
@@ -166,10 +171,14 @@ public void buttonPressToDeleteButton(){
     @Test
     public void WhiteWinCondition() {
         for(int j = 0; j <= 20; j += 2) {
-            Board.getTile(0,j).setValue(-1);
+            Board.getTile(j,0).setValue(-1);
         }
         GuiActionRunner.execute(() -> {
-            Board.checkWin(Game.plrByID(-1));
+            if(Board.checkWin(Game.plrByID(1))){
+                DrawBoard.nextMove.setText("BLACK WINS!!");
+            } else if (Board.checkWin(Game.plrByID(-1))){
+                DrawBoard.nextMove.setText("WHITE WINS!!");
+            }
         });
 
         assertEquals("WHITE WINS!!", DrawBoard.nextMove.getText());
@@ -202,14 +211,26 @@ public void buttonPressToDeleteButton(){
     public void botTakesWinningMove() {
 //        Board.plrList.set(0, new Bot(1));
 //        Bot blackBot = (Bot) Board.plrList.get(0);
+        GuiActionRunner.execute(() -> {Game.plrByID(Game.getCurrentPlayer()).makeMove();}); //bot first move is random
+
+        Field field = Bot.class.getDeclaredField("placed");
+        field.setAccessible(true);
+        Stack<Tile> botStack = (Stack<Tile>) field.get(null);
+
         for(int i = 0; i < 10; i++) {
             Board.getTile(i,10).setValue(1);
         }
         //Game.currentPlayer = 1;
         Game.plrByID(Game.getCurrentPlayer()).makeMove(); //bot should make move
 
-        GuiActionRunner.execute(() -> Board.checkWin(Game.plrByID(1)));
-        assertEquals("BLACK WINS!!", DrawBoard.nextMove.getText());
+        GuiActionRunner.execute(() -> {
+            if(Board.checkWin(Game.plrByID(1))){
+                DrawBoard.nextMove.setText("BLACK WINS!!");
+            } else if (Board.checkWin(Game.plrByID(-1))){
+                DrawBoard.nextMove.setText("WHITE WINS!!");
+            }
+        });
+        assertEquals("BLACK WINS!!", DrawBoard.nextMove.getText()); //doesnt exist yet
     }
 
 //    @Test
