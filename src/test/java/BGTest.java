@@ -2,6 +2,7 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.*;
 //import org.junit.jupiter.api;
@@ -9,6 +10,8 @@ import org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import org.movshovich.QuaxRebuild.src.Board;
+import org.movshovich.QuaxRebuild.src.Game;
+import org.movshovich.QuaxRebuild.src.Player;
 import org.movshovich.QuaxRebuild.src.Tile;
 
 public class BGTest {
@@ -64,5 +67,17 @@ public class BGTest {
     }
 
     @Test
-    public void
+    public void playerTests() {
+        Player testPlayer = new Player(0);
+        testPlayer.setPlayerId(1);
+        assertEquals(testPlayer.getPlayerId(), 1);
+
+        testPlayer.refreshPlayerColour();
+        assertEquals(testPlayer.getPlayerColour(), Game.playingBlack);
+        
+        testPlayer.incrementWins(); 
+        testPlayer.incrementLosses();
+        assertEquals(testPlayer.getWins(), 1);
+        assertEquals(testPlayer.getlosses(), 1);
+    }
 }
