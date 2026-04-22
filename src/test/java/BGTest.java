@@ -210,4 +210,41 @@ public class BGTest {
         assertEquals(0, result.getValue(), "Start tile must be unoccupied");
         assertEquals(0, result.getX() % 2, "BLACK start tile should be an octagon (even x)");
     }
+
+    @Test
+    public void aStarFindsPathBetweenReachableTiles() throws Exception {
+        Method astar = Bot.class.getDeclaredMethod("A_Star", Tile.class, Tile.class);
+        astar.setAccessible(true);
+
+        Tile start = Board.getTile(0, 0);
+        Tile goal  = Board.getTile(0, 5);
+
+        Queue<Tile> result = (Queue<Tile>) astar.invoke(null, start, goal);
+
+        assertNotNull(result, "A* should find a path on an empty board");
+        assertFalse(result.isEmpty(), "Path should not be empty");
+        assertEquals(start, result.peek(), "Path should start at the start tile");
+    }
+
+    @Test
+    public void reconstructPathBuildsCorrectOrder() throws Exception {
+        Tile t0 = new Tile(0, 0, 0, 0);
+        Tile t1 = new Tile(2, 0, 0, 0);
+        Tile t2 = new Tile(4, 0, 0, 0);
+
+        t0.setParent(null);
+        t1.setParent(t0);
+        t2.setParent(t1);
+
+        Method reconstruct = Bot.class.getDeclaredMethod("reconstruct_path", Tile.class);
+        reconstruct.setAccessible(true);
+
+        Queue<Tile> path = (Queue<Tile>) reconstruct.invoke(null, t2);
+
+        assertNotNull(path, "reconstruct_path should not return null");
+        assertEquals(3, path.size(), "Path should have 3 tiles");
+        assertEquals(t0, path.poll(), "First tile should be root (t0)");
+        assertEquals(t1, path.poll(), "Second tile should be t1");
+        assertEquals(t2, path.poll(), "Third tile should be t2");
+    }
 }
