@@ -91,8 +91,8 @@ public class Board {
     public static List<Tile> furthNeighbours(Tile inputTile) {
         List<Tile> nList = new ArrayList<>();
         if (inputTile.getX() % 2 == 0) {
-            int[] dx = {-2, -2, -1,  0,  1,  2, 2, 2, 1, 0, -1, -2};
-            int[] dy = { 0, -1, -1, -1, -1, -1, 0, 1, 0, 1,  0,  1};
+            int[] dx = {0, 2, -2, 1, -1, -2,  2, -2, -1,  1,  2,  0};
+            int[] dy = {1, 1,  1, 0,  0,  0,  0, -1, -1, -1, -1, -1};
 
             for (int i = 0; i < 12; ++i) {
                 int neighbourX = inputTile.getX() + dx[i];
