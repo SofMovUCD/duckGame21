@@ -20,21 +20,13 @@ import java.util.Stack;
 
 public class UiTest extends AssertJSwingJUnitTestCase {
     private FrameFixture windowF;
-    private FrameFixture windowP;
 
 
     @BeforeEach
     public void onSetUp() {
         GuiActionRunner.execute(Game::new); // starts game
-        System.out.println("ok1");
-        //Game.plrByID(Game.getCurrentPlayer()).makeMove(); //EDT violation
         windowF = new FrameFixture(robot(), DrawBoard.boardFrame);
-        System.out.println("ok2");
-        //windowP = showInFrame(DrawBoard.overlayPanel);
-        System.out.println("ok3");
         windowF.show(); // shows the frame to test
-
-
     }
 
 
@@ -50,8 +42,10 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     public void buttonPressToUpdateLabel() {
         //GIVEN button press
         JButton btn = windowF.button("0 0").target();
+        System.out.println(Game.getCurrentPlayer()); //should be 1
         GuiActionRunner.execute(() ->{btn.doClick();});
         GuiActionRunner.execute(Game::nextTurn);
+        System.out.println(Game.getCurrentPlayer()); //should be -1
         //CHECK label updated to correct value
         windowF.label("nextMoveLabelName").requireText("WHITE to play");
     }
