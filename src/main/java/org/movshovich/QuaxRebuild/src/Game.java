@@ -162,8 +162,6 @@ public class Game {
                 initStrategyButtons();
                 Bot.piRule();
 
-                
-
                 if (piRulePressed) {
                     for (Player plr: plrList) {
                         plr.setPlayerId(-plr.getPlayerId());

@@ -59,10 +59,14 @@ public class Bot extends Player {
             next = findingGap();
         }
         //System.out.println(next);
+        if (findWeakPoints()) {
+            next = path.poll();
+        }
 
         if (next == null) {
             next = givenUp();
         }
+
         next.getTileButton().doClick(); //place tile
         Game.flipMovingFlag(); //go to next move
         placed.push(next); //add placed tile to stack
@@ -273,5 +277,43 @@ public class Bot extends Player {
         }
 
         return randTile;
+    }
+
+    private boolean findWeakPoints() {
+        Stack<Tile> temp = new Stack<Tile>();
+        List<Tile> shared = new ArrayList<>();
+        boolean output = false;
+        while (placed.size() > 1) {
+            temp.push(placed.pop());
+            Tile child = temp.peek();
+            Tile parent = placed.peek();
+            if (!Board.getNeighbours(child).contains(parent)) {
+                for (Tile n : Board.getNeighbours(child)) {
+                    if (Board.getNeighbours(parent).contains(n)) {
+                        if (n.getValue() == getPlayerId()) {
+                            output = false;
+                            break;
+                        }
+
+                        shared.add(n);
+                        if (n.getValue() == getPlayerId()) output = true;
+                    }
+                }
+                if (output == true) {
+                    for (Tile tile: shared) {
+                        if (tile.getValue() == 0) {
+                            path.clear();
+                            path.add(tile);
+                            break;
+                        }
+                    }
+                }
+            }
+            
+        }
+        while (!temp.isEmpty()) {
+            placed.push(temp.pop());
+        }
+        return output;
     }
 }

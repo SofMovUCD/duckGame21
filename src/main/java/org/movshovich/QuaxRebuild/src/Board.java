@@ -29,26 +29,6 @@ public class Board {
         return null;
     }
 
-    public static String visualBoard() {
-        StringBuilder sb = new StringBuilder();
-        for (int c = 0; c < BOARD_Y; c++) {
-            for (int r = 0; r < BOARD_X; r += 2) {
-                if (board[c][r] != null) {
-                    sb.append(getTile(r, c).getValue() + "   "); 
-                } 
-            }
-            sb.append("\n");
-            for (int r = 1; r < BOARD_X; r += 2) {
-                if (board[c][r] != null) {
-                    sb.append("  " + getTile(r, c).getValue() + " ");
-                }
-            }
-            sb.append("\n");
-        }
-
-        return sb.toString();
-    }
-
     private void initBoard() {
         for (int c = 0; c < BOARD_Y; c++) {
             for (int r = 0; r < BOARD_X; r++) {
