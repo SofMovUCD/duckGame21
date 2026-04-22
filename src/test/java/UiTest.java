@@ -48,8 +48,8 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     public void buttonPressToUpdateLabel() {
         //GIVEN button press
         JButton btn = windowF.button("0 0").target();
-        robot().click(btn); // More precise than .click()
-        robot().waitForIdle();
+        GuiActionRunner.execute(() ->{btn.doClick();});
+        GuiActionRunner.execute(Game::nextTurn);
         //CHECK label updated to correct value
         windowF.label("nextMoveLabelName").requireText("WHITE to play");
     }
