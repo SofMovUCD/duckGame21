@@ -1,10 +1,10 @@
-package src.test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 
 import org.junit.*;
-import org.junit.jupiter.api;
+//import org.junit.jupiter.api;
 import org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
@@ -47,7 +47,7 @@ public class BGTest {
         Board testBoard = new Board();
         List<Tile> octNeighbourList = new ArrayList<>();
         Tile testOctTile = Board.getTile(20, 5);
-        octNeighbourList.add(Board.getTile(18, 5)); 
+        octNeighbourList.add(Board.getTile(18, 5));
         octNeighbourList.add(Board.getTile(19, 4));
         octNeighbourList.add(Board.getTile(20, 4));
         octNeighbourList.add(Board.getTile(20, 6));
@@ -64,5 +64,5 @@ public class BGTest {
     }
 
     @Test
-    public void 
+    public void
 }
