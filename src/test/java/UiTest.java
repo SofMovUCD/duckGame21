@@ -28,7 +28,7 @@ public class UiTest extends AssertJSwingJUnitTestCase {
         //Game.plrByID(Game.getCurrentPlayer()).makeMove(); //EDT violation
         windowF = new FrameFixture(robot(), DrawBoard.boardFrame);
         System.out.println("ok2");
-        windowP = showInFrame(DrawBoard.overlayPanel);
+        //windowP = showInFrame(DrawBoard.overlayPanel);
         System.out.println("ok3");
         windowP.show(); // shows the frame to test
 
