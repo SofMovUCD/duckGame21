@@ -13,7 +13,9 @@ import org.movshovich.QuaxRebuild.src.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Stack;
 
 
 public class UiTest extends AssertJSwingJUnitTestCase {
@@ -25,12 +27,12 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     public void onSetUp() {
         GuiActionRunner.execute(Game::new); // starts game
         System.out.println("ok1");
-        //Game.plrByID(Game.getCurrentPlayer()).makeMove();
-        windowF = new FrameFixture(robot(), DrawBoard.boardFrame); //so this wont initialise correctly (NULL)
+        //Game.plrByID(Game.getCurrentPlayer()).makeMove(); //EDT violation
+        windowF = new FrameFixture(robot(), DrawBoard.boardFrame);
         System.out.println("ok2");
-        windowP = showInFrame(DrawBoard.overlayPanel); //so this wont initialise correctly (NULL)
+        //windowP = showInFrame(DrawBoard.overlayPanel);
         System.out.println("ok3");
-        windowP.show(); // shows the frame to test
+        windowF.show(); // shows the frame to test
 
 
     }
@@ -38,9 +40,8 @@ public class UiTest extends AssertJSwingJUnitTestCase {
 
     @Test
     public void buttonPressToUpdateArray() {
-        JButton btn = windowP.button("0 0").target();
-
-        btn.doClick();
+        JButton btn = windowF.button("0 0").target();
+        GuiActionRunner.execute(() ->{btn.doClick();});
 
         assertEquals("The board array at 0,0 should be updated to 1", 1, Board.getTile(0,0).getValue());
     }
@@ -48,9 +49,9 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     @Test
     public void buttonPressToUpdateLabel() {
         //GIVEN button press
-        JButton btn = windowP.button("0 0").target();
-        robot().click(btn); // More precise than .click()
-        robot().waitForIdle();
+        JButton btn = windowF.button("0 0").target();
+        GuiActionRunner.execute(() ->{btn.doClick();});
+        GuiActionRunner.execute(Game::nextTurn);
         //CHECK label updated to correct value
         windowF.label("nextMoveLabelName").requireText("WHITE to play");
     }
@@ -67,8 +68,8 @@ public class UiTest extends AssertJSwingJUnitTestCase {
     }*/
 @Test
 public void buttonPressToDeleteButton(){
-    JButton btn = windowP.button("0 0").target();
-    btn.doClick();
+    JButton btn = windowF.button("0 0").target();
+    GuiActionRunner.execute(()->{btn.doClick();});
     assertEquals("The array should be 1 (Black) after first move",1, Board.getTile(0,0).getValue());
 }
 
@@ -85,6 +86,10 @@ public void buttonPressToDeleteButton(){
         windowP.button("0 0").click();
         assertEquals(-1, Game.getCurrentPlayer());
         windowP.button("0 1").click();
+
+        JButton btn2 = windowF.button("0 1").target();
+        GuiActionRunner.execute(()->{btn2.doClick();}); //click button
+        GuiActionRunner.execute(Game::nextTurn); //switch turn (same way as in main)
         assertEquals(1, Game.getCurrentPlayer());
     }
 
@@ -92,7 +97,7 @@ public void buttonPressToDeleteButton(){
     public void checkAllRhombusButtonsExist(){
         for(int i = 0; i < 10; i++){
             for(int j = 0; j < 10; j++){
-                windowP.button(i+ " "+ (2*j+1)).isEnabled();
+                windowF.button((2*i+1)+ " "+ j).isEnabled();
             }
         }
     }
@@ -101,7 +106,7 @@ public void buttonPressToDeleteButton(){
     public void checkAllOctagonalButtonsExist(){
         for(int i = 0; i < 11; i++){
             for(int j = 0; j < 11; j++){
-                windowP.button(i+ " "+ 2*j).isEnabled();
+                windowF.button(2*i+ " "+ j).isEnabled();
             }
         }
     }
@@ -112,7 +117,15 @@ public void buttonPressToDeleteButton(){
                     Game.plrByID(Game.getCurrentPlayer()).makeMove(); //bot should make move // First move
                 });
 
-        //GuiActionRunner.execute(Game::initPiRuleButton);
+        GuiActionRunner.execute(Game::initPiRuleButton);
+        Field field = Game.class.getDeclaredField("piRuleBut");
+        field.setAccessible(true);
+        JButton piRuleBut = (JButton) field.get(null);
+        GuiActionRunner.execute( () -> {
+            DrawBoard.buttonPane.add(piRuleBut);
+            DrawBoard.buttonPane.setComponentZOrder(piRuleBut, 0);
+        });
+
 
         JButtonFixture piBtn = windowF.button("Activate Pi Rule").click();
 //        piBtn.doClick();
@@ -126,7 +139,8 @@ public void buttonPressToDeleteButton(){
     public void BoardStartsEmpty() {
         for (int i = 0; i < 11; i++) {
             for (int j = 0; j < 21; j++) {
-                assertEquals(0, Board.getTile(i,j).getValue());
+                if(i == 10 && j > 0) j++; //for last row
+                assertEquals(0, Board.getTile(j,i).getValue());
             }
         }
     }
@@ -208,7 +222,7 @@ public void buttonPressToDeleteButton(){
 //    }
 
     @Test
-    public void botTakesWinningMove() {
+    public void botTakesWinningMove() throws NoSuchFieldException, IllegalAccessException {
 //        Board.plrList.set(0, new Bot(1));
 //        Bot blackBot = (Bot) Board.plrList.get(0);
         GuiActionRunner.execute(() -> {Game.plrByID(Game.getCurrentPlayer()).makeMove();}); //bot first move is random
@@ -218,10 +232,11 @@ public void buttonPressToDeleteButton(){
         Stack<Tile> botStack = (Stack<Tile>) field.get(null);
 
         for(int i = 0; i < 10; i++) {
-            Board.getTile(i,10).setValue(1);
+            botStack.push(Board.getTile(10,i));
+            Board.getTile(10,i).setValue(1);
         }
         //Game.currentPlayer = 1;
-        Game.plrByID(Game.getCurrentPlayer()).makeMove(); //bot should make move
+        GuiActionRunner.execute(() -> {Game.plrByID(Game.getCurrentPlayer()).makeMove();}); //bot should make move
 
         GuiActionRunner.execute(() -> {
             if(Board.checkWin(Game.plrByID(1))){
