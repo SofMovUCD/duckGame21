@@ -81,9 +81,13 @@ public void buttonPressToDeleteButton(){
     }
     @Test
     public void switchTurn(){
-        windowF.button("0 0").click();
+        JButton btn = windowF.button("0 0").target();
+        GuiActionRunner.execute(()->{btn.doClick();}); //click button
+        GuiActionRunner.execute(Game::nextTurn); //switch turn (same way as in main)
         assertEquals(-1, Game.getCurrentPlayer());
-        windowF.button("0 1").click();
+        JButton btn2 = windowF.button("0 1").target();
+        GuiActionRunner.execute(()->{btn2.doClick();}); //click button
+        GuiActionRunner.execute(Game::nextTurn); //switch turn (same way as in main)
         assertEquals(1, Game.getCurrentPlayer());
     }
 
