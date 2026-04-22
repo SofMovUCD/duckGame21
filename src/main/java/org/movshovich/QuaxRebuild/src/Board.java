@@ -124,13 +124,12 @@ public class Board {
         List<Tile> visited = new ArrayList<>();
         boolean output = false;
         for (int i = 0; i < BOARD_X; i+= 2) {
-            if (plr.getPlayerId() == ((Tile)Game.valueForID(getTile(i, 0), getTile(0, i/2), plr)).getValue()) {
-            output = checkWinRecur(plr, (Tile)Game.valueForID(getTile(i, 0), getTile(0, i/2), plr), visited);
+            if (plr.getPlayerId() == ((Tile)Game.valueForID(getTile(i, 10), getTile(20, i/2), plr)).getValue()) {
+            output = checkWinRecur(plr, (Tile)Game.valueForID(getTile(i, 10), getTile(20, i/2), plr), visited);
             if (output) break;
             }
         }
         //System.out.println(visualBoard());
-        DrawBoard.testingPane.removeAll();
         return output;
     }
 
@@ -140,7 +139,7 @@ public class Board {
         //System.out.println(curr.toString());
         for (Tile neighbour : getNeighbours(curr)) {
             if (plr.getPlayerId() == neighbour.getValue() && !visited.contains(neighbour)) {
-                if ((Game.valueForID(neighbour.getY(), neighbour.getX(), plr))==(Game.valueForID(10, 20, plr))) return true;
+                if (((int)Game.valueForID(neighbour.getY(), neighbour.getX(), plr)) == 0) return true;
                 else {return checkWinRecur(plr, neighbour, visited);}
             }
         }
@@ -174,20 +173,6 @@ public class Board {
         for (int i = 0; i < 21; i += 2) {
             board[10][i].setWeight(0);
             board[i/2][20].setWeight(1);
-        }
-    }
-
-    private static Rectangle drawnBounds(Tile tile) {
-        if (tile.getX() % 2 ==0) {
-            return new Rectangle((tile.getX()/2)*DrawBoard.OCTAGON_DISTANCE + 30,
-                                   (tile.getY())*DrawBoard.OCTAGON_DISTANCE + 25,
-                                       DrawBoard.OCTAGON_DISTANCE,
-                                       DrawBoard.OCTAGON_DISTANCE);
-        } else {
-            return new Rectangle((tile.getX()/2)*DrawBoard.OCTAGON_DISTANCE + 80,
-                                 (tile.getY())*DrawBoard.OCTAGON_DISTANCE + 75,
-                                 40,
-                                 40);
         }
     }
 }

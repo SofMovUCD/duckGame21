@@ -162,10 +162,7 @@ public class Game {
                 initStrategyButtons();
                 Bot.piRule();
 
-                movingFlag = false;
-                whiteFirst = true;
-                ongoing = true;
-                currentPlayer = 1;
+                
 
                 if (piRulePressed) {
                     for (Player plr: plrList) {
@@ -175,7 +172,12 @@ public class Game {
                     piRulePressed = false;
                 }
 
-                DrawBoard.placedPane.remove(WL);
+                whiteFirst = true;
+                currentPlayer = 1;
+                Bot.endReached = false;
+                DrawBoard.popupPane.remove(WL);
+                ongoing = true;
+                movingFlag = false;
             }
         });
         WL.add(AB);
@@ -208,7 +210,7 @@ public class Game {
         WL.add(PA);
             
 
-        DrawBoard.placedPane.add(WL);
+        DrawBoard.popupPane.add(WL);
         DrawBoard.repaintAll();
     }
 
@@ -246,6 +248,8 @@ public class Game {
             winner.incrementWins();
             loser.incrementLosses();
             winLoseWind(winner, loser);
+            currentPlayer = winner.getPlayerId();
+            DrawBoard.repaintAll();
             while (movingFlag) {
                 System.out.print("");
             }

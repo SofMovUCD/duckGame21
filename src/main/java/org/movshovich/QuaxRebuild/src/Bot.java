@@ -9,12 +9,12 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.Stack;
 import javax.swing.JPanel;
-import java.awt.Font;
 
 public class Bot extends Player {
     private static Queue<Tile> path  = new LinkedList<>();
     private static Stack<Tile> placed = new Stack<>();
     private static Stack<Tile> allPlaced = new Stack<>();
+    public static boolean endReached = false;
 
     public Bot(int playerId) {
         super(playerId);
@@ -29,43 +29,50 @@ public class Bot extends Player {
     public void makeMove() {
         Tile next = null;
 
-        if (placed.isEmpty()) {
-            next = createPath(findNewStart()).poll();
-        }
+        if (!endReached) {
+            if (placed.isEmpty()) {
+                next = createPath(findNewStart()).poll();
+            }
 
-        else {
-            path = createPath(placed.peek());
+            else {
+                path = createPath(placed.peek());
 
-            if (path == null) {
-                while (next == null) {
-                    placed.pop();
-                    Queue<Tile> nextQ = createPath(placed.peek());
-                    if (nextQ == null) {
-                        next = createPath(findNewStart()).poll();
-                    }
-                    else {
-                        nextQ.poll();
-                        next = nextQ.poll();
+                if (path == null) {
+                    while (next == null) {
+                        placed.pop();
+                        Queue<Tile> nextQ = createPath(placed.peek());
+                        if (nextQ == null) {
+                            next = createPath(findNewStart()).poll();
+                        }
+                        else {
+                            nextQ.poll();
+                            next = nextQ.poll();
+                        }
                     }
                 }
+                else {
+                    path.poll();
+                    next = createPath(path.poll()).poll();
+                }
             }
-            else {
-                path.poll();
-                next = createPath(path.poll()).poll();
-            }
+        } else {
+            next = findingGap();
         }
+        //System.out.println(next);
 
-        System.out.println(next);
-
+        if (next == null) {
+            next = givenUp();
+        }
         next.getTileButton().doClick(); //place tile
         Game.flipMovingFlag(); //go to next move
         placed.push(next); //add placed tile to stack
         allPlaced.push(next);
+        if ((boolean) Game.valueForID((next.getY() == 10), next.getX() == 20, this)) endReached = true;
         
     }
 
     private Tile findNewStart() {
-        Tile newStart;
+        Tile newStart = null;
         Random tileFinder = new Random();
 
         do {
@@ -77,7 +84,7 @@ public class Bot extends Player {
                 newStart = Board.getTile(0, tileFinder.nextInt() % 10);
         }
 
-        } while (newStart == null || newStart.isBlocked() || newStart.getValue() != 0);
+        } while (newStart == null || newStart.getValue() != 0);
 
         return newStart;
     }
@@ -244,20 +251,27 @@ public class Bot extends Player {
         DrawBoard.repaintAll();
     }
 
-    //called when reached the line and need to fill in rhombus or when blocked off
-    //will place rhombuses around already placed tiles
-    private static Tile putRhombus(){
-        Tile secondLast,last = placed.pop();
-
-        while(!placed.isEmpty()) {
-            secondLast = placed.pop();
-            if(heuristic(last,secondLast) != 1 && Board.getTile((last.getX()+secondLast.getX())/2,Math.max(last.getY(),secondLast.getY())).getValue() == 0){
-                placed.push(secondLast);
-                return Board.getTile((last.getX()+secondLast.getX())/2,Math.max(last.getY(),secondLast.getY())); //find and return rhombus
+    private static Tile findingGap() {
+        if (placed.size() > 1) {
+            Tile child = placed.pop();
+            Tile parent = placed.peek();
+        
+            if (!Board.getNeighbours(child).contains(parent)) {
+                for (Tile n : Board.getNeighbours(parent)) {
+                    if (Board.getNeighbours(child).contains(n) && n.getValue() == 0 ) return n;
+                }
             }
-            last = secondLast;
+            return findingGap();
+        } else return null;
+    }
+
+    private Tile givenUp() {
+        Tile randTile = null;
+        Random find = new Random();
+        while (randTile == null || randTile.getValue() != 0) {
+            randTile = Board.getTile(find.nextInt() % 20, find.nextInt() % 10);
         }
-        //couldn't find tile
-        return null;
+
+        return randTile;
     }
 }
