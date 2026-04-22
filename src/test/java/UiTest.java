@@ -93,7 +93,7 @@ public void buttonPressToDeleteButton(){
     public void checkAllRhombusButtonsExist(){
         for(int i = 0; i < 10; i++){
             for(int j = 0; j < 10; j++){
-                windowF.button(i+ " "+ (2*j+1)).isEnabled();
+                windowF.button((2*i+1)+ " "+ j).isEnabled();
             }
         }
     }
@@ -102,17 +102,24 @@ public void buttonPressToDeleteButton(){
     public void checkAllOctagonalButtonsExist(){
         for(int i = 0; i < 11; i++){
             for(int j = 0; j < 11; j++){
-                windowF.button(i+ " "+ 2*j).isEnabled();
+                windowF.button(2*i+ " "+ j).isEnabled();
             }
         }
     }
 
     @Test
     public void PieRuleButtonSwapsPlayers() {
-        Game.plrByID(Game.getCurrentPlayer()).makeMove(); //bot should make move // First move //EDT violation
+        GuiActionRunner.execute(() -> {
+                    Game.plrByID(Game.getCurrentPlayer()).makeMove(); //bot should make move // First move
+                });
 //        robot().waitForIdle();
 
-        //GuiActionRunner.execute(Game::initPiRuleButton);
+        GuiActionRunner.execute(Game::initPiRuleButton);
+        GuiActionRunner.execute( () -> {
+            DrawBoard.buttonPane.add(Game.piRuleBut);
+            DrawBoard.buttonPane.setComponentZOrder(Game.piRuleBut, 0);
+        });
+
 
         JButtonFixture piBtn = windowF.button("Activate Pi Rule").click();
 //        piBtn.doClick();
