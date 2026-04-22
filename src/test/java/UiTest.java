@@ -160,19 +160,6 @@ public void buttonPressToDeleteButton(){
         assertEquals("WHITE to play", DrawBoard.nextMove.getText());
     }
 
-//    @Test
-//    public void PieRuleDisappearsAfterClick() {
-//        window.button("0 0").click();
-//        GuiActionRunner.execute(() -> {
-//            Game.initPiRuleButton();
-//            //DrawBoard.overlayPanel.add(Game.piRuleBut);
-//            //Game.piRuleBut.doClick();
-//        });
-//
-//        assertThatThrownBy(() -> window.button("Activate Pi Rule"))
-//                .isInstanceOf(ComponentLookupException.class);
-//    }
-
     @Test
     public void BlackWinCondition() {
         for(int i = 0; i < 11; i++) {
@@ -206,33 +193,9 @@ public void buttonPressToDeleteButton(){
         assertEquals("WHITE WINS!!", DrawBoard.nextMove.getText());
     }
 
-//    @Test
-//    public void botChoosesVerticalPath() {
-//        Board.plrList.clear();
-//        Bot blackBot = new Bot(1);
-//        Player whitePlayer = new Player(-1); // Add the opponent!
-//        Board.plrList.add(blackBot);
-//        Board.plrList.add(whitePlayer);
-//        Board.currentPlayer = 1;
-//
-//        GuiActionRunner.execute(() -> blackBot.makeMove());
-//        assertEquals(1, Board.board[0][10][0]);
-//    }
-//
-//    @Test
-//    public void botManeuversAroundObstacle() {
-//        Board.plrList.set(0, new Bot(1));
-//        Board.board[0][10][0] = 1;
-//        Board.board[1][10][0] = -1;
-//
-//        GuiActionRunner.execute(() -> ((Bot)Board.plrList.get(0)).makeMove());
-//        assertEquals("Bot should use Rhombus to maneuver", 1, Board.board[0][11][0]);
-//    }
 
     @Test
     public void botTakesWinningMove() throws NoSuchFieldException, IllegalAccessException {
-//        Board.plrList.set(0, new Bot(1));
-//        Bot blackBot = (Bot) Board.plrList.get(0);
         GuiActionRunner.execute(() -> {Game.plrByID(Game.getCurrentPlayer()).makeMove();}); //bot first move is random
 
         Field field = Bot.class.getDeclaredField("placed");
@@ -255,26 +218,5 @@ public void buttonPressToDeleteButton(){
         });
         assertEquals("BLACK WINS!!", DrawBoard.nextMove.getText()); //doesnt exist yet
     }
-
-//    @Test
-//    public void botHandlesFullBoard() {
-//        Board.plrList.set(0, new Bot(1));
-//        Bot blackBot = (Bot) Board.plrList.get(0);
-//        for (int i = 0; i < 11; i++) {
-//            for (int j = 0; j < 21; j++) {
-//                Board.board[i][j][0] = 5;
-//            }
-//        }
-//        GuiActionRunner.execute(() -> blackBot.makeMove());
-//    }
-//
-//    @Test
-//    public void botUsesFallbackWhenColumnFull() {
-//        Board.plrList.set(0, new Bot(1));
-//        for(int i = 0; i < 11; i++) { Board.board[i][10][0] = -1; }
-//
-//        GuiActionRunner.execute(() -> ((Bot)Board.plrList.get(0)).makeMove());
-//        assertEquals("Bot should fallback to column 0", 1, Board.board[0][0][0]);
-//    }
 
 }
