@@ -112,16 +112,19 @@ public void buttonPressToDeleteButton(){
     }
 
     @Test
-    public void PieRuleButtonSwapsPlayers() {
+    public void PieRuleButtonSwapsPlayers() throws NoSuchFieldException, IllegalAccessException {
         GuiActionRunner.execute(() -> {
                     Game.plrByID(Game.getCurrentPlayer()).makeMove(); //bot should make move // First move
                 });
 //        robot().waitForIdle();
 
         GuiActionRunner.execute(Game::initPiRuleButton);
+        Field field = Game.class.getDeclaredField("piRuleBut");
+        field.setAccessible(true);
+        JButton piRuleBut = (JButton) field.get(null);
         GuiActionRunner.execute( () -> {
-            DrawBoard.buttonPane.add(Game.piRuleBut);
-            DrawBoard.buttonPane.setComponentZOrder(Game.piRuleBut, 0);
+            DrawBoard.buttonPane.add(piRuleBut);
+            DrawBoard.buttonPane.setComponentZOrder(piRuleBut, 0);
         });
 
 
