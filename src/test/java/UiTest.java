@@ -182,7 +182,7 @@ public void buttonPressToDeleteButton(){
             Board.checkWin(Game.plrByID(-1));
         });
 
-        assertEquals("WHITE WINS!!", DrawBoard.nextMove.getText());
+        assertEquals("WHITE WINS!!", DrawBoard.nextMove.getText()); //doesnt exist yet
     }
 
 //    @Test
