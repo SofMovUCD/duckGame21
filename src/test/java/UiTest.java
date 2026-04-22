@@ -13,7 +13,9 @@ import org.movshovich.QuaxRebuild.src.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Stack;
 
 
 public class UiTest extends AssertJSwingJUnitTestCase {
@@ -209,17 +211,22 @@ public void buttonPressToDeleteButton(){
 //    }
 
     @Test
-    public void botTakesWinningMove() {
+    public void botTakesWinningMove() throws NoSuchFieldException, IllegalAccessException {
 //        Board.plrList.set(0, new Bot(1));
 //        Bot blackBot = (Bot) Board.plrList.get(0);
+        GuiActionRunner.execute(() -> {Game.plrByID(Game.getCurrentPlayer()).makeMove();}); //bot should make move
+        Field field = Bot.class.getDeclaredField("placed");
+        field.setAccessible(true);
+        Stack<Tile> botStack = (Stack<Tile>) field.get(null);
         for(int i = 0; i < 10; i++) {
-            Board.getTile(i,10).setValue(1);
+            botStack.push(Board.getTile(10,i));
+            Board.getTile(10,i).setValue(1);
         }
         //Game.currentPlayer = 1;
-        Game.plrByID(Game.getCurrentPlayer()).makeMove(); //bot should make move
+        GuiActionRunner.execute(() -> {Game.plrByID(Game.getCurrentPlayer()).makeMove();}); //bot should make move
 
         GuiActionRunner.execute(() -> Board.checkWin(Game.plrByID(1)));
-        assertEquals("BLACK WINS!!", DrawBoard.nextMove.getText());
+        assertEquals("BLACK WINS!!", DrawBoard.nextMove.getText()); //doesnt exist yet
     }
 
 //    @Test
