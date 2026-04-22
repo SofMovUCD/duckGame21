@@ -152,6 +152,7 @@ public class Game {
         JInternalFrame WL = new JInternalFrame();
         WL.setVisible(true);
         WL.setBounds(250, 450, 300, 200);
+        WL.setName("WL"); //for testing
         JButton AB = new JButton("Play Again");
         AB.setBounds(20, 100, 100, 50);
         AB.addActionListener(new ActionListener() {
