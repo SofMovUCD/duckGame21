@@ -8,13 +8,12 @@ import org.junit.jupiter.api.BeforeEach;
 
 import static org.assertj.swing.fixture.Containers.showInFrame;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.movshovich.QuaxRebuild.src.*;
 
 import javax.swing.*;
-import java.awt.*;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Stack;
 
 
@@ -217,6 +216,20 @@ public void buttonPressToDeleteButton(){
             }
         });
         assertEquals("BLACK WINS!!", DrawBoard.nextMove.getText()); //doesnt exist yet
+    }
+
+    @Test
+    public void strategyButtonChanges() throws NoSuchFieldException, IllegalAccessException {
+        Field field = Game.class.getDeclaredField("showStrategyBut");
+        field.setAccessible(true);
+        JButton showStrategyBut = (JButton) field.get(null);
+
+        GuiActionRunner.execute(() -> {showStrategyBut.doClick();});
+
+        Field field2 = Game.class.getDeclaredField("hideStrategyBut");
+        field2.setAccessible(true);
+        JButton hideStrategyBut = (JButton) field2.get(null);
+        assertTrue(hideStrategyBut.isEnabled());
     }
 
 }
