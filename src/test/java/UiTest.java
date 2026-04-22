@@ -67,7 +67,7 @@ public class UiTest extends AssertJSwingJUnitTestCase {
 @Test
 public void buttonPressToDeleteButton(){
     JButton btn = windowF.button("0 0").target();
-    btn.doClick();
+    GuiActionRunner.execute(()->{btn.doClick();});
     assertEquals("The array should be 1 (Black) after first move",1, Board.getTile(0,0).getValue());
 }
 
