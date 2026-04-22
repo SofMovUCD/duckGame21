@@ -157,6 +157,11 @@ public class Game {
         AB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                DrawBoard.resetBoard();
+                Board board = new Board();
+                initStrategyButtons();
+                Bot.piRule();
+
                 movingFlag = false;
                 whiteFirst = true;
                 ongoing = true;
@@ -169,11 +174,7 @@ public class Game {
                     piRulePressed = false;
                 }
 
-                DrawBoard.resetBoard();
-                Board board = new Board();
-                initStrategyButtons();
                 DrawBoard.placedPane.remove(WL);
-                Bot.piRule();
             }
         });
         WL.add(AB);
@@ -194,7 +195,7 @@ public class Game {
         score.setBounds(10, -10, 90, 90);
         JLabel P1Score = new JLabel("Bot: " + plrList.get(0).getWins() + " - " + plrList.get(0).getlosses());
         P1Score.setBounds(10, 10, 90, 90);
-        JLabel P2Score = new JLabel("Bot: " + plrList.get(1).getWins() + " - " + plrList.get(1).getlosses());
+        JLabel P2Score = new JLabel("Player: " + plrList.get(1).getWins() + " - " + plrList.get(1).getlosses());
         P2Score.setBounds(10, 30, 90, 90);
         JLabel PA = new JLabel("Play Again?");
         PA.setBounds(40, 30, 90, 90);
