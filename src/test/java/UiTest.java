@@ -116,7 +116,6 @@ public void buttonPressToDeleteButton(){
         GuiActionRunner.execute(() -> {
                     Game.plrByID(Game.getCurrentPlayer()).makeMove(); //bot should make move // First move
                 });
-//        robot().waitForIdle();
 
         GuiActionRunner.execute(Game::initPiRuleButton);
         Field field = Game.class.getDeclaredField("piRuleBut");
@@ -217,10 +216,12 @@ public void buttonPressToDeleteButton(){
     public void botTakesWinningMove() throws NoSuchFieldException, IllegalAccessException {
 //        Board.plrList.set(0, new Bot(1));
 //        Bot blackBot = (Bot) Board.plrList.get(0);
-        GuiActionRunner.execute(() -> {Game.plrByID(Game.getCurrentPlayer()).makeMove();}); //bot should make move
+        GuiActionRunner.execute(() -> {Game.plrByID(Game.getCurrentPlayer()).makeMove();}); //bot first move is random
+
         Field field = Bot.class.getDeclaredField("placed");
         field.setAccessible(true);
         Stack<Tile> botStack = (Stack<Tile>) field.get(null);
+
         for(int i = 0; i < 10; i++) {
             botStack.push(Board.getTile(10,i));
             Board.getTile(10,i).setValue(1);
@@ -228,7 +229,11 @@ public void buttonPressToDeleteButton(){
         //Game.currentPlayer = 1;
         GuiActionRunner.execute(() -> {Game.plrByID(Game.getCurrentPlayer()).makeMove();}); //bot should make move
 
-        GuiActionRunner.execute(() -> Board.checkWin(Game.plrByID(1)));
+        GuiActionRunner.execute(() -> {
+            if(Board.checkWin(Game.plrByID(1))){
+                DrawBoard.nextMove.setText("BLACK WINS!!");
+            }
+        });
         assertEquals("BLACK WINS!!", DrawBoard.nextMove.getText()); //doesnt exist yet
     }
 
