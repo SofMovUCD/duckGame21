@@ -149,6 +149,7 @@ public void buttonPressToDeleteButton(){
     public void testLabelColorChange() {
         assertEquals("BLACK to play", DrawBoard.nextMove.getText());
         windowF.button("0 0").click();
+        GuiActionRunner.execute(Game::nextTurn);
         assertEquals("WHITE to play", DrawBoard.nextMove.getText());
     }
 
