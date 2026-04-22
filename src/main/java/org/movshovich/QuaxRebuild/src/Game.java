@@ -19,7 +19,7 @@ public class Game {
     private static boolean movingFlag;
     private static boolean whiteFirst;
     private static List<Player> plrList = new ArrayList<>();
-    public static JButton piRuleBut; //public just for testing
+    private static JButton piRuleBut;
     private static JButton showStrategyBut;
     private static JButton hideStrategyBut;
     private static boolean ongoing;
