@@ -14,6 +14,8 @@ import org.movshovich.QuaxRebuild.src.*;
 
 import javax.swing.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Stack;
 
 
@@ -230,6 +232,17 @@ public void buttonPressToDeleteButton(){
         field2.setAccessible(true);
         JButton hideStrategyBut = (JButton) field2.get(null);
         assertTrue(hideStrategyBut.isEnabled());
+    }
+
+    @Test
+    public void PopUpIsWorking() throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        Class[] cArg = new Class[2];
+        cArg[0] = Player.class;
+        cArg[1] = Player.class;
+        Method method = Game.class.getDeclaredMethod("winLoseWind",cArg);
+        method.setAccessible(true);
+        GuiActionRunner.execute(() -> {method.invoke(null, new Player(1), new Player(2));});
+        assertTrue(windowF.internalFrame("WL").isEnabled());
     }
 
 }
