@@ -27,7 +27,7 @@ public class Game {
     
 
     public Game() {
-
+        System.out.println("Game start");
         plrList.add(new Bot(1));
         plrList.add(new Player(-1));
         movingFlag = false;
@@ -116,13 +116,13 @@ public class Game {
                 Bot.hideStrategy();
                 DrawBoard.placedPane.remove(hideStrategyBut);
                 DrawBoard.placedPane.add(showStrategyBut);
-                DrawBoard.placedPane.setComponentZOrder(showStrategyBut, 0);
+                //DrawBoard.placedPane.setComponentZOrder(showStrategyBut, 0);
                 DrawBoard.repaintAll();
             }
         });
 
         DrawBoard.placedPane.add(showStrategyBut);
-        DrawBoard.placedPane.setComponentZOrder(showStrategyBut, 0);
+        //DrawBoard.placedPane.setComponentZOrder(showStrategyBut, 0);
     }
 
     public static void piRule() {
@@ -162,7 +162,7 @@ public class Game {
                 ongoing = true;
                 currentPlayer = 1;
 
-                if (piRulePressed == true) {
+                if (piRulePressed) {
                     for (Player plr: plrList) {
                         plr.setPlayerId(-plr.getPlayerId());
                     }
@@ -211,7 +211,7 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        Game quax = new Game();
+        new Game();
 
         while(true) {
             if (ongoing) {

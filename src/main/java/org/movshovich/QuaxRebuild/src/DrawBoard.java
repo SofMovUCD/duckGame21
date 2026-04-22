@@ -10,12 +10,11 @@ public class DrawBoard extends JPanel{
     public static final int OCTAGON_DISTANCE = 68;
 
     public static JLabel nextMove, bot, player;
-    public static JFrame boardFrame;
+    public static JFrame boardFrame; //just for testing
     public static JLayeredPane placedPane;
     public static JPanel overlayPanel;
     public static JLayeredPane buttonPane;
     public static JLayeredPane strategyPane; // top layer for strategy overlay
-    public static JFrame boardFrame; //just for testing
 
     public DrawBoard() {
 
