@@ -63,7 +63,7 @@ public class Board {
         List<Tile> nList = new ArrayList<>();
         if (inputTile.getX() % 2 == 0) {
             int[] dx = {-2, -1, 0, 1, 2, 1, 0, -1};
-            int[] dy = {0, -1, -1, -1, 0, -0, 1, 0};
+            int[] dy = {0, -1, -1, -1, 0, 0, 1, 0};
 
             for (int i = 0; i < 8; ++i) {
                 int neighbourX = inputTile.getX() + dx[i];
@@ -88,6 +88,24 @@ public class Board {
         return nList;
     }
 
+    public static List<Tile> furthNeighbours(Tile inputTile) {
+        List<Tile> nList = new ArrayList<>();
+        if (inputTile.getX() % 2 == 0) {
+            int[] dx = {-2, -2, -1,  0,  1,  2, 2, 2, 1, 0, -1, -2};
+            int[] dy = { 0, -1, -1, -1, -1, -1, 0, 1, 0, 1,  0,  1};
+
+            for (int i = 0; i < 12; ++i) {
+                int neighbourX = inputTile.getX() + dx[i];
+                int neighbourY = inputTile.getY() + dy[i];
+                if (inBounds(neighbourX, neighbourY)) {
+                    nList.add(board[neighbourY][neighbourX]);
+                }
+            }
+
+            return nList;
+        } else {return getNeighbours(inputTile);}
+    }
+
     private static boolean inBounds(int x, int y) {
         return (x > -1 && x < 21) && (y > -1 && y < 11) && board[y][x] != null;
     }
@@ -103,11 +121,13 @@ public class Board {
             }
         }
         //System.out.println(visualBoard());
+        DrawBoard.testingPane.removeAll();
         return output;
     }
 
     private static boolean checkWinRecur(Player plr, Tile curr, List<Tile> visited) {
         visited.add(curr);
+        
         //System.out.println(curr.toString());
         for (Tile neighbour : getNeighbours(curr)) {
             if (plr.getPlayerId() == neighbour.getValue() && !visited.contains(neighbour)) {
@@ -145,6 +165,20 @@ public class Board {
         for (int i = 0; i < 21; i += 2) {
             board[10][i].setWeight(0);
             board[i/2][20].setWeight(1);
+        }
+    }
+
+    private static Rectangle drawnBounds(Tile tile) {
+        if (tile.getX() % 2 ==0) {
+            return new Rectangle((tile.getX()/2)*DrawBoard.OCTAGON_DISTANCE + 30,
+                                   (tile.getY())*DrawBoard.OCTAGON_DISTANCE + 25,
+                                       DrawBoard.OCTAGON_DISTANCE,
+                                       DrawBoard.OCTAGON_DISTANCE);
+        } else {
+            return new Rectangle((tile.getX()/2)*DrawBoard.OCTAGON_DISTANCE + 80,
+                                 (tile.getY())*DrawBoard.OCTAGON_DISTANCE + 75,
+                                 40,
+                                 40);
         }
     }
 }

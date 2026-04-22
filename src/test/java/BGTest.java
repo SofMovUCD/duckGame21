@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 
 import org.junit.*;
-import org.junit.jupiter.api;
 import org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
@@ -24,15 +23,15 @@ public class BGTest {
         testTile.setG(1);
         testTile.setH(3);
         testTile.setF();
-        testTile.setParent();
+        testTile.setParent(parentTile);
 
         assertEquals(testTile.getX(), 10);
         assertEquals(testTile.getY(), 5);
         assertEquals(testTile.getValue(), 1);
         assertEquals(testTile.getWeight(), 3);
-        assertEquals(testTile.get.G(),1);
+        assertEquals(testTile.getG(),1);
         assertEquals(testTile.getH(), 3);
-        assertEquals(testTile.get.F(), 4);
+        assertEquals(testTile.getF(), 4);
         assertEquals(testTile.getParent(), parentTile);
     }
 

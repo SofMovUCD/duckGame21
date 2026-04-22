@@ -15,6 +15,7 @@ public class DrawBoard extends JPanel{
     public static JPanel overlayPanel;
     public static JLayeredPane buttonPane;
     public static JLayeredPane strategyPane; // top layer for strategy overlay
+    public static JLayeredPane testingPane;
 
     public DrawBoard() {
 
@@ -137,12 +138,18 @@ public class DrawBoard extends JPanel{
         strategyPane = new JLayeredPane(); // top layer -> strategy arrows drawn here
         strategyPane.setSize(810, 1000);
         strategyPane.setOpaque(false);
+
+        testingPane = new JLayeredPane();
+        testingPane.setSize(810, 1000);
+        //testingPane.setOpaque(false);
         //create label
         initDash();
 
+        overlayPanel.add(testingPane);
         overlayPanel.add(strategyPane); // Top Layer (Strategy overlay)
         overlayPanel.add(buttonPane);
         overlayPanel.add(placedPane); // Middle Layer (Tiles being placed)
+        overlayPanel.add(testingPane);
         overlayPanel.add(new DrawBoard()); // Bottom Layer (The Brown Board)
         boardFrame.add(overlayPanel);
 

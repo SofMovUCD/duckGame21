@@ -74,6 +74,7 @@ public class Tile {
             Color currentColor = Game.plrByID(Game.getCurrentPlayer()).getPlayerColour();
             TileDraw newTile = new TileDraw(currentColor, (x % 2 == 0));
             newTile.setBounds(drawnBounds(x));
+
             DrawBoard.placedPane.add(newTile);
             DrawBoard.buttonPane.remove(src);
             if (x % 2 == 0) {
@@ -129,7 +130,7 @@ public class Tile {
     }
 
     public boolean isBlocked() {
-        for (Tile neighbour : Board.getNeighbours(this)) {
+        for (Tile neighbour : Board.furthNeighbours(this)) {
             if (neighbour.value == 0) return false;
         }
         return true;

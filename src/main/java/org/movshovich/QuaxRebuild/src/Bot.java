@@ -112,7 +112,7 @@ public class Bot extends Player {
             closedList.add(current);
 
             // Check all neighboring nodes
-            for (Tile neighbor : Board.getNeighbours(current)){
+            for (Tile neighbor : Board.furthNeighbours(current)){
                 if (closedList.contains(neighbor) || neighbor.getValue() != 0|| neighbor.isBlocked() || allPlaced.contains(neighbor)) {
                     continue;  // Skip already evaluated nodes
                 }
@@ -126,6 +126,7 @@ public class Bot extends Player {
                 neighbor.setG(tentative_g);
                 neighbor.setH(heuristic(neighbor, goal));
                 neighbor.setF();
+                System.out.println(neighbor.toString() + " F: " + neighbor.getF());
             }
         }
     return null;  // No path exists
@@ -142,7 +143,7 @@ public class Bot extends Player {
 
     private static int heuristic(Tile a, Tile b) {
         
-        return (int) Math.sqrt(Math.pow((b.getX() - a.getX()),2) + Math.pow((b.getY() - a.getY()),2));
+        return (int) Math.floor(Math.sqrt(Math.pow((b.getX()/2 - a.getX())/2,2) + Math.pow((b.getY() - a.getY()),2)));
     }
 
     /* Returns the pixel center of a tile for drawing arrows */
