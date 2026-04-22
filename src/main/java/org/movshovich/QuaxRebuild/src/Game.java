@@ -154,6 +154,7 @@ public class Game {
         WL.setBounds(250, 450, 300, 200);
         WL.setName("WL"); //for testing
         JButton AB = new JButton("Play Again");
+        AB.setName("Play Again");
         AB.setBounds(20, 100, 100, 50);
         AB.addActionListener(new ActionListener() {
             @Override
@@ -184,6 +185,7 @@ public class Game {
         WL.add(AB);
 
         JButton QB = new JButton("Quit");
+        QB.setName("Quit"); //for testing
         QB.setBounds(145, 100, 100, 50);
         QB.addActionListener(new ActionListener() {
             @Override
