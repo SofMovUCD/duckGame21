@@ -171,7 +171,6 @@ public class Game {
 
                 DrawBoard.resetBoard();
                 Board board = new Board();
-                initPiRuleButton();
                 initStrategyButtons();
                 DrawBoard.placedPane.remove(WL);
                 Bot.piRule();

@@ -76,15 +76,17 @@ public class Tile {
             DrawBoard.placedPane.add(newTile);
             DrawBoard.buttonPane.remove(src);
             if (x % 2 == 0) {
-                Tile endTile = Board.getTile((int)Game.valueForID(x, 20, Game.plrByID(-Game.getCurrentPlayer())), 
+                Tile endTileA = Board.getTile((int)Game.valueForID(x, 20, Game.plrByID(-Game.getCurrentPlayer())), 
                             (int) Game.valueForID(10, y, Game.plrByID(-Game.getCurrentPlayer())));
-                System.out.println(endTile.x + " " + endTile.y);
+                Tile endTileB = Board.getTile((int)Game.valueForID(x, 20, Game.plrByID(Game.getCurrentPlayer())), 
+                            (int) Game.valueForID(10, y, Game.plrByID(Game.getCurrentPlayer())));
+                
 
                 if (Game.plrByID(Game.getCurrentPlayer()).getClass() == Bot.class) {
-                    endTile.weight++;
+                    endTileB.weight++;
                 }
                 else {
-                    endTile.weight--;
+                    endTileA.weight--;
                 }
             }
             Game.flipMovingFlag();
