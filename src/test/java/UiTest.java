@@ -162,7 +162,7 @@ public void buttonPressToDeleteButton(){
 
     @Test
     public void BlackWinCondition() {
-        for(int i = 0; i < 11; i++) {
+        for(int i = 0; i <= 11; i++) {
            //may need to create tile
             Board.getTile(i,0).setValue(1);
         }
@@ -170,7 +170,7 @@ public void buttonPressToDeleteButton(){
             Board.checkWin(Game.plrByID(1));
         });
         // Check win for Black
-        assertEquals("BLACK WINS!!", DrawBoard.nextMove.getText());
+        assertEquals("BLACK WINS!!", DrawBoard.nextMove.getText()); //doesnt exist yet
     }
 
     @Test
