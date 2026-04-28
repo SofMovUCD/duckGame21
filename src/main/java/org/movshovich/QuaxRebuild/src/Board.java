@@ -1,6 +1,4 @@
 package org.movshovich.QuaxRebuild.src;
-import java.awt.Color;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +31,7 @@ public class Board {
         for (int c = 0; c < BOARD_Y; c++) {
             for (int r = 0; r < BOARD_X; r++) {
                 if (c == 10 && r % 2 == 1) board[c][r] = null;
-                else board[c][r] = new Tile(r, c, 0, 0); 
+                else board[c][r] = new Tile(r, c); 
             }
         }
         initialWeights();

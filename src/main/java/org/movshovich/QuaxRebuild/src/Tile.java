@@ -9,8 +9,8 @@ import javax.swing.JButton;
 public class Tile {
     private int x; //x cord on the board
     private int y; //y cord on the board
-    private int value; //1 for black, -1 for white
-    private int weight; //weight for the bot
+    private int value = 0; //1 for black, -1 for white
+    private int weight = 0; //weight for the bot
     private JButton tileButton;
     private int g;
     private int h;
@@ -26,11 +26,9 @@ public class Tile {
 
     private Tile parent;
 
-    public Tile(int x, int y, int value, int weight) {
+    public Tile(int x, int y) {
         this.x = x;
         this.y = y;
-        this.value = value;
-        this.weight = weight;
         initButton();
     }
 
@@ -83,7 +81,6 @@ public class Tile {
                 Tile endTileB = Board.getTile((int)Game.valueForID(x, 20, Game.plrByID(Game.getCurrentPlayer())), 
                             (int) Game.valueForID(10, y, Game.plrByID(Game.getCurrentPlayer())));
                 
-
                 if (Game.plrByID(Game.getCurrentPlayer()).getClass() == Bot.class) {
                     endTileB.weight++;
                 }
@@ -92,7 +89,6 @@ public class Tile {
                 }
             }
             Game.flipMovingFlag();
-            //System.out.println(src.getName());
             }
         });
         DrawBoard.buttonPane.add(tileButton);

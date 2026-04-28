@@ -28,7 +28,7 @@ public class Player {
     public void incrementLosses(){losses++;}
 
     public void makeMove() {
-        System.out.print("");
+        //System.out.print("");
         DrawBoard.overlayPanel.add(DrawBoard.buttonPane);
         Game.flipMovingFlag();
     }

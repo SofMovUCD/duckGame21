@@ -17,49 +17,38 @@ public class DrawBoard extends JPanel{
     public static JLayeredPane strategyPane; // top layer for strategy overlay
     public static JLayeredPane popupPane;
 
+    int yC;
+    int xC;
+    int numberOfPoints = 8;
+    final Color octagonColor = new Color(173, 111, 49);
+    final Color rhombusColor = new Color(99, 59, 19);
+    int[] octagonX = {50, 78, 98, 98, 78, 50, 30, 30, 50};
+    int[] octagonY = {25, 25, 45, 73, 93, 93, 73, 45, 25};
+
     public DrawBoard() {
 
     }
 
     public void paint(Graphics g) {
-
-        int yC;
-        int xC;
-        int numberOfPoints = 8;
-
-        final Color octagonColor = new Color(173, 111, 49);
-        final Color rhombusColor = new Color(99, 59, 19);
-
-        int[] octagonX = {50, 78, 98, 98, 78, 50, 30, 30, 50};
-        int[] octagonY = {25, 25, 45, 73, 93, 93, 73, 45, 25};
-
         Graphics2D g2 = (Graphics2D) g;
-
         g2.fillRect(0, 0, 810, 800);
-
         g2.setColor(Color.white);
         g2.fillRect(0, 45, 810, 710);
-
         g2.setColor(rhombusColor);
         g2.fillRect(50, 50, 700, 700);
-
         g2.setColor(Color.black);
         g2.setStroke(new BasicStroke(3));
-
         for (yC = 0; yC < OCTAGON_LENGTH; ++yC) {
             final int currYC = yC;
-            int[] y = Arrays.stream(octagonY).map(a -> a + currYC*OCTAGON_DISTANCE).toArray();
-                        
+            int[] y = Arrays.stream(octagonY).map(a -> a + currYC*OCTAGON_DISTANCE).toArray();           
             for (xC = 0; xC < OCTAGON_LENGTH; ++xC) {
                 final int currXC = xC;
                 int[] x = Arrays.stream(octagonX).map(a -> a + currXC*OCTAGON_DISTANCE).toArray();
-
                 g2.setColor(octagonColor);
                 g2.fillPolygon(x, y, numberOfPoints);
                 for (int i = 0; i < numberOfPoints - 1; i++) {
                     g2.setColor(Color.black);
                     g2.drawLine(x[i], y[i], x[i + 1], y[i + 1]);
-                    
                 }
                 g2.drawLine(x[0], y[0], x[numberOfPoints - 1], y[numberOfPoints - 1]);
             }
@@ -71,22 +60,16 @@ public class DrawBoard extends JPanel{
         g2.fillPolygon(newX, newY, 8);
         g2.setColor(Color.BLACK);
         g2.drawPolygon(newX, newY, 8);
-
         int[] newNewX = {18+330, 38+330, 18+330, -2+330};
         int[] newNewY = {25 + 815, 45 + 815, 65 + 815,  45 + 815};
-
         g2.setColor(Game.plrByID(Game.getCurrentPlayer()).getPlayerColour());
         g2.fillPolygon(newNewX, newNewY, 4);
         g2.setColor(Color.BLACK);
         g2.drawPolygon(newNewX, newNewY, 4);
     }
 
-    public static void initDash() {
-    
-        nextMove = new JLabel("BLACK to play");
-        nextMove.setName("nextMoveLabelName");
-        nextMove.setBounds(390, 830, 150, 50);
-        //display text to display which player is which colour
+    private static void createIcons() {
+
         bot = new JLabel("    Bot");
         bot.setForeground(Color.WHITE);
         bot.setBackground(new Color(45,45,45));
@@ -97,7 +80,31 @@ public class DrawBoard extends JPanel{
         player.setBackground(Color.WHITE);
         player.setBounds(620, 830, 55, 50);
         player.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(), BorderFactory.createLoweredBevelBorder()));
+    }
+
+    private static void addAll() {
+        placedPane.add(nextMove);
+        placedPane.add(player);
+        placedPane.add(bot);
+
+        overlayPanel.add(popupPane);
+        overlayPanel.add(strategyPane); // Top Layer (Strategy overlay)
+        overlayPanel.add(buttonPane);
+        overlayPanel.add(placedPane); // Middle Layer (Tiles being placed)
+        overlayPanel.add(popupPane, null, 0);
+        overlayPanel.add(new DrawBoard()); // Bottom Layer (The Brown Board)
+        boardFrame.add(overlayPanel);
+    }
+
+    public static void initDash() {
+    
+        nextMove = new JLabel("BLACK to play");
+        nextMove.setName("nextMoveLabelName");
+        nextMove.setBounds(390, 830, 150, 50);
+        //display text to display which player is which colour
+        createIcons();
         //do the numbers and letters at edge of board
+
         for(int i = 0; i < OCTAGON_LENGTH; i++){
             JLabel num = new JLabel(Integer.toString(i+1));
             JLabel chars = new JLabel(Character.toString(i+65));
@@ -113,10 +120,6 @@ public class DrawBoard extends JPanel{
         nextMove.setOpaque(true);
         bot.setOpaque(true);
         player.setOpaque(true);
-        placedPane.add(nextMove);
-        placedPane.add(player);
-        placedPane.add(bot);
-    
     }
 
     public static void initBoard() {
@@ -144,14 +147,7 @@ public class DrawBoard extends JPanel{
         //testingPane.setOpaque(false);
         //create label
         initDash();
-
-        overlayPanel.add(popupPane);
-        overlayPanel.add(strategyPane); // Top Layer (Strategy overlay)
-        overlayPanel.add(buttonPane);
-        overlayPanel.add(placedPane); // Middle Layer (Tiles being placed)
-        overlayPanel.add(popupPane, null, 0);
-        overlayPanel.add(new DrawBoard()); // Bottom Layer (The Brown Board)
-        boardFrame.add(overlayPanel);
+        addAll();
 
         //Set board properties
         boardFrame.setSize(810,1000);

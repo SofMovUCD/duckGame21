@@ -6,21 +6,18 @@ import java.util.Queue;
 import java.util.Stack;
 
 import org.assertj.swing.edt.GuiActionRunner;
-import org.junit.*;
-//import org.junit.jupiter.api;
-import org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import org.movshovich.QuaxRebuild.src.Board;
 import org.movshovich.QuaxRebuild.src.Bot;
-import org.movshovich.QuaxRebuild.src.DrawBoard;
 import org.movshovich.QuaxRebuild.src.Game;
 import org.movshovich.QuaxRebuild.src.Player;
 import org.movshovich.QuaxRebuild.src.Tile;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings("unused")
 public class BGTest {
 
     @BeforeAll
@@ -31,8 +28,8 @@ public class BGTest {
     @Test
     public void TileGettersSettersTest() {
         //DrawBoard.initBoard();
-        Tile testTile = new Tile(10, 5, 1, 3);
-        Tile parentTile = new Tile(0, 0, -1, 3);
+        Tile testTile = new Tile(10, 5);
+        Tile parentTile = new Tile(0, 0);
 
         testTile.setX(5);
         testTile.setY(10);
@@ -228,9 +225,9 @@ public class BGTest {
 
     @Test
     public void reconstructPathBuildsCorrectOrder() throws Exception {
-        Tile t0 = new Tile(0, 0, 0, 0);
-        Tile t1 = new Tile(2, 0, 0, 0);
-        Tile t2 = new Tile(4, 0, 0, 0);
+        Tile t0 = new Tile(0, 0);
+        Tile t1 = new Tile(2, 0);
+        Tile t2 = new Tile(4, 0);
 
         t0.setParent(null);
         t1.setParent(t0);

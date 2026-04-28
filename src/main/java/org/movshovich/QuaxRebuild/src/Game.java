@@ -8,9 +8,8 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 
-
+@SuppressWarnings("unused")
 public class Game {
 
     public static Color playingBlack = new Color(45,45,45);
@@ -210,9 +209,28 @@ public class Game {
         WL.add(P2Score);
         WL.add(PA);
             
-
         DrawBoard.popupPane.add(WL);
         DrawBoard.repaintAll();
+    }
+
+    public static void gameFinished() {
+        Player winner = (-currentPlayer == 1? plrByID(1) : plrByID(-1));
+            Player loser = plrByID(-winner.getPlayerId());
+            if(winner.getPlayerColour() == Color.WHITE) {
+                DrawBoard.nextMove.setText("WHITE WINS!!");
+            }
+            else{
+                DrawBoard.nextMove.setText("BLACK WINS!!");
+            }
+            
+            winner.incrementWins();
+            loser.incrementLosses();
+            winLoseWind(winner, loser);
+            currentPlayer = winner.getPlayerId();
+            DrawBoard.repaintAll();
+            while (movingFlag) {
+                System.out.print("");
+            }
     }
 
     public static void main(String[] args) {
@@ -236,25 +254,7 @@ public class Game {
                 } while (!Board.checkWin(plrByID(-currentPlayer)));
             }
             ongoing = false;
-
-            Player winner = (-currentPlayer == 1? plrByID(1) : plrByID(-1));
-            Player loser = plrByID(-winner.getPlayerId());
-            if(winner.getPlayerColour() == Color.WHITE) {
-                DrawBoard.nextMove.setText("WHITE WINS!!");
-            }
-            else{
-                DrawBoard.nextMove.setText("BLACK WINS!!");
-            }
-            
-            winner.incrementWins();
-            loser.incrementLosses();
-            winLoseWind(winner, loser);
-            currentPlayer = winner.getPlayerId();
-            DrawBoard.repaintAll();
-            while (movingFlag) {
-                System.out.print("");
-            }
-
+            gameFinished();
         }
     }
 }

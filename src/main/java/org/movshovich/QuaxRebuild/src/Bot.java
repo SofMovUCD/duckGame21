@@ -28,12 +28,8 @@ public class Bot extends Player {
     @Override
     public void makeMove() {
         Tile next = null;
-
         if (!endReached) {
-            if (placed.isEmpty()) {
-                next = createPath(findNewStart()).poll();
-            }
-
+            if (placed.isEmpty()) next = createPath(findNewStart()).poll();
             else {
                 path = createPath(placed.peek());
 
@@ -41,9 +37,7 @@ public class Bot extends Player {
                     while (next == null) {
                         placed.pop();
                         Queue<Tile> nextQ = createPath(placed.peek());
-                        if (nextQ == null) {
-                            next = createPath(findNewStart()).poll();
-                        }
+                        if (nextQ == null) next = createPath(findNewStart()).poll();
                         else {
                             nextQ.poll();
                             next = nextQ.poll();
@@ -55,21 +49,13 @@ public class Bot extends Player {
                     next = createPath(path.poll()).poll();
                 }
             }
-        } else {
-            next = findingGap();
-        }
-        //System.out.println(next);
-
-        if (next == null) {
-            next = givenUp();
-        }
-
+        } else next = findingGap();
+        if (next == null) next = givenUp();
         next.getTileButton().doClick(); //place tile
         Game.flipMovingFlag(); //go to next move
         placed.push(next); //add placed tile to stack
         allPlaced.push(next);
         if ((boolean) Game.valueForID((next.getY() == 10), next.getX() == 20, this)) endReached = true;
-        
     }
 
     private Tile findNewStart() {
@@ -275,44 +261,4 @@ public class Bot extends Player {
 
         return randTile;
     }
-    /*
-
-    private boolean findWeakPoints() {
-        Stack<Tile> temp = new Stack<Tile>();
-        List<Tile> shared = new ArrayList<>();
-        boolean output = false;
-        while (placed.size() > 1) {
-            temp.push(placed.pop());
-            Tile child = temp.peek();
-            Tile parent = placed.peek();
-            if (!Board.getNeighbours(child).contains(parent)) {
-                for (Tile n : Board.getNeighbours(child)) {
-                    if (Board.getNeighbours(parent).contains(n)) {
-                        if (n.getValue() == getPlayerId()) {
-                            output = false;
-                            break;
-                        }
-
-                        shared.add(n);
-                        if (n.getValue() == getPlayerId()) output = true;
-                    }
-                }
-                if (output == true) {
-                    for (Tile tile: shared) {
-                        if (tile.getValue() == 0) {
-                            path.clear();
-                            path.add(tile);
-                            break;
-                        }
-                    }
-                }
-            }
-            
-        }
-        while (!temp.isEmpty()) {
-            placed.push(temp.pop());
-        }
-        return output;
-    }
-        */
 }
