@@ -32,7 +32,7 @@ public class Tile {
         initButton();
     }
 
-    public int getX() { return x; }
+    public int getX() { return x;}
     public void setX(int x) { this.x = x;}
 
     public int getY() {return y;}
@@ -97,15 +97,12 @@ public class Tile {
     public void octagonButton() {
         tileButton.setBounds(30 + (x/2)*DrawBoard.OCTAGON_DISTANCE,
                              45 + (y)*DrawBoard.OCTAGON_DISTANCE,
-                                    DrawBoard.OCTAGON_DISTANCE,
-                             30);    
+                                    DrawBoard.OCTAGON_DISTANCE,30);
     }
 
     public void rhombusButton() {
         tileButton.setBounds(88 + (x/2)*DrawBoard.OCTAGON_DISTANCE,
-                             82 + (y)*DrawBoard.OCTAGON_DISTANCE,
-                                    20,
-                             18);   
+                             82 + (y)*DrawBoard.OCTAGON_DISTANCE, 20, 18);
     }
 
     private Rectangle drawnBounds(int x) {
@@ -117,8 +114,7 @@ public class Tile {
         } else {
             return new Rectangle((x/2)*DrawBoard.OCTAGON_DISTANCE + 80,
                                  (y)*DrawBoard.OCTAGON_DISTANCE + 75,
-                                 40,
-                                 40);
+                                 40,40);
         }
     }
     public String toString() {

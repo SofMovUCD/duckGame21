@@ -72,13 +72,6 @@ public class Board {
             int[] dyb = {1, 1,  1, 0,  0,  0, 0, -1, -1, -1, -1, -1};
             int[] dxw = {2, 2,  2, 1,  1,  0, 0, -2, -2, -1, -1, -2};
             int[] dyw = {0, 1, -1, 0, -1, -1, 1,  1, -1,  0, -1,  0};
-            
-            if (Game.getCurrentPlayer() == 1) {
-                
-                
-            } else {
-
-            }
 
             for (int i = 0; i < 12; ++i) {
                 int neighbourX = inputTile.getX() + (int) Game.valueForID(dxb[i], dxw[i], Game.plrByID(Game.getCurrentPlayer()));
@@ -128,13 +121,12 @@ public class Board {
     private static Tile largestWeightRecur(Tile tile, List<Tile> visited) {
         visited.add(tile);
 
-        Tile max = tile;
         for (Tile neighbour : getNeighbours(tile)) {
             if (!visited.contains(neighbour) && neighbour != null) {
-                max = max.largerWeight(largestWeightRecur(neighbour, visited));
+                tile = tile.largerWeight(largestWeightRecur(neighbour, visited));
             }
         }
-        return max;
+        return tile;
     }
 
     private static void initialWeights() {

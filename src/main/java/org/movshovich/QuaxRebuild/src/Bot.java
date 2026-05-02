@@ -56,7 +56,7 @@ public class Bot extends Player {
         Game.flipMovingFlag(); //go to next move
         placed.push(next); //add placed tile to stack
         allPlaced.push(next);
-        if ((boolean) Game.valueForID((next.getY() == 10), next.getX() == 20, this)) endReached = true;
+        endReached = (boolean) Game.valueForID((next.getY() == 10), next.getX() == 20, this);
     }
 
     private Tile findNewStart() {
@@ -64,14 +64,12 @@ public class Bot extends Player {
         Random tileFinder = new Random();
 
         do {
-        if (getPlayerId() == 1) {
-                newStart = Board.getTile((tileFinder.nextInt() % 10) * 2, 0);
-        }
-
-        else {
-                newStart = Board.getTile(0, tileFinder.nextInt() % 10);
-        }
-
+            if (getPlayerId() == 1) {
+                    newStart = Board.getTile((tileFinder.nextInt() % 10) * 2, 0);
+            }
+            else {
+                    newStart = Board.getTile(0, tileFinder.nextInt() % 10);
+            }
         } while (newStart == null || newStart.getValue() != 0);
 
         return newStart;
@@ -82,7 +80,7 @@ public class Bot extends Player {
     }
 
     private static Queue<Tile> A_Star(Tile start, Tile goal) {
-    // Initialize open and closed lists
+        // Initialize open and closed lists
         Queue<Tile> openList = new PriorityQueue<>((a, b) -> a.getF() - b.getF());          // Nodes to be evaluated
         List<Tile> closedList = new ArrayList<>();            // Nodes already evaluated
         openList.add(start);
@@ -94,7 +92,7 @@ public class Bot extends Player {
         start.setParent(null);              // For path reconstruction
         while (!openList.isEmpty()) {
             // Get node with lowest f value - implement using a priority queue
-           // for faster retrieval of the best node
+            // for faster retrieval of the best node
             Tile current = openList.peek();
 
             // Check if we've reached the goal
@@ -142,15 +140,16 @@ public class Bot extends Player {
 
     /* Returns the pixel center of a tile for drawing arrows */
     private static Point tileCenter(Tile tile) {
+        int px;
+        int py;
         if (tile.getX() % 2 == 0) {
-            int px = (tile.getX()/2) * DrawBoard.OCTAGON_DISTANCE + 30 + DrawBoard.OCTAGON_DISTANCE / 2;
-            int py = tile.getY() * DrawBoard.OCTAGON_DISTANCE + 25 + DrawBoard.OCTAGON_DISTANCE / 2;
-            return new Point(px, py);
+            px = (tile.getX() / 2) * DrawBoard.OCTAGON_DISTANCE + 30 + DrawBoard.OCTAGON_DISTANCE / 2;
+            py = tile.getY() * DrawBoard.OCTAGON_DISTANCE + 25 + DrawBoard.OCTAGON_DISTANCE / 2;
         } else {
-            int px = (tile.getX()/2) * DrawBoard.OCTAGON_DISTANCE + 80 + 20;
-            int py = tile.getY() * DrawBoard.OCTAGON_DISTANCE + 75 + 20;
-            return new Point(px, py);
+            px = (tile.getX() / 2) * DrawBoard.OCTAGON_DISTANCE + 80 + 20;
+            py = tile.getY() * DrawBoard.OCTAGON_DISTANCE + 75 + 20;
         }
+        return new Point(px, py);
     }
 
     /**
@@ -192,11 +191,11 @@ public class Bot extends Player {
                     }
 
                     // Draw weight label at goal tile
-                        Tile last = pathTiles.get(pathTiles.size() - 1);
-                        Point center = tileCenter(last);
-                        canvas.setColor(new Color(255, 50, 50));
-                        canvas.setFont(new Font("Arial", Font.BOLD, 13));
-                        canvas.drawString("W:" + last.getWeight(), center.x - 10, center.y - 5);
+                    Tile last = pathTiles.get(pathTiles.size() - 1);
+                    Point center = tileCenter(last);
+                    canvas.setColor(new Color(255, 50, 50));
+                    canvas.setFont(new Font("Arial", Font.BOLD, 13));
+                    canvas.drawString("W:" + last.getWeight(), center.x - 10, center.y - 5);
                 }
 
                 // Highlight the goal tile (highest weight) in green if not yet placed
@@ -234,7 +233,7 @@ public class Bot extends Player {
         DrawBoard.strategyPane.setComponentZOrder(overlay, 0);
 
 
-        // Textual description shown to the right of the board
+        // Textual description shown to the bottom of the board
         JLabel strategyDescription = new JLabel(
                 "<html><b>Bot Strategy:</b><br>The bot uses A* search to find the "
                         + "highest-weight path across the board.<br>It evaluates all reachable "
@@ -271,17 +270,6 @@ public class Bot extends Player {
             return findingGap();
         } else return null;
     }
-    //this was crashing
-
-//    private Tile givenUp() {
-//        Tile randTile = null;
-//        Random find = new Random();
-//        while (randTile == null || randTile.getValue() != 0) {
-//            randTile = Board.getTile(find.nextInt() % 20, find.nextInt() % 10);
-//        }
-//
-//        return randTile;
-//    }
 
     private Tile givenUp() {
         Random find = new Random();

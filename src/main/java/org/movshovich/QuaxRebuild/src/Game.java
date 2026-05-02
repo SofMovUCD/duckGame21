@@ -9,7 +9,6 @@ import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 
-@SuppressWarnings("unused")
 public class Game {
 
     public static Color playingBlack = new Color(45,45,45);
@@ -26,7 +25,7 @@ public class Game {
     
 
     public Game() {
-        System.out.println("Game start");
+        System.out.println("Game start"); //for testing
         plrList.clear();
         plrList.add(new Bot(1));
         plrList.add(new Player(-1));
@@ -34,7 +33,7 @@ public class Game {
         whiteFirst = true;
         ongoing = true;
         DrawBoard.initBoard();
-        Board board = new Board();
+        new Board();
         initPiRuleButton();
         initStrategyButtons();
     }
@@ -60,7 +59,7 @@ public class Game {
         } else {
             DrawBoard.nextMove.setText("WHITE to play");
         }
-        //System.out.println(currentPlayer);
+
         DrawBoard.repaintAll();
     }
 
@@ -88,42 +87,6 @@ public class Game {
             }
         });
     }
-
-//    public static void initStrategyButtons() {
-//        // Show Strategy button
-//        showStrategyBut = new JButton("Show Strategy");
-//        showStrategyBut.setName("Show Strategy");
-//        showStrategyBut.setBounds(690, 830, 150, 50);
-//        showStrategyBut.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                Bot.showStrategy();
-//                // swap Show -> Hide
-//                DrawBoard.placedPane.remove(showStrategyBut);
-//                DrawBoard.placedPane.add(hideStrategyBut);
-//                DrawBoard.placedPane.setComponentZOrder(hideStrategyBut, 0);
-//                DrawBoard.repaintAll();
-//            }
-//        });
-//
-//        // Hide Strategy button (starts hidden)
-//        hideStrategyBut = new JButton("Hide Strategy");
-//        hideStrategyBut.setName("Hide Strategy");
-//        hideStrategyBut.setBounds(690, 830, 150, 50);
-//        hideStrategyBut.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                Bot.hideStrategy();
-//                DrawBoard.placedPane.remove(hideStrategyBut);
-//                DrawBoard.placedPane.add(showStrategyBut);
-//                //DrawBoard.placedPane.setComponentZOrder(showStrategyBut, 0);
-//                DrawBoard.repaintAll();
-//            }
-//        });
-//
-//        DrawBoard.placedPane.add(showStrategyBut);
-//        //DrawBoard.placedPane.setComponentZOrder(showStrategyBut, 0);
-//    }
 
     public static void initStrategyButtons() {
         showStrategyBut = buildShowStrategyButton();
@@ -165,7 +128,6 @@ public class Game {
     }
 
     public static void piRule() {
-        //System.out.println("I am a PI Rule");
         for (Player plr: plrList) {
             plr.setPlayerId(plr.getPlayerId() * -1);
             plr.refreshPlayerColour();
@@ -185,74 +147,6 @@ public class Game {
         Board.piRuleWeight();
         //DrawBoard.buttonPane.repaint();
     }
-//
-//    private static void showGameResultDialog(Player winner, Player loser) {
-//        movingFlag = true;
-//        JInternalFrame resultFrame = new JInternalFrame();
-//        resultFrame.setVisible(true);
-//        resultFrame.setBounds(250, 450, 300, 200);
-//        resultFrame.setName("WL"); //for testing
-//
-//        JButton playAgainButton = new JButton("Play Again");
-//        playAgainButton.setName("Play Again");
-//        playAgainButton.setBounds(20, 100, 100, 50);
-//        playAgainButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                DrawBoard.resetBoard();
-//                Board board = new Board();
-//                initStrategyButtons();
-//                Bot.piRule();
-//
-//                if (piRulePressed) {
-//                    for (Player plr: plrList) {
-//                        plr.setPlayerId(-plr.getPlayerId());
-//                        plr.refreshPlayerColour();
-//                    }
-//                    piRulePressed = false;
-//                }
-//
-//                whiteFirst = true;
-//                currentPlayer = 1;
-//                Bot.endReached = false;
-//                DrawBoard.popupPane.remove(resultFrame);
-//                ongoing = true;
-//                movingFlag = false;
-//            }
-//        });
-//        resultFrame.add(playAgainButton);
-//
-//        JButton quitButton = new JButton("Quit");
-//        quitButton.setName("Quit"); //for testing
-//        quitButton.setBounds(145, 100, 100, 50);
-//        quitButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                System.exit(0);
-//            }
-//        });
-//        resultFrame.add(quitButton);
-//
-//        JLabel winnerLabel = new JLabel("Winner: " + (winner.getPlayerId() == 1? "Black" : "White"));
-//        winnerLabel.setBounds(10, -30, 90, 90);
-//        JLabel scoreLabel = new JLabel("Score:");
-//        scoreLabel.setBounds(10, -10, 90, 90);
-//        JLabel botScoreLabel = new JLabel("Bot: " + plrList.get(0).getWins() + " - " + plrList.get(0).getlosses());
-//        botScoreLabel.setBounds(10, 10, 90, 90);
-//        JLabel playerScoreLabel = new JLabel("Player: " + plrList.get(1).getWins() + " - " + plrList.get(1).getlosses());
-//        playerScoreLabel.setBounds(10, 30, 90, 90);
-//        JLabel playAgainPrompt = new JLabel("Play Again?");
-//        playAgainPrompt.setBounds(40, 30, 90, 90);
-//
-//        resultFrame.add(winnerLabel);
-//        resultFrame.add(scoreLabel);
-//        resultFrame.add(botScoreLabel);
-//        resultFrame.add(playerScoreLabel);
-//        resultFrame.add(playAgainPrompt);
-//
-//        DrawBoard.popupPane.add(resultFrame);
-//        DrawBoard.repaintAll();
-//    }
 
     private static void winLoseWind(Player winner, Player loser) {
         movingFlag = true;
@@ -287,7 +181,7 @@ public class Game {
 
     private static void resetForNewGame(JInternalFrame resultFrame) {
         DrawBoard.resetBoard();
-        Board board = new Board();
+        new Board();
         initStrategyButtons();
         Bot.piRule();
         if (piRulePressed) {
@@ -365,7 +259,6 @@ public class Game {
                     if ((currentPlayer == -1) && whiteFirst && piRuleBut.getParent() == null) {
                         DrawBoard.buttonPane.add(piRuleBut);
                         DrawBoard.buttonPane.setComponentZOrder(piRuleBut, 0);
-                        //zDrawBoard.buttonPane.repaint();
                     }
 
                     plrByID(currentPlayer).makeMove();
