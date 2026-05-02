@@ -62,7 +62,6 @@ public class Board {
                 }
             }
         }
-        //System.out.println(nList);
         return nList;
     }
 
@@ -98,7 +97,6 @@ public class Board {
     }
 
     public static boolean checkWin(Player plr) {
-        //System.out.println(plr.getPlayerId());
         List<Tile> visited = new ArrayList<>();
         boolean output = false;
         for (int i = 0; i < BOARD_X; i+= 2) {
@@ -107,14 +105,12 @@ public class Board {
             if (output) break;
             }
         }
-        //System.out.println(visualBoard());
         return output;
     }
 
     private static boolean checkWinRecur(Player plr, Tile curr, List<Tile> visited) {
         visited.add(curr);
-        
-        //System.out.println(curr.toString());
+
         for (Tile neighbour : getNeighbours(curr)) {
             if (plr.getPlayerId() == neighbour.getValue() && !visited.contains(neighbour)) {
                 if (((int)Game.valueForID(neighbour.getY(), neighbour.getX(), plr)) == 0) return true;

@@ -17,8 +17,8 @@ public class DrawBoard extends JPanel{
     public static JLayeredPane strategyPane; // top layer for strategy overlay
     public static JLayeredPane popupPane;
 
-    int yC;
-    int xC;
+    int tileRow;//tileRow yC
+    int tileCol;//tileCol xC
     int numberOfPoints = 8;
     final Color octagonColor = new Color(173, 111, 49);
     final Color rhombusColor = new Color(99, 59, 19);
@@ -30,42 +30,42 @@ public class DrawBoard extends JPanel{
     }
 
     public void paint(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g;
-        g2.fillRect(0, 0, 810, 800);
-        g2.setColor(Color.white);
-        g2.fillRect(0, 45, 810, 710);
-        g2.setColor(rhombusColor);
-        g2.fillRect(50, 50, 700, 700);
-        g2.setColor(Color.black);
-        g2.setStroke(new BasicStroke(3));
-        for (yC = 0; yC < OCTAGON_LENGTH; ++yC) {
-            final int currYC = yC;
-            int[] y = Arrays.stream(octagonY).map(a -> a + currYC*OCTAGON_DISTANCE).toArray();           
-            for (xC = 0; xC < OCTAGON_LENGTH; ++xC) {
-                final int currXC = xC;
-                int[] x = Arrays.stream(octagonX).map(a -> a + currXC*OCTAGON_DISTANCE).toArray();
-                g2.setColor(octagonColor);
-                g2.fillPolygon(x, y, numberOfPoints);
+        Graphics2D graphics = (Graphics2D) g;
+        graphics.fillRect(0, 0, 810, 800);
+        graphics.setColor(Color.white);
+        graphics.fillRect(0, 45, 810, 710);
+        graphics.setColor(rhombusColor);
+        graphics.fillRect(50, 50, 700, 700);
+        graphics.setColor(Color.black);
+        graphics.setStroke(new BasicStroke(3));
+        for (tileRow = 0; tileRow < OCTAGON_LENGTH; ++tileRow) {
+            final int currTileRow = tileRow;
+            int[] y = Arrays.stream(octagonY).map(a -> a + currTileRow*OCTAGON_DISTANCE).toArray();
+            for (tileCol = 0; tileCol < OCTAGON_LENGTH; ++tileCol) {
+                final int currtileCol = tileCol;
+                int[] x = Arrays.stream(octagonX).map(a -> a + currtileCol*OCTAGON_DISTANCE).toArray();
+                graphics.setColor(octagonColor);
+                graphics.fillPolygon(x, y, numberOfPoints);
                 for (int i = 0; i < numberOfPoints - 1; i++) {
-                    g2.setColor(Color.black);
-                    g2.drawLine(x[i], y[i], x[i + 1], y[i + 1]);
+                    graphics.setColor(Color.black);
+                    graphics.drawLine(x[i], y[i], x[i + 1], y[i + 1]);
                 }
-                g2.drawLine(x[0], y[0], x[numberOfPoints - 1], y[numberOfPoints - 1]);
+                graphics.drawLine(x[0], y[0], x[numberOfPoints - 1], y[numberOfPoints - 1]);
             }
         }
         //update __ to move
-        g2.setColor(Game.plrByID(Game.getCurrentPlayer()).getPlayerColour());
+        graphics.setColor(Game.plrByID(Game.getCurrentPlayer()).getPlayerColour());
         int[] newX = Arrays.stream(octagonX).map(a -> a + 200).toArray();
         int[] newY = Arrays.stream(octagonY).map(a -> a + 800).toArray();
-        g2.fillPolygon(newX, newY, 8);
-        g2.setColor(Color.BLACK);
-        g2.drawPolygon(newX, newY, 8);
+        graphics.fillPolygon(newX, newY, 8);
+        graphics.setColor(Color.BLACK);
+        graphics.drawPolygon(newX, newY, 8);
         int[] newNewX = {18+330, 38+330, 18+330, -2+330};
         int[] newNewY = {25 + 815, 45 + 815, 65 + 815,  45 + 815};
-        g2.setColor(Game.plrByID(Game.getCurrentPlayer()).getPlayerColour());
-        g2.fillPolygon(newNewX, newNewY, 4);
-        g2.setColor(Color.BLACK);
-        g2.drawPolygon(newNewX, newNewY, 4);
+        graphics.setColor(Game.plrByID(Game.getCurrentPlayer()).getPlayerColour());
+        graphics.fillPolygon(newNewX, newNewY, 4);
+        graphics.setColor(Color.BLACK);
+        graphics.drawPolygon(newNewX, newNewY, 4);
     }
 
     private static void createIcons() {
@@ -137,7 +137,7 @@ public class DrawBoard extends JPanel{
         placedPane = new JLayeredPane();
         placedPane.setSize(810, 1000);
 
-        //stratgey testingggg
+        //strategy overlay panel
         strategyPane = new JLayeredPane(); // top layer -> strategy arrows drawn here
         strategyPane.setSize(810, 1000);
         strategyPane.setOpaque(false);

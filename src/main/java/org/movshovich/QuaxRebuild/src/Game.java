@@ -27,6 +27,7 @@ public class Game {
 
     public Game() {
         System.out.println("Game start");
+        plrList.clear();
         plrList.add(new Bot(1));
         plrList.add(new Player(-1));
         movingFlag = false;
@@ -45,7 +46,7 @@ public class Game {
     public boolean isWhiteFirst() {return whiteFirst;}
     public static List<Player> getPlrList() {return plrList;}
 
-    public static void nextTurn() { 
+    public static void nextTurn() {
 
         if (whiteFirst && currentPlayer == -1) {
             whiteFirst = false;
@@ -88,40 +89,79 @@ public class Game {
         });
     }
 
+//    public static void initStrategyButtons() {
+//        // Show Strategy button
+//        showStrategyBut = new JButton("Show Strategy");
+//        showStrategyBut.setName("Show Strategy");
+//        showStrategyBut.setBounds(690, 830, 150, 50);
+//        showStrategyBut.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                Bot.showStrategy();
+//                // swap Show -> Hide
+//                DrawBoard.placedPane.remove(showStrategyBut);
+//                DrawBoard.placedPane.add(hideStrategyBut);
+//                DrawBoard.placedPane.setComponentZOrder(hideStrategyBut, 0);
+//                DrawBoard.repaintAll();
+//            }
+//        });
+//
+//        // Hide Strategy button (starts hidden)
+//        hideStrategyBut = new JButton("Hide Strategy");
+//        hideStrategyBut.setName("Hide Strategy");
+//        hideStrategyBut.setBounds(690, 830, 150, 50);
+//        hideStrategyBut.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                Bot.hideStrategy();
+//                DrawBoard.placedPane.remove(hideStrategyBut);
+//                DrawBoard.placedPane.add(showStrategyBut);
+//                //DrawBoard.placedPane.setComponentZOrder(showStrategyBut, 0);
+//                DrawBoard.repaintAll();
+//            }
+//        });
+//
+//        DrawBoard.placedPane.add(showStrategyBut);
+//        //DrawBoard.placedPane.setComponentZOrder(showStrategyBut, 0);
+//    }
+
     public static void initStrategyButtons() {
-        // Show Strategy button
-        showStrategyBut = new JButton("Show Strategy");
-        showStrategyBut.setName("Show Strategy");
-        showStrategyBut.setBounds(690, 830, 150, 50);
-        showStrategyBut.addActionListener(new ActionListener() {
+        showStrategyBut = buildShowStrategyButton();
+        hideStrategyBut = buildHideStrategyButton();
+        DrawBoard.placedPane.add(showStrategyBut);
+    }
+
+    private static JButton buildShowStrategyButton() {
+        JButton btn = new JButton("Show Strategy");
+        btn.setName("Show Strategy");
+        btn.setBounds(690, 830, 150, 50);
+        btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Bot.showStrategy();
-                // swap Show -> Hide
                 DrawBoard.placedPane.remove(showStrategyBut);
                 DrawBoard.placedPane.add(hideStrategyBut);
                 DrawBoard.placedPane.setComponentZOrder(hideStrategyBut, 0);
                 DrawBoard.repaintAll();
             }
         });
+        return btn;
+    }
 
-        // Hide Strategy button (starts hidden)
-        hideStrategyBut = new JButton("Hide Strategy");
-        hideStrategyBut.setName("Hide Strategy");
-        hideStrategyBut.setBounds(690, 830, 150, 50);
-        hideStrategyBut.addActionListener(new ActionListener() {
+    private static JButton buildHideStrategyButton() {
+        JButton btn = new JButton("Hide Strategy");
+        btn.setName("Hide Strategy");
+        btn.setBounds(690, 830, 150, 50);
+        btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Bot.hideStrategy();
                 DrawBoard.placedPane.remove(hideStrategyBut);
                 DrawBoard.placedPane.add(showStrategyBut);
-                //DrawBoard.placedPane.setComponentZOrder(showStrategyBut, 0);
                 DrawBoard.repaintAll();
             }
         });
-
-        DrawBoard.placedPane.add(showStrategyBut);
-        //DrawBoard.placedPane.setComponentZOrder(showStrategyBut, 0);
+        return btn;
     }
 
     public static void piRule() {
@@ -145,72 +185,155 @@ public class Game {
         Board.piRuleWeight();
         //DrawBoard.buttonPane.repaint();
     }
+//
+//    private static void showGameResultDialog(Player winner, Player loser) {
+//        movingFlag = true;
+//        JInternalFrame resultFrame = new JInternalFrame();
+//        resultFrame.setVisible(true);
+//        resultFrame.setBounds(250, 450, 300, 200);
+//        resultFrame.setName("WL"); //for testing
+//
+//        JButton playAgainButton = new JButton("Play Again");
+//        playAgainButton.setName("Play Again");
+//        playAgainButton.setBounds(20, 100, 100, 50);
+//        playAgainButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                DrawBoard.resetBoard();
+//                Board board = new Board();
+//                initStrategyButtons();
+//                Bot.piRule();
+//
+//                if (piRulePressed) {
+//                    for (Player plr: plrList) {
+//                        plr.setPlayerId(-plr.getPlayerId());
+//                        plr.refreshPlayerColour();
+//                    }
+//                    piRulePressed = false;
+//                }
+//
+//                whiteFirst = true;
+//                currentPlayer = 1;
+//                Bot.endReached = false;
+//                DrawBoard.popupPane.remove(resultFrame);
+//                ongoing = true;
+//                movingFlag = false;
+//            }
+//        });
+//        resultFrame.add(playAgainButton);
+//
+//        JButton quitButton = new JButton("Quit");
+//        quitButton.setName("Quit"); //for testing
+//        quitButton.setBounds(145, 100, 100, 50);
+//        quitButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                System.exit(0);
+//            }
+//        });
+//        resultFrame.add(quitButton);
+//
+//        JLabel winnerLabel = new JLabel("Winner: " + (winner.getPlayerId() == 1? "Black" : "White"));
+//        winnerLabel.setBounds(10, -30, 90, 90);
+//        JLabel scoreLabel = new JLabel("Score:");
+//        scoreLabel.setBounds(10, -10, 90, 90);
+//        JLabel botScoreLabel = new JLabel("Bot: " + plrList.get(0).getWins() + " - " + plrList.get(0).getlosses());
+//        botScoreLabel.setBounds(10, 10, 90, 90);
+//        JLabel playerScoreLabel = new JLabel("Player: " + plrList.get(1).getWins() + " - " + plrList.get(1).getlosses());
+//        playerScoreLabel.setBounds(10, 30, 90, 90);
+//        JLabel playAgainPrompt = new JLabel("Play Again?");
+//        playAgainPrompt.setBounds(40, 30, 90, 90);
+//
+//        resultFrame.add(winnerLabel);
+//        resultFrame.add(scoreLabel);
+//        resultFrame.add(botScoreLabel);
+//        resultFrame.add(playerScoreLabel);
+//        resultFrame.add(playAgainPrompt);
+//
+//        DrawBoard.popupPane.add(resultFrame);
+//        DrawBoard.repaintAll();
+//    }
 
     private static void winLoseWind(Player winner, Player loser) {
         movingFlag = true;
-        JInternalFrame WL = new JInternalFrame();
-        WL.setVisible(true);
-        WL.setBounds(250, 450, 300, 200);
-        WL.setName("WL"); //for testing
-        JButton AB = new JButton("Play Again");
-        AB.setName("Play Again");
-        AB.setBounds(20, 100, 100, 50);
-        AB.addActionListener(new ActionListener() {
+        JInternalFrame resultFrame = buildResultFrame();
+        resultFrame.add(buildPlayAgainButton(resultFrame));
+        resultFrame.add(buildQuitButton());
+        addScoreLabels(resultFrame, winner);
+        DrawBoard.popupPane.add(resultFrame);
+        DrawBoard.repaintAll();
+    }
+
+    private static JInternalFrame buildResultFrame() {
+        JInternalFrame frame = new JInternalFrame();
+        frame.setVisible(true);
+        frame.setBounds(250, 450, 300, 200);
+        frame.setName("WL"); // used in tests
+        return frame;
+    }
+
+    private static JButton buildPlayAgainButton(JInternalFrame resultFrame) {
+        JButton playAgainButton = new JButton("Play Again");
+        playAgainButton.setName("Play Again");
+        playAgainButton.setBounds(20, 100, 100, 50);
+        playAgainButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DrawBoard.resetBoard();
-                Board board = new Board();
-                initStrategyButtons();
-                Bot.piRule();
-
-                if (piRulePressed) {
-                    for (Player plr: plrList) {
-                        plr.setPlayerId(-plr.getPlayerId());
-                        plr.refreshPlayerColour();
-                    }
-                    piRulePressed = false;
-                }
-
-                whiteFirst = true;
-                currentPlayer = 1;
-                Bot.endReached = false;
-                DrawBoard.popupPane.remove(WL);
-                ongoing = true;
-                movingFlag = false;
+                resetForNewGame(resultFrame);
             }
         });
-        WL.add(AB);
+        return playAgainButton;
+    }
 
-        JButton QB = new JButton("Quit");
-        QB.setName("Quit"); //for testing
-        QB.setBounds(145, 100, 100, 50);
-        QB.addActionListener(new ActionListener() {
+    private static void resetForNewGame(JInternalFrame resultFrame) {
+        DrawBoard.resetBoard();
+        Board board = new Board();
+        initStrategyButtons();
+        Bot.piRule();
+        if (piRulePressed) {
+            for (Player plr : plrList) {
+                plr.setPlayerId(-plr.getPlayerId());
+                plr.refreshPlayerColour();
+            }
+            piRulePressed = false;
+        }
+        whiteFirst = true;
+        currentPlayer = 1;
+        Bot.endReached = false;
+        DrawBoard.popupPane.remove(resultFrame);
+        ongoing = true;
+        movingFlag = false;
+    }
+
+    private static JButton buildQuitButton() {
+        JButton quitButton = new JButton("Quit");
+        quitButton.setName("Quit"); // used in tests
+        quitButton.setBounds(145, 100, 100, 50);
+        quitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
         });
-        WL.add(QB);
+        return quitButton;
+    }
 
-        JLabel results = new JLabel("Winner: " + (winner.getPlayerId() == 1? "Black" : "White"));
-        results.setBounds(10, -30, 90, 90);
-        JLabel score = new JLabel("Score:");
-        score.setBounds(10, -10, 90, 90);
-        JLabel P1Score = new JLabel("Bot: " + plrList.get(0).getWins() + " - " + plrList.get(0).getlosses());
-        P1Score.setBounds(10, 10, 90, 90);
-        JLabel P2Score = new JLabel("Player: " + plrList.get(1).getWins() + " - " + plrList.get(1).getlosses());
-        P2Score.setBounds(10, 30, 90, 90);
-        JLabel PA = new JLabel("Play Again?");
-        PA.setBounds(40, 30, 90, 90);
-
-        WL.add(results);
-        WL.add(score);
-        WL.add(P1Score);
-        WL.add(P2Score);
-        WL.add(PA);
-            
-        DrawBoard.popupPane.add(WL);
-        DrawBoard.repaintAll();
+    private static void addScoreLabels(JInternalFrame frame, Player winner) {
+        JLabel winnerLabel = new JLabel("Winner: " + (winner.getPlayerId() == 1 ? "Black" : "White"));
+        winnerLabel.setBounds(10, -30, 90, 90);
+        JLabel scoreLabel = new JLabel("Score:");
+        scoreLabel.setBounds(10, -10, 90, 90);
+        JLabel botScoreLabel = new JLabel("Bot: " + plrList.get(0).getWins() + " - " + plrList.get(0).getlosses());
+        botScoreLabel.setBounds(10, 10, 90, 90);
+        JLabel playerScoreLabel = new JLabel("Player: " + plrList.get(1).getWins() + " - " + plrList.get(1).getlosses());
+        playerScoreLabel.setBounds(10, 30, 90, 90);
+        JLabel playAgainPrompt = new JLabel("Play Again?");
+        playAgainPrompt.setBounds(40, 30, 90, 90);
+        frame.add(winnerLabel);
+        frame.add(scoreLabel);
+        frame.add(botScoreLabel);
+        frame.add(playerScoreLabel);
+        frame.add(playAgainPrompt);
     }
 
     public static void gameFinished() {

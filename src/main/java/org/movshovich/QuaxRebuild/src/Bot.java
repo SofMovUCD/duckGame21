@@ -8,6 +8,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Stack;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Bot extends Player {
@@ -111,16 +112,15 @@ public class Bot extends Player {
                     continue;  // Skip already evaluated nodes
                 }
                 // Calculate tentative g score
-                int tentative_g = current.getG() + 1;
+                int tentativeG = current.getG() + 1;
                 if (!openList.contains(neighbor)) openList.add(neighbor);
-                else if (tentative_g >= neighbor.getG()) continue;  // This path is not better
+                else if (tentativeG >= neighbor.getG()) continue;  // This path is not better
             
                 // This path is the best so far
                 neighbor.setParent(current);
-                neighbor.setG(tentative_g);
+                neighbor.setG(tentativeG);
                 neighbor.setH(heuristic(neighbor, goal));
                 neighbor.setF();
-                //System.out.println(neighbor.toString() + " F: " + neighbor.getF());
             }
         }
     return null;  // No path exists
@@ -153,9 +153,13 @@ public class Bot extends Player {
         }
     }
 
-    /*Show the bot strategy: draw arrows from each placed tile along its A* path,
-     *  with the weight of the goal tile shown. Uses placed stack. */
+    /**
+     * Shows the bot strategy overlay: red arrows from each placed tile along its
+     * A* path to the highest weight goal, the goal highlighted in green, and a
+     * textual description below the board.
+     */
     public static void showStrategy() {
+        if (placed.isEmpty()) return;
         DrawBoard.strategyPane.removeAll();
 
         // Build a full size transparent overlay to draw on
@@ -163,8 +167,8 @@ public class Bot extends Player {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                Graphics2D g2 = (Graphics2D) g;
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                Graphics2D canvas = (Graphics2D) g;
+                canvas.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
                 // For each tile in placed, compute the A* path and draw arrows
                 List<Tile> placedList = new ArrayList<>(placed); // snapshot, no new data
@@ -178,42 +182,40 @@ public class Bot extends Player {
                     if (pathTiles.size() < 2) continue;
 
                     // Draw arrows along path segments
-                    g2.setColor(new Color(220, 50, 50, 200)); // semi transparent red
-                    g2.setStroke(new BasicStroke(2.5f));
+                    canvas.setColor(new Color(220, 50, 50, 200)); // semi transparent red
+                    canvas.setStroke(new BasicStroke(2.5f));
 
                     for (int i = 0; i < pathTiles.size() - 1; i++) {
                         Point from = tileCenter(pathTiles.get(i));
                         Point to   = tileCenter(pathTiles.get(i + 1));
-                        drawArrow(g2, from, to);
+                        drawArrow(canvas, from, to);
                     }
 
                     // Draw weight label at goal tile
-                    if (!pathTiles.isEmpty()) {
                         Tile last = pathTiles.get(pathTiles.size() - 1);
                         Point center = tileCenter(last);
-                        g2.setColor(new Color(255, 50, 50));
-                        g2.setFont(new Font("Arial", Font.BOLD, 13));
-                        g2.drawString("W:" + last.getWeight(), center.x - 10, center.y - 5);
-                    }
+                        canvas.setColor(new Color(255, 50, 50));
+                        canvas.setFont(new Font("Arial", Font.BOLD, 13));
+                        canvas.drawString("W:" + last.getWeight(), center.x - 10, center.y - 5);
                 }
 
                 // Highlight the goal tile (highest weight) in green if not yet placed
                 if (goal != null && goal.getValue() == 0) {
                     Point c = tileCenter(goal);
-                    g2.setColor(new Color(0, 180, 0, 160));
-                    g2.fillOval(c.x - 18, c.y - 18, 36, 36);
-                    g2.setColor(Color.BLACK);
-                    g2.setStroke(new BasicStroke(2));
-                    g2.drawOval(c.x - 18, c.y - 18, 36, 36);
-                    g2.setColor(Color.WHITE);
-                    g2.setFont(new Font("Arial", Font.BOLD, 11));
-                    g2.drawString("" + goal.getWeight(), c.x - 5, c.y + 4);
+                    canvas.setColor(new Color(0, 180, 0, 160));
+                    canvas.fillOval(c.x - 18, c.y - 18, 36, 36);
+                    canvas.setColor(Color.BLACK);
+                    canvas.setStroke(new BasicStroke(2));
+                    canvas.drawOval(c.x - 18, c.y - 18, 36, 36);
+                    canvas.setColor(Color.WHITE);
+                    canvas.setFont(new Font("Arial", Font.BOLD, 11));
+                    canvas.drawString("" + goal.getWeight(), c.x - 5, c.y + 4);
                 }
             }
 
             /* Draw a line with an arrowhead at to */
-            private void drawArrow(Graphics2D g2, Point from, Point to) {
-                g2.drawLine(from.x, from.y, to.x, to.y);
+            private void drawArrow(Graphics2D canvas, Point from, Point to) {
+                canvas.drawLine(from.x, from.y, to.x, to.y);
                 double angle = Math.atan2(to.y - from.y, to.x - from.x);
                 int arrowLen = 10;
                 double arrowAngle = Math.toRadians(30);
@@ -221,8 +223,8 @@ public class Bot extends Player {
                 int ay1 = (int)(to.y - arrowLen * Math.sin(angle - arrowAngle));
                 int ax2 = (int)(to.x - arrowLen * Math.cos(angle + arrowAngle));
                 int ay2 = (int)(to.y - arrowLen * Math.sin(angle + arrowAngle));
-                g2.drawLine(to.x, to.y, ax1, ay1);
-                g2.drawLine(to.x, to.y, ax2, ay2);
+                canvas.drawLine(to.x, to.y, ax1, ay1);
+                canvas.drawLine(to.x, to.y, ax2, ay2);
             }
         };
 
@@ -230,6 +232,24 @@ public class Bot extends Player {
         overlay.setBounds(0, 0, 810, 1000);
         DrawBoard.strategyPane.add(overlay);
         DrawBoard.strategyPane.setComponentZOrder(overlay, 0);
+
+
+        // Textual description shown to the right of the board
+        JLabel strategyDescription = new JLabel(
+                "<html><b>Bot Strategy:</b><br>The bot uses A* search to find the "
+                        + "highest-weight path across the board.<br>It evaluates all reachable "
+                        + "paths, selects the goal tile with the maximum weight,<br>and places "
+                        + "tiles along the optimal route each turn.<br><br>"
+                        + "<b>Legend:</b> Red arrows = computed paths &nbsp; "
+                        + "Green circle = chosen goal tile</html>"
+        );
+        strategyDescription.setBounds(0, 780, 810, 90);
+        strategyDescription.setFont(new Font("Arial", Font.PLAIN, 11));
+        strategyDescription.setForeground(new Color(30, 30, 30));
+        strategyDescription.setOpaque(true);
+        strategyDescription.setBackground(new Color(255, 255, 220, 220));
+        DrawBoard.strategyPane.add(strategyDescription);
+
         DrawBoard.repaintAll();
     }
 
@@ -242,7 +262,7 @@ public class Bot extends Player {
         if (placed.size() > 1) {
             Tile child = placed.pop();
             Tile parent = placed.peek();
-        
+
             if (!Board.getNeighbours(child).contains(parent)) {
                 for (Tile n : Board.getNeighbours(parent)) {
                     if (Board.getNeighbours(child).contains(n) && n.getValue() == 0 ) return n;
@@ -251,14 +271,26 @@ public class Bot extends Player {
             return findingGap();
         } else return null;
     }
+    //this was crashing
+
+//    private Tile givenUp() {
+//        Tile randTile = null;
+//        Random find = new Random();
+//        while (randTile == null || randTile.getValue() != 0) {
+//            randTile = Board.getTile(find.nextInt() % 20, find.nextInt() % 10);
+//        }
+//
+//        return randTile;
+//    }
 
     private Tile givenUp() {
-        Tile randTile = null;
         Random find = new Random();
-        while (randTile == null || randTile.getValue() != 0) {
-            randTile = Board.getTile(find.nextInt() % 20, find.nextInt() % 10);
+        int attempts = 0;
+        while (attempts < 500) {
+            Tile candidate = Board.getTile(find.nextInt(20), find.nextInt(10));
+            if (candidate != null && candidate.getValue() == 0) return candidate;
+            attempts++;
         }
-
-        return randTile;
+        return null;
     }
 }
