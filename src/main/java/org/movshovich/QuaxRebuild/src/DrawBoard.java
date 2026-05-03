@@ -96,10 +96,6 @@ public class DrawBoard extends JPanel{
 
     /** Sets up the UI layering order (Bottom to Top) */
     private static void addAll() {
-        placedPane.add(nextMove);
-        placedPane.add(player);
-        placedPane.add(bot);
-
         overlayPanel.add(popupPane);
         overlayPanel.add(strategyPane); // Top Layer (Strategy overlay)
         overlayPanel.add(buttonPane);
@@ -133,6 +129,11 @@ public class DrawBoard extends JPanel{
         nextMove.setOpaque(true);
         bot.setOpaque(true);
         player.setOpaque(true);
+
+        placedPane.add(nextMove);
+        placedPane.add(player);
+        placedPane.add(bot);
+
     }
 
     /** Initializes the main JFrame and all layered panels */
