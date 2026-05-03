@@ -6,7 +6,6 @@ import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 
-import static org.assertj.swing.fixture.Containers.showInFrame;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -62,23 +61,13 @@ public class UiTest extends AssertJSwingJUnitTestCase {
         //CHECK label updated to correct value
         windowF.label("nextMoveLabelName").requireText("WHITE to play");
     }
-/*
+
     @Test
     public void buttonPressToDeleteButton(){
-        //GIVEN button press
-        window.button("0 0").click();
-        //CHECK button does not exist anymore
-        assertThatThrownBy(() -> {
-            window.button("0 0").isEnabled();
-        }).isInstanceOf(ComponentLookupException.class)
-                .hasMessageStartingWith("Unable to find component");
-    }*/
-@Test
-public void buttonPressToDeleteButton(){
-    JButton btn = windowF.button("0 0").target();
-    GuiActionRunner.execute(()->{btn.doClick();});
-    assertEquals("The array should be 1 (Black) after first move",1, Board.getTile(0,0).getValue());
-}
+        JButton btn = windowF.button("0 0").target();
+        GuiActionRunner.execute(()->{btn.doClick();});
+        assertEquals("The array should be 1 (Black) after first move",1, Board.getTile(0,0).getValue());
+    }
 
     @Test
     public void numAndLett(){
@@ -136,12 +125,8 @@ public void buttonPressToDeleteButton(){
 
 
         JButtonFixture piBtn = windowF.button("Activate Pi Rule").click();
-//        piBtn.doClick();
-//        GuiActionRunner.execute(() -> );
         assertEquals("Player 0 ID should now be -1",-1, Game.getPlrList().getFirst().getPlayerId());
     }
-
-    //check
 
     @Test
     public void BoardStartsEmpty() {
@@ -207,7 +192,6 @@ public void buttonPressToDeleteButton(){
             botStack.push(Board.getTile(10,i));
             Board.getTile(10,i).setValue(1);
         }
-        //Game.currentPlayer = 1;
         GuiActionRunner.execute(() -> {Game.plrByID(Game.getCurrentPlayer()).makeMove();}); //bot should make move
 
         GuiActionRunner.execute(() -> {

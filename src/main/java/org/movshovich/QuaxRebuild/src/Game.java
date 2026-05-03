@@ -9,26 +9,34 @@ import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 
+/**
+ * Main Controller class for the Quax game.
+ * Manages game state, turn logic, and UI interactions.
+ */
 public class Game {
 
+    // Static Constants & State Variables
     public static Color playingBlack = new Color(45,45,45);
-
-    private static int currentPlayer = 1;
-    private static boolean movingFlag;
-    private static boolean whiteFirst;
+    private static int currentPlayer = 1; // 1 for Black, -1 for White
+    private static boolean movingFlag;   // True when waiting for a move to complete
+    private static boolean whiteFirst;  // Tracks if it's the start of the game
     private static List<Player> plrList = new ArrayList<>();
     private static JButton piRuleBut;
     private static JButton showStrategyBut;
     private static JButton hideStrategyBut;
-    private static boolean ongoing;
+    private static boolean ongoing;    // Is the game currently active
     private static boolean piRulePressed = false;
-    
 
+
+    /**
+     * Initializes a new game instance, sets up players (Bot vs Human),
+     * and resets the game board UI.
+     */
     public Game() {
         System.out.println("Game start"); //for testing
         plrList.clear();
-        plrList.add(new Bot(1));
-        plrList.add(new Player(-1));
+        plrList.add(new Bot(1));       // Typically Black
+        plrList.add(new Player(-1));  // Typically White
         movingFlag = false;
         whiteFirst = true;
         ongoing = true;
@@ -38,13 +46,22 @@ public class Game {
         initStrategyButtons();
     }
 
+    // Getters and State Helpers
+    /** Returns the ID of the player whose turn it currently is (1=BLACK, -1=WHITE). */
     public static int getCurrentPlayer() {return currentPlayer;}
+    /** Toggles movingFlag called by Player and Bot after a move starts or ends. */
     public static void flipMovingFlag() {movingFlag = !movingFlag;}
-
+    /** Returns true while a move is in progress. Used in tests. */
     public boolean getMovingFlag() {return movingFlag;}
+    /** Returns true if we are still in the first move window where Pi Rule is available. */
     public boolean isWhiteFirst() {return whiteFirst;}
+    /** Returns the ordered player list (index 0 = Bot, index 1 = human Player). */
     public static List<Player> getPlrList() {return plrList;}
 
+    /**
+     * Logic to swap turns between players.
+     * Updates the UI text and removes the Pi Rule button after the first move.
+     */
     public static void nextTurn() {
 
         if (whiteFirst && currentPlayer == -1) {
@@ -52,7 +69,7 @@ public class Game {
             DrawBoard.buttonPane.remove(piRuleBut);
         }
 
-        currentPlayer *= -1;
+        currentPlayer *= -1; // Toggle between 1 and -1
 
         if(currentPlayer == 1){
             DrawBoard.nextMove.setText("BLACK to play");
@@ -63,6 +80,9 @@ public class Game {
         DrawBoard.repaintAll();
     }
 
+    /**
+     * Finds a player object in the list based on their ID.
+     */
     public static Player plrByID(int ID) {
 		for (Player plr : plrList) {
 			if (plr.getPlayerId() == ID) {
@@ -72,10 +92,14 @@ public class Game {
 		throw new IllegalArgumentException("No Players of this ID");
 	}
 
+    /**
+     * Helper to return a generic value based on which player is active.
+     */
     public static <E> Object valueForID(E a, E b, Player plr) {
         return (plr.getPlayerId()  == 1 ? a : b);
     }
 
+    // Button Initialization & Action Listeners
     public static void initPiRuleButton() {
         piRuleBut = new JButton("Activate Pi Rule");
         piRuleBut.setName("Activate Pi Rule");
@@ -88,12 +112,14 @@ public class Game {
         });
     }
 
+    /** Creates Show/Hide Strategy buttons and registers them on the board. */
     public static void initStrategyButtons() {
         showStrategyBut = buildShowStrategyButton();
         hideStrategyBut = buildHideStrategyButton();
         DrawBoard.placedPane.add(showStrategyBut);
     }
 
+    /** Builds the Show Strategy button clicking it reveals the A* overlay and swaps to Hide. */
     private static JButton buildShowStrategyButton() {
         JButton btn = new JButton("Show Strategy");
         btn.setName("Show Strategy");
@@ -111,6 +137,7 @@ public class Game {
         return btn;
     }
 
+    /** Builds the Hide Strategy button clicking it clears the overlay and swaps back to Show. */
     private static JButton buildHideStrategyButton() {
         JButton btn = new JButton("Hide Strategy");
         btn.setName("Hide Strategy");
@@ -127,6 +154,11 @@ public class Game {
         return btn;
     }
 
+    /**
+     * Implements the "Pie Rule" (Swap Rule).
+     * The second player can choose to swap roles with the first player
+     * to counteract any first move advantage.
+     */
     public static void piRule() {
         for (Player plr: plrList) {
             plr.setPlayerId(plr.getPlayerId() * -1);
@@ -138,16 +170,19 @@ public class Game {
         movingFlag = false;
         whiteFirst = false;
         piRulePressed = true;
-        //change colours
+
+        // Update UI colors to reflect the swap
         DrawBoard.bot.setForeground(playingBlack);
         DrawBoard.bot.setBackground(Color.WHITE);
         DrawBoard.player.setForeground(Color.WHITE);
         DrawBoard.player.setBackground(playingBlack);
         DrawBoard.buttonPane.remove(piRuleBut);
         Board.piRuleWeight();
-        //DrawBoard.buttonPane.repaint();
     }
 
+    /**
+     * Creates and displays the end game result window.
+     */
     private static void winLoseWind(Player winner, Player loser) {
         movingFlag = true;
         JInternalFrame resultFrame = buildResultFrame();
@@ -158,6 +193,7 @@ public class Game {
         DrawBoard.repaintAll();
     }
 
+    /** Creates the result dialog frame. Named "WL" so UI tests can locate it by name. */
     private static JInternalFrame buildResultFrame() {
         JInternalFrame frame = new JInternalFrame();
         frame.setVisible(true);
@@ -166,6 +202,7 @@ public class Game {
         return frame;
     }
 
+    /** Builds the Play Again button clicking it calls resetForNewGame. */
     private static JButton buildPlayAgainButton(JInternalFrame resultFrame) {
         JButton playAgainButton = new JButton("Play Again");
         playAgainButton.setName("Play Again");
@@ -179,6 +216,9 @@ public class Game {
         return playAgainButton;
     }
 
+    /**
+     * Resets game state, scores (if swapped), and board for a fresh round.
+     */
     private static void resetForNewGame(JInternalFrame resultFrame) {
         DrawBoard.resetBoard();
         new Board();
@@ -199,6 +239,7 @@ public class Game {
         movingFlag = false;
     }
 
+    /** Builds the Quit button clicking it exits the application. Named "Quit" for tests. */
     private static JButton buildQuitButton() {
         JButton quitButton = new JButton("Quit");
         quitButton.setName("Quit"); // used in tests
@@ -212,6 +253,7 @@ public class Game {
         return quitButton;
     }
 
+    /** Adds winner name, score, and Play Again prompt labels to the result dialog. */
     private static void addScoreLabels(JInternalFrame frame, Player winner) {
         JLabel winnerLabel = new JLabel("Winner: " + (winner.getPlayerId() == 1 ? "Black" : "White"));
         winnerLabel.setBounds(10, -30, 90, 90);
@@ -230,6 +272,9 @@ public class Game {
         frame.add(playAgainPrompt);
     }
 
+    /**
+     * Triggered when a win condition is met. Updates stats and shows popup.
+     */
     public static void gameFinished() {
         Player winner = (-currentPlayer == 1? plrByID(1) : plrByID(-1));
             Player loser = plrByID(-winner.getPlayerId());
@@ -245,29 +290,39 @@ public class Game {
             winLoseWind(winner, loser);
             currentPlayer = winner.getPlayerId();
             DrawBoard.repaintAll();
+
+        // Busy wait loop to hold the execution while the win screen is visible
             while (movingFlag) {
                 System.out.print("");
             }
     }
 
+    /**
+     * Main game loop. Initialises the game then repeatedly:
+     * runs turns until a win, shows the Pi Rule button on WHITE's first turn,
+     * then calls gameFinished() to handle the result and wait for replay.
+     */
     public static void main(String[] args) {
         new Game();
 
         while(true) {
             if (ongoing) {
                 do {
+                    // Show Pi Rule button if it's the second turn and not yet swapped
                     if ((currentPlayer == -1) && whiteFirst && piRuleBut.getParent() == null) {
                         DrawBoard.buttonPane.add(piRuleBut);
                         DrawBoard.buttonPane.setComponentZOrder(piRuleBut, 0);
                     }
 
                     plrByID(currentPlayer).makeMove();
+
+                    // Wait for move selection
                     while (movingFlag) {
                         System.out.print("");
                     }
                     DrawBoard.overlayPanel.remove(DrawBoard.buttonPane);
                     nextTurn();
-                } while (!Board.checkWin(plrByID(-currentPlayer)));
+                } while (!Board.checkWin(plrByID(-currentPlayer))); // Check if the last player won
             }
             ongoing = false;
             gameFinished();

@@ -4,6 +4,10 @@ import java.util.Arrays;
 
 import javax.swing.*;
 
+/**
+ * Visual renderer for the game board.
+ * Uses JLayeredPane to manage overlapping graphics components.
+ */
 public class DrawBoard extends JPanel{
     public static final int OCTAGON_LENGTH = 11;
     public static final int RHOMBUS_LENGTH = 10;
@@ -11,32 +15,40 @@ public class DrawBoard extends JPanel{
 
     public static JLabel nextMove, bot, player;
     public static JFrame boardFrame; //just for testing
-    public static JLayeredPane placedPane;
-    public static JPanel overlayPanel;
-    public static JLayeredPane buttonPane;
-    public static JLayeredPane strategyPane; // top layer for strategy overlay
-    public static JLayeredPane popupPane;
+    public static JLayeredPane placedPane;   // Layer for placed tiles
+    public static JPanel overlayPanel;       // Main wrapper
+    public static JLayeredPane buttonPane;   // Layer for clickable buttons
+    public static JLayeredPane strategyPane; // Layer for bot arrows
+    public static JLayeredPane popupPane;     // Layer for win/lose windows
 
-    int tileRow;//tileRow yC
-    int tileCol;//tileCol xC
+    int tileRow;
+    int tileCol;
     int numberOfPoints = 8;
     final Color octagonColor = new Color(173, 111, 49);
     final Color rhombusColor = new Color(99, 59, 19);
+
+    /** Coordinates for drawing the background octagon shape */
     int[] octagonX = {50, 78, 98, 98, 78, 50, 30, 30, 50};
     int[] octagonY = {25, 25, 45, 73, 93, 93, 73, 45, 25};
 
+    /** Default constructor  DrawBoard is instantiated as the bottom rendering layer. */
     public DrawBoard() {
 
     }
 
+    /**
+     * Primary rendering method for the board background.
+     * Draws the brown octagons and rhombuses.
+     */
     public void paint(Graphics g) {
         Graphics2D graphics = (Graphics2D) g;
-        graphics.fillRect(0, 0, 810, 800);
+        graphics.fillRect(0, 0, 810, 800); // Header area
         graphics.setColor(Color.white);
-        graphics.fillRect(0, 45, 810, 710);
+        graphics.fillRect(0, 45, 810, 710); // Background for board
         graphics.setColor(rhombusColor);
-        graphics.fillRect(50, 50, 700, 700);
+        graphics.fillRect(50, 50, 700, 700); // Main rhombus area
         graphics.setColor(Color.black);
+
         graphics.setStroke(new BasicStroke(3));
         for (tileRow = 0; tileRow < OCTAGON_LENGTH; ++tileRow) {
             final int currTileRow = tileRow;
@@ -53,7 +65,7 @@ public class DrawBoard extends JPanel{
                 graphics.drawLine(x[0], y[0], x[numberOfPoints - 1], y[numberOfPoints - 1]);
             }
         }
-        //update __ to move
+        // Draw the current player colour indicator shapes below the board
         graphics.setColor(Game.plrByID(Game.getCurrentPlayer()).getPlayerColour());
         int[] newX = Arrays.stream(octagonX).map(a -> a + 200).toArray();
         int[] newY = Arrays.stream(octagonY).map(a -> a + 800).toArray();
@@ -68,8 +80,8 @@ public class DrawBoard extends JPanel{
         graphics.drawPolygon(newNewX, newNewY, 4);
     }
 
+    /** Creates the Bot and Player colour coded label icons shown in the dashboard. */
     private static void createIcons() {
-
         bot = new JLabel("    Bot");
         bot.setForeground(Color.WHITE);
         bot.setBackground(new Color(45,45,45));
@@ -82,6 +94,7 @@ public class DrawBoard extends JPanel{
         player.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(), BorderFactory.createLoweredBevelBorder()));
     }
 
+    /** Sets up the UI layering order (Bottom to Top) */
     private static void addAll() {
         placedPane.add(nextMove);
         placedPane.add(player);
@@ -96,8 +109,8 @@ public class DrawBoard extends JPanel{
         boardFrame.add(overlayPanel);
     }
 
+    /** Initialises the dashboard: turn label, player icons, and board edge numbers/letters. */
     public static void initDash() {
-    
         nextMove = new JLabel("BLACK to play");
         nextMove.setName("nextMoveLabelName");
         nextMove.setBounds(390, 830, 150, 50);
@@ -122,6 +135,7 @@ public class DrawBoard extends JPanel{
         player.setOpaque(true);
     }
 
+    /** Initializes the main JFrame and all layered panels */
     public static void initBoard() {
         //Init board name and closing function
         boardFrame = new JFrame("Quax Player vs Bot");
@@ -133,7 +147,7 @@ public class DrawBoard extends JPanel{
         overlayPanel.setPreferredSize(new Dimension(810, 1000));
 
         //Create Panes for placing buttons
-        buttonPane = new JLayeredPane(); 
+        buttonPane = new JLayeredPane();
         placedPane = new JLayeredPane();
         placedPane.setSize(810, 1000);
 
@@ -144,7 +158,6 @@ public class DrawBoard extends JPanel{
 
         popupPane = new JLayeredPane();
         popupPane.setSize(810, 1000);
-        //testingPane.setOpaque(false);
         //create label
         initDash();
         addAll();
@@ -155,13 +168,15 @@ public class DrawBoard extends JPanel{
         boardFrame.setVisible(true);
     }
 
+    /** Triggers a repaint on all UI layers to reflect the latest game state. */
     public static void repaintAll() {
         overlayPanel.repaint();
         placedPane.repaint();
         buttonPane.repaint();
         strategyPane.repaint();
-    } 
+    }
 
+    /** Clears all placed tiles, buttons, and strategy overlays, then reinitialises the dashboard. */
     public static void resetBoard() {
         placedPane.removeAll();
         buttonPane.removeAll();

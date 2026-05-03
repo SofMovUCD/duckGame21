@@ -27,7 +27,6 @@ public class BGTest {
 
     @Test
     public void TileGettersSettersTest() {
-        //DrawBoard.initBoard();
         Tile testTile = new Tile(10, 5);
         Tile parentTile = new Tile(0, 0);
 
@@ -243,5 +242,16 @@ public class BGTest {
         assertEquals(t0, path.poll(), "First tile should be root (t0)");
         assertEquals(t1, path.poll(), "Second tile should be t1");
         assertEquals(t2, path.poll(), "Third tile should be t2");
+    }
+
+    @Test
+    public void givenUpReturnsFallbackTile() throws Exception {
+        Method givenUp = Bot.class.getDeclaredMethod("givenUp");
+        givenUp.setAccessible(true);
+        Bot bot = new Bot(1);
+        Tile result = (Tile) givenUp.invoke(bot);
+        // On empty board, should always find a tile
+        assertNotNull(result, "givenUp should find a tile on an empty board");
+        assertEquals(0, result.getValue(), "Fallback tile must be unoccupied");
     }
 }
