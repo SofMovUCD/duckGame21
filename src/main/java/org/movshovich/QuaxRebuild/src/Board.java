@@ -52,8 +52,8 @@ public class Board {
     public static List<Tile> getNeighbours(Tile inputTile) {
         List<Tile> nList = new ArrayList<>();
         if (inputTile.getX() % 2 == 0) { // Octagon neighbors
-            int[] dx = {-2, -1, 0, 1, 2, 1, 0, -1};
-            int[] dy = {0, -1, -1, -1, 0, 0, 1, 0};
+            int[] dx = {-2, -1,  0,  1, 2, 1, 0, -1};
+            int[] dy = { 0, -1, -1, -1, 0, 0, 1,  0};
 
             for (int i = 0; i < 8; ++i) {
                 int neighbourX = inputTile.getX() + dx[i];
@@ -124,13 +124,14 @@ public class Board {
     private static boolean checkWinRecur(Player plr, Tile curr, List<Tile> visited) {
         visited.add(curr);
 
-        for (Tile neighbour : getNeighbours(curr)) {
-            if (plr.getPlayerId() == neighbour.getValue() && !visited.contains(neighbour)) {
+        for (Tile neighbour : getNeighbours(curr)) { //check each neighbour
+            if (plr.getPlayerId() == neighbour.getValue() && !visited.contains(neighbour)) { //if the nieghbour is the same value as the player and not visited
                 // If we reached the target coordinate (0 on the relevant axis), win found
                 if (((int)Game.valueForID(neighbour.getY(), neighbour.getX(), plr)) == 0) return true;
                 else {return checkWinRecur(plr, neighbour, visited);}
             }
         }
+        //visited.remove(curr);
         return false;
     }
 

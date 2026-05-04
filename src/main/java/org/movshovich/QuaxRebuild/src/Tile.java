@@ -139,7 +139,7 @@ public class Tile {
         return true;
     }
 
-    /** Returns the tile with the higher weight for bot decision making */
+    /** Returns the tile with the higher weight for bot decision-making */
     public Tile largerWeight(Tile tile) {
         if (this.weight > tile.weight) {
             return this;
