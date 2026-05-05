@@ -12,10 +12,10 @@ public class Player {
     private int losses;
 
     /** Constructs a Player with the given ID, sets colour (BLACK for 1, WHITE for -1) and zeroes stats. */
-    public Player(int playerId){
+    public Player(int playerId) {
         this.playerId = playerId;
         // Default: 1 is Black (playingBlack), -1 is White
-        this.tileColour = playerId == 1? Game.playingBlack: Color.white;
+        this.tileColour = playerId == 1 ? Game.playingBlack : Color.white;
         this.wins = 0;
         this.losses = 0;
     }

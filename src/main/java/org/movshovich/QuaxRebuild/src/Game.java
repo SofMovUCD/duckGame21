@@ -1,4 +1,5 @@
 package org.movshovich.QuaxRebuild.src;
+
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,7 +17,7 @@ import javax.swing.JLabel;
 public class Game {
 
     // Static Constants & State Variables
-    public static Color playingBlack = new Color(45,45,45);
+    public static Color playingBlack = new Color(45, 45, 45);
     private static int currentPlayer = 1; // 1 for Black, -1 for White
     private static boolean movingFlag;   // True when waiting for a move to complete
     private static boolean whiteFirst;  // Tracks if it's the start of the game
@@ -46,15 +47,30 @@ public class Game {
     }
 
     // Getters and State Helpers
-    /** Returns the ID of the player whose turn it currently is (1=BLACK, -1=WHITE). */
+
+    /**
+     * Returns the ID of the player whose turn it currently is (1=BLACK, -1=WHITE).
+     */
     public static int getCurrentPlayer() {return currentPlayer;}
-    /** Toggles movingFlag called by Player and Bot after a move starts or ends. */
+
+    /**
+     * Toggles movingFlag called by Player and Bot after a move starts or ends.
+     */
     public static void flipMovingFlag() {movingFlag = !movingFlag;}
-    /** Returns true while a move is in progress. Used in tests. */
+
+    /**
+     * Returns true while a move is in progress. Used in tests.
+     */
     public boolean getMovingFlag() {return movingFlag;}
-    /** Returns true if we are still in the first move window where Pi Rule is available. */
+
+    /**
+     * Returns true if we are still in the first move window where Pi Rule is available.
+     */
     public boolean isWhiteFirst() {return whiteFirst;}
-    /** Returns the ordered player list (index 0 = Bot, index 1 = human Player). */
+
+    /**
+     * Returns the ordered player list (index 0 = Bot, index 1 = human Player).
+     */
     public static List<Player> getPlrList() {return plrList;}
 
     /**
@@ -70,7 +86,7 @@ public class Game {
 
         currentPlayer *= -1; // Toggle between 1 and -1
 
-        if(currentPlayer == 1){
+        if (currentPlayer == 1) {
             DrawBoard.nextMove.setText("BLACK to play");
         } else {
             DrawBoard.nextMove.setText("WHITE to play");
@@ -83,19 +99,19 @@ public class Game {
      * Finds a player object in the list based on their ID.
      */
     public static Player plrByID(int ID) {
-		for (Player plr : plrList) {
-			if (plr.getPlayerId() == ID) {
-				return plr;
-			}
-		}
-		throw new IllegalArgumentException("No Players of this ID");
-	}
+        for (Player plr : plrList) {
+            if (plr.getPlayerId() == ID) {
+                return plr;
+            }
+        }
+        throw new IllegalArgumentException("No Players of this ID");
+    }
 
     /**
      * Helper to return a generic value based on which player is active.
      */
     public static <E> Object valueForID(E a, E b, Player plr) {
-        return (plr.getPlayerId()  == 1 ? a : b);
+        return (plr.getPlayerId() == 1 ? a : b);
     }
 
     // Button Initialization & Action Listeners
@@ -111,14 +127,18 @@ public class Game {
         });
     }
 
-    /** Creates Show/Hide Strategy buttons and registers them on the board. */
+    /**
+     * Creates Show/Hide Strategy buttons and registers them on the board.
+     */
     public static void initStrategyButtons() {
         showStrategyBut = buildShowStrategyButton();
         hideStrategyBut = buildHideStrategyButton();
         DrawBoard.placedPane.add(showStrategyBut);
     }
 
-    /** Builds the Show Strategy button clicking it reveals the A* overlay and swaps to Hide. */
+    /**
+     * Builds the Show Strategy button clicking it reveals the A* overlay and swaps to Hide.
+     */
     private static JButton buildShowStrategyButton() {
         JButton btn = new JButton("Show Strategy");
         btn.setName("Show Strategy");
@@ -136,7 +156,9 @@ public class Game {
         return btn;
     }
 
-    /** Builds the Hide Strategy button clicking it clears the overlay and swaps back to Show. */
+    /**
+     * Builds the Hide Strategy button clicking it clears the overlay and swaps back to Show.
+     */
     private static JButton buildHideStrategyButton() {
         JButton btn = new JButton("Hide Strategy");
         btn.setName("Hide Strategy");
@@ -159,7 +181,7 @@ public class Game {
      * to counteract any first move advantage.
      */
     public static void piRule() {
-        for (Player plr: plrList) {
+        for (Player plr : plrList) {
             plr.setPlayerId(plr.getPlayerId() * -1);
             plr.refreshPlayerColour();
             Bot.piRule();
@@ -192,7 +214,9 @@ public class Game {
         DrawBoard.repaintAll();
     }
 
-    /** Creates the result dialog frame. Named "WL" so UI tests can locate it by name. */
+    /**
+     * Creates the result dialog frame. Named "WL" so UI tests can locate it by name.
+     */
     private static JInternalFrame buildResultFrame() {
         JInternalFrame frame = new JInternalFrame();
         frame.setVisible(true);
@@ -201,7 +225,9 @@ public class Game {
         return frame;
     }
 
-    /** Builds the Play Again button clicking it calls resetForNewGame. */
+    /**
+     * Builds the Play Again button clicking it calls resetForNewGame.
+     */
     private static JButton buildPlayAgainButton(JInternalFrame resultFrame) {
         JButton playAgainButton = new JButton("Play Again");
         playAgainButton.setName("Play Again");
@@ -238,7 +264,9 @@ public class Game {
         movingFlag = false;
     }
 
-    /** Builds the Quit button clicking it exits the application. Named "Quit" for tests. */
+    /**
+     * Builds the Quit button clicking it exits the application. Named "Quit" for tests.
+     */
     private static JButton buildQuitButton() {
         JButton quitButton = new JButton("Quit");
         quitButton.setName("Quit"); // used in tests
@@ -252,7 +280,9 @@ public class Game {
         return quitButton;
     }
 
-    /** Adds winner name, score, and Play Again prompt labels to the result dialog. */
+    /**
+     * Adds winner name, score, and Play Again prompt labels to the result dialog.
+     */
     private static void addScoreLabels(JInternalFrame frame, Player winner) {
         JLabel winnerLabel = new JLabel("Winner: " + (winner.getPlayerId() == 1 ? "Black" : "White"));
         winnerLabel.setBounds(10, -30, 90, 90);
@@ -275,25 +305,24 @@ public class Game {
      * Triggered when a win condition is met. Updates stats and shows popup.
      */
     public static void gameFinished() {
-        Player winner = (-currentPlayer == 1? plrByID(1) : plrByID(-1));
-            Player loser = plrByID(-winner.getPlayerId());
-            if(winner.getPlayerColour() == Color.WHITE) {
-                DrawBoard.nextMove.setText("WHITE WINS!!");
-            }
-            else{
-                DrawBoard.nextMove.setText("BLACK WINS!!");
-            }
-            
-            winner.incrementWins();
-            loser.incrementLosses();
-            winLoseWind(winner, loser);
-            currentPlayer = winner.getPlayerId();
-            DrawBoard.repaintAll();
+        Player winner = (-currentPlayer == 1 ? plrByID(1) : plrByID(-1));
+        Player loser = plrByID(-winner.getPlayerId());
+        if (winner.getPlayerColour() == Color.WHITE) {
+            DrawBoard.nextMove.setText("WHITE WINS!!");
+        } else {
+            DrawBoard.nextMove.setText("BLACK WINS!!");
+        }
+
+        winner.incrementWins();
+        loser.incrementLosses();
+        winLoseWind(winner, loser);
+        currentPlayer = winner.getPlayerId();
+        DrawBoard.repaintAll();
 
         // Busy wait loop to hold the execution while the win screen is visible
-            while (movingFlag) {
-                System.out.print("");
-            }
+        while (movingFlag) {
+            System.out.print("");
+        }
     }
 
     /**
@@ -303,7 +332,7 @@ public class Game {
      */
     public static void main(String[] args) {
         new Game();
-        while(true) {
+        while (true) {
             if (ongoing) {
                 do {
                     // Show Pi Rule button if it's the second turn and not yet swapped

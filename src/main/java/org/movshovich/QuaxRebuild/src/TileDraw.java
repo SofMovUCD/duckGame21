@@ -23,7 +23,7 @@ public class TileDraw extends JPanel {
 
         // Makes the edges look smooth instead of pixelated
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        
+
         if (isOctagon) {
             // Full 68x68 coverage
             int[] x = {20, 48, 68, 68, 48, 20, 0, 0};

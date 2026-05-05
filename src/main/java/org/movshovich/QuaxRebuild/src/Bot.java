@@ -76,10 +76,9 @@ public class Bot extends Player {
         Random tileFinder = new Random();
         do {
             if (getPlayerId() == 1) {
-                    newStart = Board.getTile((tileFinder.nextInt() % 10) * 2, 0);
-            }
-            else {
-                    newStart = Board.getTile(0, tileFinder.nextInt() % 10);
+                newStart = Board.getTile((tileFinder.nextInt() % 10) * 2, 0);
+            } else {
+                newStart = Board.getTile(0, tileFinder.nextInt() % 10);
             }
         } while (newStart == null || newStart.getValue() != 0);
 
@@ -115,8 +114,9 @@ public class Bot extends Player {
             openList.remove(current);
             closedList.add(current);
             // Check all neighboring nodes
-            for (Tile neighbor : Board.furthNeighbours(current)){
-                if (closedList.contains(neighbor) || neighbor.getValue() != 0|| neighbor.isBlocked() || allPlaced.contains(neighbor)) continue;  // Skip already evaluated nodes
+            for (Tile neighbor : Board.furthNeighbours(current)) {
+                if (closedList.contains(neighbor) || neighbor.getValue() != 0 || neighbor.isBlocked() || allPlaced.contains(neighbor))
+                    continue;  // Skip already evaluated nodes
                 // Calculate tentative g score
                 if (!openList.contains(neighbor)) openList.add(neighbor);
                 else if (current.getG() + 1 >= neighbor.getG()) continue;  // This path is not better
@@ -124,7 +124,7 @@ public class Bot extends Player {
                 setNeighbourAStarVals(neighbor, current, goal);
             }
         }
-    return null;  // No path exists
+        return null;  // No path exists
     }
 
     private static void setNeighbourAStarVals(Tile tile, Tile parent, Tile goal) {
@@ -136,7 +136,7 @@ public class Bot extends Player {
 
     /** Traces parent pointers from goal back to start and returns the path in order. */
     private static Queue<Tile> reconstruct_path(Tile current) {
-        Deque <Tile> path = new LinkedList<>();
+        Deque<Tile> path = new LinkedList<>();
         while (current != null) {
             path.addFirst(current);
             current = current.getParent();
@@ -147,7 +147,7 @@ public class Bot extends Player {
     /** Geometric distance estimation (Euclidean distance) for A* heuristic */
     private static int heuristic(Tile a, Tile b) {
 
-        return (int) Math.floor(Math.sqrt(Math.pow((double) (b.getX() / 2 - a.getX()) /2,2) + Math.pow((b.getY() - a.getY()),2)));
+        return (int) Math.floor(Math.sqrt(Math.pow((double) (b.getX() / 2 - a.getX()) / 2, 2) + Math.pow((b.getY() - a.getY()), 2)));
     }
 
     /** Clears all strategy overlay components and repaints the board. */
@@ -167,7 +167,7 @@ public class Bot extends Player {
 
             if (!Board.getNeighbours(child).contains(parent)) {
                 for (Tile n : Board.getNeighbours(parent)) {
-                    if (Board.getNeighbours(child).contains(n) && n.getValue() == 0 ) return n;
+                    if (Board.getNeighbours(child).contains(n) && n.getValue() == 0) return n;
                 }
             }
             return findingGap();

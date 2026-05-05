@@ -56,9 +56,12 @@ public class Tile {
     public void initButton() {
         tileButton = new JButton();
         // Even X coordinates are Octagons, Odd are Rhombuses
-        if (x % 2 == 0) {octagonButton();}
-        else {rhombusButton();}
-        tileButton.setName(x +" " + y);
+        if (x % 2 == 0) {
+            octagonButton();
+        } else {
+            rhombusButton();
+        }
+        tileButton.setName(x + " " + y);
         tileButton.setContentAreaFilled(false);
         tileButton.setBorderPainted(false);
         // Click Logic
@@ -71,59 +74,58 @@ public class Tile {
         DrawBoard.buttonPane.add(tileButton);
     }
 
-    private void implementButtonLogic(JButton src){
-            // Set tile ownership to current player
-            value = Game.getCurrentPlayer();
-            weight = -10;// Mark as occupied/less desirable for future moves
-            Color currentColor = Game.plrByID(Game.getCurrentPlayer()).getPlayerColour();
-            // Create the visual graphic for the placed piece
-            TileDraw newTile = new TileDraw(currentColor, (x % 2 == 0));
-            newTile.setBounds(drawnBounds(x));
-            DrawBoard.placedPane.add(newTile);
-            DrawBoard.buttonPane.remove(src);// Remove the clickable button once placed
-            // Logic for updating weights near the edges (end game tiles)
-            if (x % 2 == 0) {
-                Tile endTileA = Board.getTile((int)Game.valueForID(x, 20, Game.plrByID(-Game.getCurrentPlayer())), 
-                            (int) Game.valueForID(10, y, Game.plrByID(-Game.getCurrentPlayer())));
-                Tile endTileB = Board.getTile((int)Game.valueForID(x, 20, Game.plrByID(Game.getCurrentPlayer())), 
-                            (int) Game.valueForID(10, y, Game.plrByID(Game.getCurrentPlayer())));
-                
-                if (Game.plrByID(Game.getCurrentPlayer()).getClass() == Bot.class) {
-                    endTileB.weight++;
-                }
-                else {
-                    endTileA.weight--;
-                }
+    private void implementButtonLogic(JButton src) {
+        // Set tile ownership to current player
+        value = Game.getCurrentPlayer();
+        weight = -10;// Mark as occupied/less desirable for future moves
+        Color currentColor = Game.plrByID(Game.getCurrentPlayer()).getPlayerColour();
+        // Create the visual graphic for the placed piece
+        TileDraw newTile = new TileDraw(currentColor, (x % 2 == 0));
+        newTile.setBounds(drawnBounds(x));
+        DrawBoard.placedPane.add(newTile);
+        DrawBoard.buttonPane.remove(src);// Remove the clickable button once placed
+        // Logic for updating weights near the edges (end game tiles)
+        if (x % 2 == 0) {
+            Tile endTileA = Board.getTile((int) Game.valueForID(x, 20, Game.plrByID(-Game.getCurrentPlayer())),
+                    (int) Game.valueForID(10, y, Game.plrByID(-Game.getCurrentPlayer())));
+            Tile endTileB = Board.getTile((int) Game.valueForID(x, 20, Game.plrByID(Game.getCurrentPlayer())),
+                    (int) Game.valueForID(10, y, Game.plrByID(Game.getCurrentPlayer())));
+
+            if (Game.plrByID(Game.getCurrentPlayer()).getClass() == Bot.class) {
+                endTileB.weight++;
+            } else {
+                endTileA.weight--;
             }
-            Game.flipMovingFlag();// Signal the Game loop that the move is done
+        }
+        Game.flipMovingFlag();// Signal the Game loop that the move is done
     }
 
     /** Sets the clickable area for Octagon tiles */
     public void octagonButton() {
-        tileButton.setBounds(30 + (x/2)*DrawBoard.OCTAGON_DISTANCE,
-                             45 + (y)*DrawBoard.OCTAGON_DISTANCE,
-                                    DrawBoard.OCTAGON_DISTANCE,30);
+        tileButton.setBounds(30 + (x / 2) * DrawBoard.OCTAGON_DISTANCE,
+                45 + (y) * DrawBoard.OCTAGON_DISTANCE,
+                DrawBoard.OCTAGON_DISTANCE, 30);
     }
 
     /** Sets the clickable area for Rhombus tiles */
     public void rhombusButton() {
-        tileButton.setBounds(88 + (x/2)*DrawBoard.OCTAGON_DISTANCE,
-                             82 + (y)*DrawBoard.OCTAGON_DISTANCE, 20, 18);
+        tileButton.setBounds(88 + (x / 2) * DrawBoard.OCTAGON_DISTANCE,
+                82 + (y) * DrawBoard.OCTAGON_DISTANCE, 20, 18);
     }
 
     /**
      * Calculates the Rectangle area where the TileDraw polygon will be rendered.
      */
     private Rectangle drawnBounds(int x) {
-        if (x % 2 ==0) {
-            return new Rectangle((x/2)*DrawBoard.OCTAGON_DISTANCE + 30,
-                                   (y)*DrawBoard.OCTAGON_DISTANCE + 25,
-                                       DrawBoard.OCTAGON_DISTANCE,
-                                       DrawBoard.OCTAGON_DISTANCE);
+        if (x % 2 == 0) {
+            return new Rectangle((x / 2) * DrawBoard.OCTAGON_DISTANCE + 30,
+                    (y) * DrawBoard.OCTAGON_DISTANCE + 25,
+                    DrawBoard.OCTAGON_DISTANCE,
+                    DrawBoard.OCTAGON_DISTANCE);
         } else {
-            return new Rectangle((x/2)*DrawBoard.OCTAGON_DISTANCE + 80,
-                                 (y)*DrawBoard.OCTAGON_DISTANCE + 75,
-                                 40,40);
+            return new Rectangle((x / 2) * DrawBoard.OCTAGON_DISTANCE + 80,
+                    (y) * DrawBoard.OCTAGON_DISTANCE + 75,
+                    40, 40);
         }
     }
 

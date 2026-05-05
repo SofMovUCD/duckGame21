@@ -36,9 +36,7 @@ public class DrawBoard extends JPanel{
     static int[] octagonY = {25, 25, 45, 73, 93, 93, 73, 45, 25};
 
     /** Default constructor  DrawBoard is instantiated as the bottom rendering layer. */
-    public DrawBoard() {
-
-    }
+    public DrawBoard() {}
 
     /**
      * Primary rendering method for the board background.
@@ -50,10 +48,10 @@ public class DrawBoard extends JPanel{
         graphics.setStroke(new BasicStroke(3));
         for (tileRow = 0; tileRow < OCTAGON_LENGTH; ++tileRow) {
             final int currTileRow = tileRow;
-            int[] y = Arrays.stream(octagonY).map(a -> a + currTileRow*OCTAGON_DISTANCE).toArray();
+            int[] y = Arrays.stream(octagonY).map(a -> a + currTileRow * OCTAGON_DISTANCE).toArray();
             for (tileCol = 0; tileCol < OCTAGON_LENGTH; ++tileCol) {
                 final int currtileCol = tileCol;
-                int[] x = Arrays.stream(octagonX).map(a -> a + currtileCol*OCTAGON_DISTANCE).toArray();
+                int[] x = Arrays.stream(octagonX).map(a -> a + currtileCol * OCTAGON_DISTANCE).toArray();
                 graphics.setColor(octagonColor);
                 graphics.fillPolygon(x, y, numberOfPoints);
                 for (int i = 0; i < numberOfPoints - 1; i++) {
@@ -83,8 +81,8 @@ public class DrawBoard extends JPanel{
         graphics.fillPolygon(newX, newY, 8);
         graphics.setColor(Color.BLACK);
         graphics.drawPolygon(newX, newY, 8);
-        int[] newNewX = {18+330, 38+330, 18+330, -2+330};
-        int[] newNewY = {25 + 815, 45 + 815, 65 + 815,  45 + 815};
+        int[] newNewX = {18 + 330, 38 + 330, 18 + 330, -2 + 330};
+        int[] newNewY = {25 + 815, 45 + 815, 65 + 815, 45 + 815};
         graphics.setColor(Game.plrByID(Game.getCurrentPlayer()).getPlayerColour());
         graphics.fillPolygon(newNewX, newNewY, 4);
         graphics.setColor(Color.BLACK);
@@ -95,11 +93,11 @@ public class DrawBoard extends JPanel{
     private static void createIcons() {
         bot = new JLabel("    Bot");
         bot.setForeground(Color.WHITE);
-        bot.setBackground(new Color(45,45,45));
+        bot.setBackground(new Color(45, 45, 45));
         bot.setBounds(560, 830, 50, 50);
         bot.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(), BorderFactory.createLoweredBevelBorder()));
         player = new JLabel("  Player");
-        player.setForeground(new Color(45,45,45));
+        player.setForeground(new Color(45, 45, 45));
         player.setBackground(Color.WHITE);
         player.setBounds(620, 830, 55, 50);
         player.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(), BorderFactory.createLoweredBevelBorder()));
@@ -125,14 +123,14 @@ public class DrawBoard extends JPanel{
         createIcons();
         //do the numbers and letters at edge of board
 
-        for(int i = 0; i < OCTAGON_LENGTH; i++){
-            JLabel num = new JLabel(Integer.toString(i+1));
-            JLabel chars = new JLabel(Character.toString(i+65));
-            num.setBounds(10, 50 + i*68, 15,15);
-            chars.setBounds(60 + i*68, 10, 15,15 );
+        for (int i = 0; i < OCTAGON_LENGTH; i++) {
+            JLabel num = new JLabel(Integer.toString(i + 1));
+            JLabel chars = new JLabel(Character.toString(i + 65));
+            num.setBounds(10, 50 + i * 68, 15, 15);
+            chars.setBounds(60 + i * 68, 10, 15, 15);
             chars.setForeground(Color.WHITE);
-            num.setName(Integer.toString(i+1)); //for testing
-            chars.setName(Character.toString((char)(i+65))); //for testing
+            num.setName(Integer.toString(i + 1)); //for testing
+            chars.setName(Character.toString((char) (i + 65))); //for testing
             placedPane.add(num);
             placedPane.add(chars);
         }
@@ -168,7 +166,7 @@ public class DrawBoard extends JPanel{
         initDash();
         addAll();
         //Set board properties
-        boardFrame.setSize(810,1000);
+        boardFrame.setSize(810, 1000);
         boardFrame.setLocationRelativeTo(null);
         boardFrame.setVisible(true);
     }
@@ -234,10 +232,10 @@ public class DrawBoard extends JPanel{
         double angle = Math.atan2(to.y - from.y, to.x - from.x);
         int arrowLen = 10;
         double arrowAngle = Math.toRadians(30);
-        int ax1 = (int)(to.x - arrowLen * Math.cos(angle - arrowAngle));
-        int ay1 = (int)(to.y - arrowLen * Math.sin(angle - arrowAngle));
-        int ax2 = (int)(to.x - arrowLen * Math.cos(angle + arrowAngle));
-        int ay2 = (int)(to.y - arrowLen * Math.sin(angle + arrowAngle));
+        int ax1 = (int) (to.x - arrowLen * Math.cos(angle - arrowAngle));
+        int ay1 = (int) (to.y - arrowLen * Math.sin(angle - arrowAngle));
+        int ax2 = (int) (to.x - arrowLen * Math.cos(angle + arrowAngle));
+        int ay2 = (int) (to.y - arrowLen * Math.sin(angle + arrowAngle));
         canvas.drawLine(to.x, to.y, ax1, ay1);
         canvas.drawLine(to.x, to.y, ax2, ay2);
     }
@@ -288,7 +286,7 @@ public class DrawBoard extends JPanel{
             canvas.setStroke(new BasicStroke(2.5f));
             for (int i = 0; i < pathTiles.size() - 1; i++) {
                 Point from = tileCenter(pathTiles.get(i));
-                Point to   = tileCenter(pathTiles.get(i + 1));
+                Point to = tileCenter(pathTiles.get(i + 1));
                 drawArrow(canvas, from, to);
             }
             // Draw weight label at goal tile
@@ -300,7 +298,7 @@ public class DrawBoard extends JPanel{
         }
         // Highlight the goal tile (highest weight) in green if not yet placed
         if (goal != null && goal.getValue() == 0) {
-           createGoalOval(canvas, goal);
+            createGoalOval(canvas, goal);
         }
     }
 }

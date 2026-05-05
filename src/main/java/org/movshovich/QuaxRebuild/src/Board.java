@@ -94,7 +94,6 @@ public class Board {
                     nList.add(board[neighbourY][neighbourX]);
                 }
             }
-
             return nList;
         } else {return getNeighbours(inputTile);}
     }
