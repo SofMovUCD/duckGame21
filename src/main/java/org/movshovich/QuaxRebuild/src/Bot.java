@@ -74,7 +74,6 @@ public class Bot extends Player {
     private Tile findNewStart() {
         Tile newStart = null;
         Random tileFinder = new Random();
-
         do {
             if (getPlayerId() == 1) {
                     newStart = Board.getTile((tileFinder.nextInt() % 10) * 2, 0);

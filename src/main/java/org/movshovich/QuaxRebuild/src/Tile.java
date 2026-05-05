@@ -47,7 +47,6 @@ public class Tile {
     public void setH(int h) {this.h = h;}
     public int getF() {return f;}
     public void setF() {this.f = g + h;}
-    public JButton getTileButton() {return tileButton;}
 
     /**
      * Initializes the button for this tile.
@@ -55,33 +54,32 @@ public class Tile {
      */
     public void initButton() {
         tileButton = new JButton();
-
         // Even X coordinates are Octagons, Odd are Rhombuses
         if (x % 2 == 0) {octagonButton();}
         else {rhombusButton();}
-
         tileButton.setName(x +" " + y);
         tileButton.setContentAreaFilled(false);
         tileButton.setBorderPainted(false);
-
         // Click Logic
         tileButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            JButton src = (JButton) e.getSource();
+                JButton src = (JButton) e.getSource();
+                implementButtonLogic(src);
+            }
+        });
+        DrawBoard.buttonPane.add(tileButton);
+    }
 
+    private void implementButtonLogic(JButton src){
             // Set tile ownership to current player
             value = Game.getCurrentPlayer();
             weight = -10;// Mark as occupied/less desirable for future moves
-
             Color currentColor = Game.plrByID(Game.getCurrentPlayer()).getPlayerColour();
-
             // Create the visual graphic for the placed piece
             TileDraw newTile = new TileDraw(currentColor, (x % 2 == 0));
             newTile.setBounds(drawnBounds(x));
-
             DrawBoard.placedPane.add(newTile);
             DrawBoard.buttonPane.remove(src);// Remove the clickable button once placed
-
             // Logic for updating weights near the edges (end game tiles)
             if (x % 2 == 0) {
                 Tile endTileA = Board.getTile((int)Game.valueForID(x, 20, Game.plrByID(-Game.getCurrentPlayer())), 
@@ -97,9 +95,6 @@ public class Tile {
                 }
             }
             Game.flipMovingFlag();// Signal the Game loop that the move is done
-            }
-        });
-        DrawBoard.buttonPane.add(tileButton);
     }
 
     /** Sets the clickable area for Octagon tiles */

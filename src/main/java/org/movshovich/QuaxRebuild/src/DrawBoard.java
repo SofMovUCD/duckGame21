@@ -28,12 +28,12 @@ public class DrawBoard extends JPanel{
     int tileRow;
     int tileCol;
     int numberOfPoints = 8;
-    final Color octagonColor = new Color(173, 111, 49);
-    final Color rhombusColor = new Color(99, 59, 19);
+    static final Color octagonColor = new Color(173, 111, 49);
+    static final Color rhombusColor = new Color(99, 59, 19);
 
     /** Coordinates for drawing the background octagon shape */
-    int[] octagonX = {50, 78, 98, 98, 78, 50, 30, 30, 50};
-    int[] octagonY = {25, 25, 45, 73, 93, 93, 73, 45, 25};
+    static int[] octagonX = {50, 78, 98, 98, 78, 50, 30, 30, 50};
+    static int[] octagonY = {25, 25, 45, 73, 93, 93, 73, 45, 25};
 
     /** Default constructor  DrawBoard is instantiated as the bottom rendering layer. */
     public DrawBoard() {
@@ -46,13 +46,7 @@ public class DrawBoard extends JPanel{
      */
     public void paint(Graphics g) {
         Graphics2D graphics = (Graphics2D) g;
-        graphics.fillRect(0, 0, 810, 800); // Header area
-        graphics.setColor(Color.white);
-        graphics.fillRect(0, 45, 810, 710); // Background for board
-        graphics.setColor(rhombusColor);
-        graphics.fillRect(50, 50, 700, 700); // Main rhombus area
-        graphics.setColor(Color.black);
-
+        buildBoardBackground(graphics);
         graphics.setStroke(new BasicStroke(3));
         for (tileRow = 0; tileRow < OCTAGON_LENGTH; ++tileRow) {
             final int currTileRow = tileRow;
@@ -70,6 +64,19 @@ public class DrawBoard extends JPanel{
             }
         }
         // Draw the current player colour indicator shapes below the board
+        buildLowerIcons(graphics);
+    }
+
+    private static void buildBoardBackground(Graphics2D graphics) {
+        graphics.fillRect(0, 0, 810, 800); // Header area
+        graphics.setColor(Color.white);
+        graphics.fillRect(0, 45, 810, 710); // Background for board
+        graphics.setColor(rhombusColor);
+        graphics.fillRect(50, 50, 700, 700); // Main rhombus area
+        graphics.setColor(Color.black);
+    }
+
+    private static void buildLowerIcons(Graphics2D graphics) {
         graphics.setColor(Game.plrByID(Game.getCurrentPlayer()).getPlayerColour());
         int[] newX = Arrays.stream(octagonX).map(a -> a + 200).toArray();
         int[] newY = Arrays.stream(octagonY).map(a -> a + 800).toArray();
@@ -133,11 +140,9 @@ public class DrawBoard extends JPanel{
         nextMove.setOpaque(true);
         bot.setOpaque(true);
         player.setOpaque(true);
-
         placedPane.add(nextMove);
         placedPane.add(player);
         placedPane.add(bot);
-
     }
 
     /** Initializes the main JFrame and all layered panels */
@@ -145,28 +150,23 @@ public class DrawBoard extends JPanel{
         //Init board name and closing function
         boardFrame = new JFrame("Quax Player vs Bot");
         boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         //overlay panel to place above
         overlayPanel = new JPanel();
         overlayPanel.setLayout(new OverlayLayout(overlayPanel));
         overlayPanel.setPreferredSize(new Dimension(810, 1000));
-
         //Create Panes for placing buttons
         buttonPane = new JLayeredPane();
         placedPane = new JLayeredPane();
         placedPane.setSize(810, 1000);
-
         //strategy overlay panel
         strategyPane = new JLayeredPane(); // top layer -> strategy arrows drawn here
         strategyPane.setSize(810, 1000);
         strategyPane.setOpaque(false);
-
         popupPane = new JLayeredPane();
         popupPane.setSize(810, 1000);
         //create label
         initDash();
         addAll();
-
         //Set board properties
         boardFrame.setSize(810,1000);
         boardFrame.setLocationRelativeTo(null);
@@ -243,8 +243,6 @@ public class DrawBoard extends JPanel{
     }
 
     private static void createDesc(JPanel overlay) {
-        
-
         // Textual description shown to the bottom of the board
         JLabel strategyDescription = new JLabel(
                 "<html><b>Bot Strategy:</b><br>The bot uses A* search to find the "
