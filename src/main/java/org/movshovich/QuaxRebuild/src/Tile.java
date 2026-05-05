@@ -56,11 +56,8 @@ public class Tile {
     public void initButton() {
         tileButton = new JButton();
         // Even X coordinates are Octagons, Odd are Rhombuses
-        if (x % 2 == 0) {
-            octagonButton();
-        } else {
-            rhombusButton();
-        }
+        if (x % 2 == 0) octagonButton();
+        else rhombusButton();
         tileButton.setName(x + " " + y);
         tileButton.setContentAreaFilled(false);
         tileButton.setBorderPainted(false);

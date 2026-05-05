@@ -78,20 +78,13 @@ public class Game {
      * Updates the UI text and removes the Pi Rule button after the first move.
      */
     public static void nextTurn() {
-
         if (whiteFirst && currentPlayer == -1) {
             whiteFirst = false;
             DrawBoard.buttonPane.remove(piRuleBut);
         }
-
         currentPlayer *= -1; // Toggle between 1 and -1
-
-        if (currentPlayer == 1) {
-            DrawBoard.nextMove.setText("BLACK to play");
-        } else {
-            DrawBoard.nextMove.setText("WHITE to play");
-        }
-
+        if (currentPlayer == 1) DrawBoard.nextMove.setText("BLACK to play");
+        else DrawBoard.nextMove.setText("WHITE to play");
         DrawBoard.repaintAll();
     }
 
@@ -312,13 +305,11 @@ public class Game {
         } else {
             DrawBoard.nextMove.setText("BLACK WINS!!");
         }
-
         winner.incrementWins();
         loser.incrementLosses();
         winLoseWind(winner, loser);
         currentPlayer = winner.getPlayerId();
         DrawBoard.repaintAll();
-
         // Busy wait loop to hold the execution while the win screen is visible
         while (movingFlag) {
             System.out.print("");
@@ -340,9 +331,7 @@ public class Game {
                         DrawBoard.buttonPane.add(piRuleBut);
                         DrawBoard.buttonPane.setComponentZOrder(piRuleBut, 0);
                     }
-
                     plrByID(currentPlayer).makeMove();
-
                     // Wait for move selection
                     while (movingFlag) {
                         System.out.print("");

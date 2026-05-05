@@ -106,7 +106,6 @@ public class Bot extends Player {
         start.setParent(null);              // For path reconstruction
         while (!openList.isEmpty()) {
             // Get node with lowest f value - implement using a priority queue
-            // for faster retrieval of the best node
             Tile current = openList.peek();
             // Check if we've reached the goal
             if (current == goal) return reconstruct_path(current);

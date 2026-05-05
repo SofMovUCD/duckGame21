@@ -20,10 +20,8 @@ public class TileDraw extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D graphics = (Graphics2D) g;
-
         // Makes the edges look smooth instead of pixelated
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
         if (isOctagon) {
             // Full 68x68 coverage
             int[] x = {20, 48, 68, 68, 48, 20, 0, 0};
@@ -41,7 +39,6 @@ public class TileDraw extends JPanel {
             int[] y = {-2, 18, 38, 18};
             graphics.setColor(tileColor);
             graphics.fillPolygon(x, y, 4);
-
             // Draw a slightly thinner outline for smaller shapes
             graphics.setColor(Color.BLACK);
             graphics.setStroke(new BasicStroke(2));

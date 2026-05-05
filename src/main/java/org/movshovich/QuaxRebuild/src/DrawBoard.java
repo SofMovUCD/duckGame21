@@ -256,7 +256,6 @@ public class DrawBoard extends JPanel{
         strategyDescription.setOpaque(true);
         strategyDescription.setBackground(new Color(255, 255, 220, 220));
         DrawBoard.strategyPane.add(strategyDescription);
-
         DrawBoard.repaintAll();
     }
 
