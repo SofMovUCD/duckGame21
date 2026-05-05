@@ -124,6 +124,8 @@ public class Board {
     private static boolean checkWinRecur(Player plr, Tile curr, List<Tile> visited) {
         visited.add(curr);
 
+        System.out.println(curr);
+
         for (Tile neighbour : getNeighbours(curr)) { //check each neighbour
             if (plr.getPlayerId() == neighbour.getValue() && !visited.contains(neighbour)) { //if the nieghbour is the same value as the player and not visited
                 // If we reached the target coordinate (0 on the relevant axis), win found
@@ -146,7 +148,7 @@ public class Board {
         visited.add(tile);
 
         for (Tile neighbour : getNeighbours(tile)) {
-            if (!visited.contains(neighbour) && neighbour != null) {
+            if (!visited.contains(neighbour) && neighbour != null && neighbour.getValue() == 0) {
                 tile = tile.largerWeight(largestWeightRecur(neighbour, visited));
             }
         }

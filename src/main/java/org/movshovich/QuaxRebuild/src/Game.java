@@ -127,7 +127,7 @@ public class Game {
         btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Bot.showStrategy();
+                DrawBoard.showStrategy();
                 DrawBoard.placedPane.remove(showStrategyBut);
                 DrawBoard.placedPane.add(hideStrategyBut);
                 DrawBoard.placedPane.setComponentZOrder(hideStrategyBut, 0);

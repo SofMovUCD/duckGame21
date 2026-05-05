@@ -1,6 +1,10 @@
 package org.movshovich.QuaxRebuild.src;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -184,5 +188,121 @@ public class DrawBoard extends JPanel{
         strategyPane.removeAll();
         initDash();
         repaintAll();
+    }
+
+    /**
+     * Shows the bot strategy overlay: red arrows from each placed tile along its
+     * A* path to the highest weight goal, the goal highlighted in green, and a
+     * textual description below the board.
+     */
+    public static void showStrategy() {
+        if (Bot.getPlaced().isEmpty()) return;
+        DrawBoard.strategyPane.removeAll();
+        // Build a full size transparent overlay to draw on
+        JPanel overlay = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D canvas = (Graphics2D) g;
+                buildAllPaths(canvas);
+            }
+        };
+        overlay.setOpaque(false);
+        overlay.setBounds(0, 0, 810, 1000);
+        DrawBoard.strategyPane.add(overlay);
+        DrawBoard.strategyPane.setComponentZOrder(overlay, 0);
+        createDesc(overlay);
+    }
+
+    /** Returns the pixel center of a tile for drawing arrows */
+    private static Point tileCenter(Tile tile) {
+        int px;
+        int py;
+        if (tile.getX() % 2 == 0) {
+            px = (tile.getX() / 2) * DrawBoard.OCTAGON_DISTANCE + 30 + DrawBoard.OCTAGON_DISTANCE / 2;
+            py = tile.getY() * DrawBoard.OCTAGON_DISTANCE + 25 + DrawBoard.OCTAGON_DISTANCE / 2;
+        } else {
+            px = (tile.getX() / 2) * DrawBoard.OCTAGON_DISTANCE + 80 + 20;
+            py = tile.getY() * DrawBoard.OCTAGON_DISTANCE + 75 + 20;
+        }
+        return new Point(px, py);
+    }
+
+    /* Draw a line with an arrowhead at to */
+    private static void drawArrow(Graphics2D canvas, Point from, Point to) {
+        canvas.drawLine(from.x, from.y, to.x, to.y);
+        double angle = Math.atan2(to.y - from.y, to.x - from.x);
+        int arrowLen = 10;
+        double arrowAngle = Math.toRadians(30);
+        int ax1 = (int)(to.x - arrowLen * Math.cos(angle - arrowAngle));
+        int ay1 = (int)(to.y - arrowLen * Math.sin(angle - arrowAngle));
+        int ax2 = (int)(to.x - arrowLen * Math.cos(angle + arrowAngle));
+        int ay2 = (int)(to.y - arrowLen * Math.sin(angle + arrowAngle));
+        canvas.drawLine(to.x, to.y, ax1, ay1);
+        canvas.drawLine(to.x, to.y, ax2, ay2);
+    }
+
+    private static void createDesc(JPanel overlay) {
+        
+
+        // Textual description shown to the bottom of the board
+        JLabel strategyDescription = new JLabel(
+                "<html><b>Bot Strategy:</b><br>The bot uses A* search to find the "
+                        + "highest-weight path across the board.<br>It evaluates all reachable "
+                        + "paths, selects the goal tile with the maximum weight,<br>and places "
+                        + "tiles along the optimal route each turn.<br><br>"
+                        + "<b>Legend:</b> Red arrows = computed paths &nbsp; "
+                        + "Green circle = chosen goal tile</html>"
+        );
+        strategyDescription.setBounds(0, 780, 810, 90);
+        strategyDescription.setFont(new Font("Arial", Font.PLAIN, 11));
+        strategyDescription.setForeground(new Color(30, 30, 30));
+        strategyDescription.setOpaque(true);
+        strategyDescription.setBackground(new Color(255, 255, 220, 220));
+        DrawBoard.strategyPane.add(strategyDescription);
+
+        DrawBoard.repaintAll();
+    }
+
+    private static void createGoalOval(Graphics2D canvas, Tile goal) {
+        Point c = tileCenter(goal);
+        canvas.setColor(new Color(0, 180, 0, 160));
+        canvas.fillOval(c.x - 18, c.y - 18, 36, 36);
+        canvas.setColor(Color.BLACK);
+        canvas.setStroke(new BasicStroke(2));
+        canvas.drawOval(c.x - 18, c.y - 18, 36, 36);
+        canvas.setColor(Color.WHITE);
+        canvas.setFont(new Font("Arial", Font.BOLD, 11));
+        canvas.drawString("" + goal.getWeight(), c.x - 5, c.y + 4);
+    }
+
+    public static void buildAllPaths(Graphics2D canvas) {
+        canvas.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        // For each tile in placed, compute the A* path and draw arrows
+        ArrayList<Tile> placedList = new ArrayList<>(Bot.getPlaced()); // snapshot, no new data
+        Tile goal = Board.largestWeight(Bot.getPlaced().peek());
+        for (Tile start : placedList) {
+            Queue<Tile> pathQ = new LinkedList<>(Bot.createPath(start));
+            List<Tile> pathTiles = new ArrayList<>(pathQ);
+            if (pathTiles.size() < 2) continue;
+            // Draw arrows along path segments
+            canvas.setColor(new Color(220, 50, 50, 200)); // semi transparent red
+            canvas.setStroke(new BasicStroke(2.5f));
+            for (int i = 0; i < pathTiles.size() - 1; i++) {
+                Point from = tileCenter(pathTiles.get(i));
+                Point to   = tileCenter(pathTiles.get(i + 1));
+                drawArrow(canvas, from, to);
+            }
+            // Draw weight label at goal tile
+            Tile last = pathTiles.get(pathTiles.size() - 1);
+            Point center = tileCenter(last);
+            canvas.setColor(new Color(255, 50, 50));
+            canvas.setFont(new Font("Arial", Font.BOLD, 13));
+            canvas.drawString("W:" + last.getWeight(), center.x - 10, center.y - 5);
+        }
+        // Highlight the goal tile (highest weight) in green if not yet placed
+        if (goal != null && goal.getValue() == 0) {
+           createGoalOval(canvas, goal);
+        }
     }
 }
