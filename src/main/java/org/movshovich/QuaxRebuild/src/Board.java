@@ -123,18 +123,16 @@ public class Board {
     /** Recursive helper for win checking DFS */
     private static boolean checkWinRecur(Player plr, Tile curr, List<Tile> visited) {
         visited.add(curr);
-
-        System.out.println(curr);
-
+        boolean output = false;
         for (Tile neighbour : getNeighbours(curr)) { //check each neighbour
             if (plr.getPlayerId() == neighbour.getValue() && !visited.contains(neighbour)) { //if the nieghbour is the same value as the player and not visited
                 // If we reached the target coordinate (0 on the relevant axis), win found
-                if (((int)Game.valueForID(neighbour.getY(), neighbour.getX(), plr)) == 0) return true;
-                else {return checkWinRecur(plr, neighbour, visited);}
+                if (((int)Game.valueForID(neighbour.getY(), neighbour.getX(), plr)) == 0) output = true;
+                else {output = checkWinRecur(plr, neighbour, visited);}
+                if (output) break;
             }
         }
-        //visited.remove(curr);
-        return false;
+        return output;
     }
 
     /** Finds the tile with the highest importance (weight) reachable from start */
