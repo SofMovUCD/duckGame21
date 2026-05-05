@@ -47,6 +47,7 @@ public class Tile {
     public void setH(int h) {this.h = h;}
     public int getF() {return f;}
     public void setF() {this.f = g + h;}
+    public JButton getTileButton() {return tileButton;}
 
     /**
      * Initializes the button for this tile.

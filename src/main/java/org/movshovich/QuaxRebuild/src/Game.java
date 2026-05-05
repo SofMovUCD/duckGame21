@@ -27,7 +27,6 @@ public class Game {
     private static boolean ongoing;    // Is the game currently active
     private static boolean piRulePressed = false;
 
-
     /**
      * Initializes a new game instance, sets up players (Bot vs Human),
      * and resets the game board UI.
@@ -304,7 +303,6 @@ public class Game {
      */
     public static void main(String[] args) {
         new Game();
-
         while(true) {
             if (ongoing) {
                 do {

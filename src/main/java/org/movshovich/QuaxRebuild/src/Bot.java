@@ -100,7 +100,6 @@ public class Bot extends Player {
         Queue<Tile> openList = new PriorityQueue<>((a, b) -> a.getF() - b.getF());// Nodes to be evaluated
         List<Tile> closedList = new ArrayList<>();            // Nodes already evaluated
         openList.add(start);
-
         // Initialize node properties
         start.setG(0);                // Cost from start to start is 0
         start.setH(heuristic(start, goal));  // Estimate to goal
@@ -110,26 +109,18 @@ public class Bot extends Player {
             // Get node with lowest f value - implement using a priority queue
             // for faster retrieval of the best node
             Tile current = openList.peek();
-
             // Check if we've reached the goal
-            if (current == goal) {
-                return reconstruct_path(current);
-            }
-
+            if (current == goal) return reconstruct_path(current);
             // Move current node from open to closed list
             openList.remove(current);
             closedList.add(current);
-
             // Check all neighboring nodes
             for (Tile neighbor : Board.furthNeighbours(current)){
-                if (closedList.contains(neighbor) || neighbor.getValue() != 0|| neighbor.isBlocked() || allPlaced.contains(neighbor)) {
-                    continue;  // Skip already evaluated nodes
-                }
+                if (closedList.contains(neighbor) || neighbor.getValue() != 0|| neighbor.isBlocked() || allPlaced.contains(neighbor)) continue;  // Skip already evaluated nodes
                 // Calculate tentative g score
                 int tentativeG = current.getG() + 1;
                 if (!openList.contains(neighbor)) openList.add(neighbor);
                 else if (tentativeG >= neighbor.getG()) continue;  // This path is not better
-
                 // This path is the best so far
                 neighbor.setParent(current);
                 neighbor.setG(tentativeG);
