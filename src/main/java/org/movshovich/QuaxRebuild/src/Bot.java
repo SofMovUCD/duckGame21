@@ -88,14 +88,14 @@ public class Bot extends Player {
 
     /** Wrapper: runs A* from start toward the highest weight goal tile on the board. */
     public static Queue<Tile> createPath(Tile start) {
-            return A_Star(start, Board.largestWeight(start));
+            return aStar(start, Board.largestWeight(start));
     }
 
     /**
      * A* Search Algorithm implementation.
      * Finds the most efficient path from start to goal.
      */
-    private static Queue<Tile> A_Star(Tile start, Tile goal) {
+    private static Queue<Tile> aStar(Tile start, Tile goal) {
         // Initialize open and closed lists
         Queue<Tile> openList = new PriorityQueue<>((a, b) -> a.getF() - b.getF());// Nodes to be evaluated
         List<Tile> closedList = new ArrayList<>();            // Nodes already evaluated
@@ -118,17 +118,20 @@ public class Bot extends Player {
             for (Tile neighbor : Board.furthNeighbours(current)){
                 if (closedList.contains(neighbor) || neighbor.getValue() != 0|| neighbor.isBlocked() || allPlaced.contains(neighbor)) continue;  // Skip already evaluated nodes
                 // Calculate tentative g score
-                int tentativeG = current.getG() + 1;
                 if (!openList.contains(neighbor)) openList.add(neighbor);
-                else if (tentativeG >= neighbor.getG()) continue;  // This path is not better
+                else if (current.getG() + 1 >= neighbor.getG()) continue;  // This path is not better
                 // This path is the best so far
-                neighbor.setParent(current);
-                neighbor.setG(tentativeG);
-                neighbor.setH(heuristic(neighbor, goal));
-                neighbor.setF();
+                setNeighbourAStarVals(neighbor, current, goal);
             }
         }
     return null;  // No path exists
+    }
+
+    private static void setNeighbourAStarVals(Tile tile, Tile parent, Tile goal) {
+        tile.setParent(parent);
+        tile.setG(parent.getG() + 1);
+        tile.setH(heuristic(tile, goal));
+        tile.setF();
     }
 
     /** Traces parent pointers from goal back to start and returns the path in order. */
